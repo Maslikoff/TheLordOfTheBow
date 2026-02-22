@@ -10,8 +10,11 @@ public class MainSpawner : MonoBehaviour
     [SerializeField] private PoolableSpawner<Bullet> _bulletSpawner;
     [SerializeField] private PoolableSpawner<Enemy> _enemySpawner;
 
+    [Header("Shoot Settings")]
+    [SerializeField] private ShootEntity _shootController;
+
     [Header("Reference")]
-    [SerializeField] private InputHandler _inputHandler;
+    [SerializeField] private SpawnGrid _spawnGrid;
     [SerializeField] private Transform _playerShootPoint;
     [SerializeField] private Transform _spawnPointEnemy;
 
@@ -19,45 +22,32 @@ public class MainSpawner : MonoBehaviour
     {
         _bulletSpawner.Initialize();
         _enemySpawner.Initialize();
+
+        _spawnGrid.SpawnAllEnemies();
     }
 
     private void OnEnable()
     {
-        _inputHandler.LeftClick += OnLeftClick;
-        _inputHandler.RightClick += OnRightClick;
-        _inputHandler.Space += OnSpace;
+        _spawnGrid.SpawnEnemyAtPosition += OnSpawnEnemyAtPosition;
+        _shootController.ShotFired += OnShoot;
     }
 
     private void OnDisable()
     {
-        _inputHandler.LeftClick -= OnLeftClick;
-        _inputHandler.RightClick -= OnRightClick;
-        _inputHandler.Space -= OnSpace;
+        _spawnGrid.SpawnEnemyAtPosition -= OnSpawnEnemyAtPosition;
+        _shootController.ShotFired -= OnShoot;
     }
 
-    private void OnLeftClick()
+    private void OnShoot()
     {
         _bulletSpawner.Spawn(_playerShootPoint.position);
     }
 
-    private void OnRightClick()
+    private void OnSpawnEnemyAtPosition(Vector3 spawnPosition)
     {
-        Enemy enemy = _enemySpawner.Spawn(_spawnPointEnemy.position);
+        Enemy enemy = _enemySpawner.Spawn(spawnPosition);
 
         if (enemy != null)
             _activeEnemies.Add(enemy);
-    }
-
-    private void OnSpace()
-    {
-        if (_activeEnemies.Count == 0)
-            return;
-
-        int lastIndex = _activeEnemies.Count - 1;
-        Enemy lastEnemy = _activeEnemies[lastIndex];
-        _activeEnemies.RemoveAt(lastIndex);
-
-        if (lastEnemy != null && lastEnemy.gameObject.activeSelf)
-            lastEnemy.Release();
     }
 }
