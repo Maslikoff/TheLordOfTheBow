@@ -1,4 +1,5 @@
 ﻿using System;
+using Game.Scripts.Characters.Enemy;
 using UnityEngine;
 
 namespace Game.Scripts.PoolSystem
@@ -9,6 +10,8 @@ namespace Game.Scripts.PoolSystem
         [SerializeField] private PoolConfig<T> _config;
     
         private bool _isInitialized = false;
+        
+        public bool IsInitialized { get; private set; }
     
         public void Initialize()
         {

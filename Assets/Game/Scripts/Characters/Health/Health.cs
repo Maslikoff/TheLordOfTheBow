@@ -6,17 +6,17 @@ namespace Game.Scripts.Characters.Health
     public class Health: MonoBehaviour
 
     {
-        [SerializeField] private int _maxCount = 100;
+        [SerializeField] private float _maxCount = 100f;
         [SerializeField] private bool _isInvulnerable = false;
 
-        private int _currentCount;
+        private float _currentCount;
 
-        public int MaxCount => _maxCount;
-        public int CurrentCount => _currentCount;
+        public float MaxCount => _maxCount;
+        public float CurrentCount => _currentCount;
 
         public event Action Death;
-        public event Action<int> Changed;
-        public event Action<int> DamageTaken;
+        public event Action<float> Changed;
+        public event Action<float> DamageTaken;
 
         private void Start()
         {
@@ -25,7 +25,7 @@ namespace Game.Scripts.Characters.Health
             Changed?.Invoke(_currentCount);
         }
 
-        public void TakeDamage(int damage)
+        public void TakeDamage(float damage)
         {
             if (_isInvulnerable || _currentCount <= 0)
                 return;

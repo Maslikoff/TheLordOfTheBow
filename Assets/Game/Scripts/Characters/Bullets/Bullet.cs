@@ -8,6 +8,7 @@ namespace Game.Scripts.Characters.Bullets
     public abstract class Bullet : MonoBehaviour, IPoolable
     {
         [SerializeField] [Min(0)] protected float _speed;
+        [SerializeField] protected float _damage;
         [SerializeField] protected Rigidbody _rigidbody;
 
         public event Action<IPoolable> Released;
@@ -32,18 +33,14 @@ namespace Game.Scripts.Characters.Bullets
         }
 
         protected abstract void MoveBullet();
-        
+
+        protected abstract void HandleCollision(Collision other);
+
         protected virtual bool CanCollide(Collision other)
         {
             return other.gameObject.TryGetComponent(out Enemy.Enemy _) ||
                    other.gameObject.TryGetComponent(out Wall _) ||
                    other.gameObject.TryGetComponent(out Player.Player _);
-        }
-        
-        protected virtual void HandleCollision(Collision other)
-        {
-            if (other.gameObject.TryGetComponent(out Enemy.Enemy enemy))
-                enemy.Release();
         }
 
         public virtual void Release()

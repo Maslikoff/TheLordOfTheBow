@@ -1,16 +1,18 @@
-using System;
-using Game.Scripts.PoolSystem;
 using UnityEngine;
 
 namespace Game.Scripts.Characters.Bullets
 {
     public class BulletGoblins: Bullet
     {
-        [SerializeField] private float _damage = 10f;
-        
         protected override void MoveBullet()
         {
             _rigidbody.velocity = -transform.forward * _speed;
+        }
+
+        protected override void HandleCollision(Collision other)
+        {
+            if (other.gameObject.TryGetComponent(out Health.Health player))
+                player.TakeDamage(_damage);
         }
         
         protected override bool CanCollide(Collision other)

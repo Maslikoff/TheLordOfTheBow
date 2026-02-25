@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Game.Scripts
+namespace Game.Scripts.Spawners
 {
     public class SpawnGrid : MonoBehaviour
     {
@@ -17,6 +17,9 @@ namespace Game.Scripts
         [Header("Distance between entity")]
         [SerializeField] private float _horizontalSpacing = 2f;
         [SerializeField] private float _verticalSpacing = 2f;
+        
+        public int GridWidth => _gridWidth;
+        public int GridHeight => _gridHeight;
     
         public event Action<Vector3> SpawnEnemyAtPosition;
     
@@ -45,6 +48,26 @@ namespace Game.Scripts
     
             SpawnEnemyAtPosition?.Invoke(spawnPosition);
         }
+        
+        public Vector3 GetSpawnPosition(int x, int y)
+        {
+            if (IsValidPosition(x, y) == false)
+                return Vector3.zero;
+                
+            Vector3 offset = CalculateOffset();
+            
+            return CalculateSpawnPosition(x, y, offset);
+        }
+        
+        public Vector3 GetRandomSpawnPosition()
+        {
+            int x = UnityEngine.Random.Range(0, _gridWidth);
+            int y = UnityEngine.Random.Range(0, _gridHeight);
+            
+            return GetSpawnPosition(x, y);
+        }
+
+        private bool IsValidPosition(int x, int y) => x >= 0 && x < _gridWidth && y >= 0 && y < _gridHeight;
     
         private Vector3 CalculateOffset()
         {

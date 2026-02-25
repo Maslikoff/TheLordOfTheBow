@@ -5,7 +5,7 @@ using Game.Scripts.Characters.Enemy;
 using Game.Scripts.PoolSystem;
 using UnityEngine;
 
-namespace Game.Scripts.MainSpawner
+namespace Game.Scripts.Spawners
 {
     public class MainSpawner : MonoBehaviour
     {

@@ -590,6 +590,8 @@ GameObject:
   m_Component:
   - component: {fileID: 135343225}
   - component: {fileID: 135343226}
+  - component: {fileID: 135343228}
+  - component: {fileID: 135343227}
   m_Layer: 0
   m_Name: EnemySpawnerPoint
   m_TagString: Untagged
@@ -632,6 +634,55 @@ MonoBehaviour:
   _centerGrid: 1
   _horizontalSpacing: 2
   _verticalSpacing: 2
+--- !u!114 &135343227
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 135343224}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84b0f8b87fc544d69e6a0611b14fff2b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _waves:
+  - _waveName: First
+    _enemyCount: 3
+    _goblinChance: 100
+    _orcChance: 0
+    _trollChance: 0
+    _spawnInterval: 1
+    _spawnAllAtOnce: 0
+  _autoStartNextWave: 1
+  _delayBetweenWaves: 3
+  _armySpawner: {fileID: 135343228}
+  _enemiesParent: {fileID: 135343225}
+--- !u!114 &135343228
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 135343224}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 981b0a6704814200ad7c88357fe1c539, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _enemySpawner:
+    _config:
+      _poolType: 0
+      _prefab: {fileID: 0}
+      _parent: {fileID: 0}
+      _initialSize: 10
+      _maxSize: 50
+  _spawnGrid: {fileID: 135343226}
+  _goblinPrefab: {fileID: 6185163539357125147, guid: 75033cba042740549a4a342cdf8522b1, type: 3}
+  _orcPrefab: {fileID: 5485061371042244070, guid: 814907d684a361249a02d1fb1f2398e8, type: 3}
+  _trollPrefab: {fileID: -8161610597462155657, guid: 964311bf93d5d2344b8812dddc125a82, type: 3}
+  _maxEnemisPerWavek: 20
+  _randomPosition: 1
 --- !u!1 &155026720
 GameObject:
   m_ObjectHideFlags: 0
@@ -6019,11 +6070,12 @@ GameObject:
   m_Component:
   - component: {fileID: 1873142239}
   - component: {fileID: 1873142238}
+  - component: {fileID: 1873142242}
+  - component: {fileID: 1873142241}
   - component: {fileID: 1873142237}
   - component: {fileID: 1873142236}
   - component: {fileID: 1873142235}
   - component: {fileID: 1873142240}
-  - component: {fileID: 1873142241}
   m_Layer: 0
   m_Name: GG
   m_TagString: Untagged
@@ -6145,6 +6197,29 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _maxCount: 100
   _isInvulnerable: 0
+--- !u!136 &1873142242
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1873142234}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!1 &1885263072
 GameObject:
   m_ObjectHideFlags: 0
@@ -6686,9 +6761,9 @@ MonoBehaviour:
     _config:
       _poolType: 0
       _prefab: {fileID: 6185163539357125147, guid: 75033cba042740549a4a342cdf8522b1, type: 3}
-      _parent: {fileID: 1781085922}
+      _parent: {fileID: 0}
       _initialSize: 10
-      _maxSize: 10
+      _maxSize: 50
   _shootController: {fileID: 1873142240}
   _spawnGrid: {fileID: 135343226}
   _playerShootPoint: {fileID: 191711218}

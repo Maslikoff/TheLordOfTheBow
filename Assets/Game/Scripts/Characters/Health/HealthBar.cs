@@ -6,6 +6,8 @@ namespace Game.Scripts.Characters.Health
 {
     public class HealthBar : MonoBehaviour
     {
+        private const float ProcentCount = 100f;
+        
         [SerializeField] private Health _health;
         
         [Header("Slider")]
@@ -54,7 +56,7 @@ namespace Game.Scripts.Characters.Health
             }
         }
 
-        private void OnHealthChanged(int currentHealth)
+        private void OnHealthChanged(float currentHealth)
         {
             _targetValue = currentHealth;
 
@@ -82,7 +84,7 @@ namespace Game.Scripts.Characters.Health
             
             if (_showAsPercentage)
             {
-                float percentage = (currentHealth / _health.MaxCount) * 100f;
+                float percentage = (currentHealth / _health.MaxCount) * ProcentCount;
                 _healthText.text = $"{percentage:F0}%";
             }
             else
