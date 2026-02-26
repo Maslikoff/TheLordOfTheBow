@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using VContainer;
+using VContainer.Unity;
 
 namespace Game.Scripts.PoolSystem
 {
@@ -9,6 +11,7 @@ namespace Game.Scripts.PoolSystem
         public static PoolService Instance { get; private set; }
     
         private readonly Dictionary<PoolType, IPool> _pools = new();
+        private IObjectResolver _container;
     
         private void Awake()
         {
@@ -20,6 +23,12 @@ namespace Game.Scripts.PoolSystem
     
             Instance = this;
         }
+        
+        [Inject]
+        public void Construct(IObjectResolver container)
+        {
+            _container = container;
+        }
     
         public void TryCreatePool<T>(PoolType poolType, T prefab, Transform parent, int initialSize, int maxSize)
             where T : Component, IPoolable
@@ -27,7 +36,7 @@ namespace Game.Scripts.PoolSystem
             if (_pools.ContainsKey(poolType))
                 return;
     
-            _pools[poolType] = new Pool<T>(prefab, parent, initialSize, maxSize);
+            _pools[poolType] = new Pool<T>(prefab, parent, initialSize, maxSize, _container);
         }
     
         public T Get<T>(PoolType poolType)

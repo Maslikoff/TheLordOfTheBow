@@ -1,8 +1,9 @@
 using System;
 using System.Collections;
 using Game.Scripts.Characters.Bullets;
+using Game.Scripts.Services;
 using UnityEngine;
-using Zenject;
+using VContainer;
 using IPoolable = Game.Scripts.PoolSystem.IPoolable;
 
 namespace Game.Scripts.Characters.Enemy
@@ -16,7 +17,7 @@ namespace Game.Scripts.Characters.Enemy
         [SerializeField] protected float _damage;
         [SerializeField] protected float _rotationSpeed = 5f;
 
-        protected Vector3 _playerPosition;
+        protected PlayerReferenceService _playerReferenceService;
         private Coroutine _attackCoroutine;
 
         public Race EnemyRace => _race;
@@ -41,34 +42,33 @@ namespace Game.Scripts.Characters.Enemy
                 _attackCoroutine = null;
             }
         }
+        
+        [Inject]
+        public void Construct(PlayerReferenceService playerReferenceService)
+        {
+            _playerReferenceService = playerReferenceService;
+        }
 
         protected abstract void Attack();
 
         protected void RotateTowardsPlayer()
         {
-            if (_playerPosition != null)
-            {
-                Vector3 direction = _playerPosition - transform.position;
-                direction.y = 0;
+            if (_playerReferenceService?.PlayerTransform == null)
+                return;
 
-                if (direction != Vector3.zero)
-                {
-                    Quaternion targetRotation = Quaternion.LookRotation(direction);
-                    transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation,
-                        _rotationSpeed * Time.deltaTime);
-                }
+            Vector3 direction = _playerReferenceService.PlayerTransform.position - transform.position;
+            direction.y = 0;
+
+            if (direction != Vector3.zero)
+            {
+                Quaternion targetRotation = Quaternion.LookRotation(direction);
+                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
             }
         }
 
         public void Release()
         {
             Released?.Invoke(this);
-        }
-
-        [Inject]
-        public void Construct(IPlayerProvider playerProvider)
-        {
-            _playerPosition = playerProvider.GetPlayerPosition();
         }
 
         private IEnumerator AttackRoutine()
