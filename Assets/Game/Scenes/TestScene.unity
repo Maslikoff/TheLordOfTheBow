@@ -966,6 +966,51 @@ Transform:
   - {fileID: 1831932534}
   m_Father: {fileID: 1240532666}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &189072724
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 189072726}
+  - component: {fileID: 189072725}
+  m_Layer: 0
+  m_Name: Insaler
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &189072725
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 189072724}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d18878fa378b40298e2cec161db0b116, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _playerProvider: {fileID: 1873142243}
+--- !u!4 &189072726
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 189072724}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &191711217
 GameObject:
   m_ObjectHideFlags: 0
@@ -6076,6 +6121,7 @@ GameObject:
   - component: {fileID: 1873142236}
   - component: {fileID: 1873142235}
   - component: {fileID: 1873142240}
+  - component: {fileID: 1873142243}
   m_Layer: 0
   m_Name: GG
   m_TagString: Untagged
@@ -6220,6 +6266,19 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 1, z: 0}
+--- !u!114 &1873142243
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1873142234}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8bb449244a4444dc9b7ea98e8002c3f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _playerGameObject: {fileID: 1873142235}
 --- !u!1 &1885263072
 GameObject:
   m_ObjectHideFlags: 0
@@ -6761,7 +6820,7 @@ MonoBehaviour:
     _config:
       _poolType: 0
       _prefab: {fileID: 6185163539357125147, guid: 75033cba042740549a4a342cdf8522b1, type: 3}
-      _parent: {fileID: 0}
+      _parent: {fileID: 1781085922}
       _initialSize: 10
       _maxSize: 50
   _shootController: {fileID: 1873142240}
@@ -7062,3 +7121,4 @@ SceneRoots:
   - {fileID: 1873142239}
   - {fileID: 1947468255}
   - {fileID: 1356905381}
+  - {fileID: 189072726}
