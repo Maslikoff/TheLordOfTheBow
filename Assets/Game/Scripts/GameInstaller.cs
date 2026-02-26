@@ -24,8 +24,8 @@ namespace Game.Scripts
                 .FromInstance(_playerProvider)
                 .AsSingle();
             
-            Container.Bind<Transform>()
-                .FromMethod(() => _playerProvider.GetPlayerTransform())
+            Container.Bind<Vector3>()
+                .FromMethod(() => _playerProvider.GetPlayerPosition())
                 .WhenInjectedInto<Enemy>();
         }
     }

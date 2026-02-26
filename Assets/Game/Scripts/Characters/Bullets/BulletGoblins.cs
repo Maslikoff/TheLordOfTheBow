@@ -6,7 +6,7 @@ namespace Game.Scripts.Characters.Bullets
     {
         protected override void MoveBullet()
         {
-            _rigidbody.velocity = -transform.forward * _speed;
+            _rigidbody.velocity = transform.forward * _speed;
         }
 
         protected override void HandleCollision(Collision other)

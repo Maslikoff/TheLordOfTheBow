@@ -16,9 +16,8 @@ namespace Game.Scripts.Characters.Enemy
         [SerializeField] protected float _damage;
         [SerializeField] protected float _rotationSpeed = 5f;
 
-        protected  Transform _playerTransform;
+        protected Vector3 _playerPosition;
         private Coroutine _attackCoroutine;
-        private Coroutine _rotationCoroutine;
 
         public Race EnemyRace => _race;
 
@@ -27,7 +26,11 @@ namespace Game.Scripts.Characters.Enemy
         protected void OnEnable()
         {
             _attackCoroutine = StartCoroutine(AttackRoutine());
-            _rotationCoroutine = StartCoroutine(RotationRoutine());
+        }
+
+        protected void Update()
+        {
+            RotateTowardsPlayer();
         }
 
         protected virtual void OnDisable()
@@ -37,27 +40,22 @@ namespace Game.Scripts.Characters.Enemy
                 StopCoroutine(_attackCoroutine);
                 _attackCoroutine = null;
             }
-            
-            if (_rotationCoroutine != null)
-            {
-                StopCoroutine(_rotationCoroutine);
-                _rotationCoroutine = null;
-            }
         }
 
         protected abstract void Attack();
-        
+
         protected void RotateTowardsPlayer()
         {
-            if (_playerTransform != null)
+            if (_playerPosition != null)
             {
-                Vector3 direction = _playerTransform.position - transform.position;
+                Vector3 direction = _playerPosition - transform.position;
                 direction.y = 0;
-                
+
                 if (direction != Vector3.zero)
                 {
                     Quaternion targetRotation = Quaternion.LookRotation(direction);
-                    transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
+                    transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation,
+                        _rotationSpeed * Time.deltaTime);
                 }
             }
         }
@@ -70,7 +68,7 @@ namespace Game.Scripts.Characters.Enemy
         [Inject]
         public void Construct(IPlayerProvider playerProvider)
         {
-            _playerTransform = playerProvider.GetPlayerTransform();
+            _playerPosition = playerProvider.GetPlayerPosition();
         }
 
         private IEnumerator AttackRoutine()
@@ -79,15 +77,6 @@ namespace Game.Scripts.Characters.Enemy
             {
                 Attack();
                 yield return new WaitForSeconds(_attackCooldown);
-            }
-        }
-        
-        private IEnumerator RotationRoutine()
-        {
-            while (enabled)
-            {
-                RotateTowardsPlayer();
-                yield return null;
             }
         }
     }

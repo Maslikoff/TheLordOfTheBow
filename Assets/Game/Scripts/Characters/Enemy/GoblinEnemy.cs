@@ -7,7 +7,7 @@ namespace Game.Scripts.Characters.Enemy
     {
         protected override void Attack()
         {
-            Debug.Log($"Гоблин {gameObject.name} стреляет из лука! Урон: {_damage}. Игрок на позиции: {_playerTransform.position}");
+            Debug.Log($"Гоблин {gameObject.name} стреляет из лука! Урон: {_damage}. Игрок на позиции: {_playerPosition}");
             var projectile = Instantiate(_bulletPrefab, _shootPoint.position, _shootPoint.rotation);
         }
     }

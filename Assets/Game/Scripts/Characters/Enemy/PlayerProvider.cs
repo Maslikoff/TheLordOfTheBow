@@ -7,17 +7,15 @@ namespace Game.Scripts.Characters.Enemy
     {
         [SerializeField] private Player.Player _playerGameObject;
 
-        private Transform _playerTransform;
+        private Vector3 _playerPosition;
 
-        public Transform GetPlayerTransform() => _playerTransform;
-
-        public Vector3 GetPlayerPosition() => _playerTransform != null ? _playerTransform.position : Vector3.zero;
+        public Vector3 GetPlayerPosition() => _playerPosition != null ? _playerPosition : Vector3.zero;
 
         public Player.Player GetPlayerGameObject() => _playerGameObject;
 
         private void Awake()
         {
-            _playerTransform = _playerGameObject.transform;
+            _playerPosition = _playerGameObject.transform.position;
         }
 
         [Inject]
@@ -26,7 +24,7 @@ namespace Game.Scripts.Characters.Enemy
             if (playerGameObject != null)
             {
                 _playerGameObject = playerGameObject;
-                _playerTransform = playerGameObject.transform;
+                _playerPosition = playerGameObject.transform.position;
             }
         }
     }
