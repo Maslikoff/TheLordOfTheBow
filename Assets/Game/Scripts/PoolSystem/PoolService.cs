@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
+using Game.Scripts.ObjectPool;
 using UnityEngine;
 using VContainer;
-using VContainer.Unity;
 
 namespace Game.Scripts.PoolSystem
 {

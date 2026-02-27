@@ -1,5 +1,5 @@
 using System;
-using Game.Scripts.PoolSystem;
+using Game.Scripts.ObjectPool;
 using UnityEngine;
 
 namespace Game.Scripts.Characters.Bullets

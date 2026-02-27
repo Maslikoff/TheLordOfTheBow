@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
-using VContainer.Unity;
+using Game.Scripts.ObjectPool;
 using Object = UnityEngine.Object;
 
 namespace Game.Scripts.PoolSystem

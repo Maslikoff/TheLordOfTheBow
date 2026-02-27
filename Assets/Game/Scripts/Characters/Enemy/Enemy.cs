@@ -1,10 +1,8 @@
 using System;
 using System.Collections;
 using Game.Scripts.Characters.Bullets;
-using Game.Scripts.Services;
 using UnityEngine;
-using VContainer;
-using IPoolable = Game.Scripts.PoolSystem.IPoolable;
+using Game.Scripts.ObjectPool;
 
 namespace Game.Scripts.Characters.Enemy
 {
@@ -17,8 +15,8 @@ namespace Game.Scripts.Characters.Enemy
         [SerializeField] protected float _damage;
         [SerializeField] protected float _rotationSpeed = 5f;
 
-        protected PlayerReferenceService _playerReferenceService;
         private Coroutine _attackCoroutine;
+        protected bool _isActive;
 
         public Race EnemyRace => _race;
 
@@ -42,32 +40,23 @@ namespace Game.Scripts.Characters.Enemy
                 _attackCoroutine = null;
             }
         }
-        
-        [Inject]
-        public void Construct(PlayerReferenceService playerReferenceService)
-        {
-            _playerReferenceService = playerReferenceService;
-        }
 
         protected abstract void Attack();
 
         protected void RotateTowardsPlayer()
         {
-            if (_playerReferenceService?.PlayerTransform == null)
-                return;
-
-            Vector3 direction = _playerReferenceService.PlayerTransform.position - transform.position;
-            direction.y = 0;
-
-            if (direction != Vector3.zero)
-            {
-                Quaternion targetRotation = Quaternion.LookRotation(direction);
-                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
-            }
+            
+        }
+        
+        public void Initialize()
+        {
+            _isActive = true;
+            gameObject.SetActive(true);
         }
 
         public void Release()
         {
+            _isActive = false;
             Released?.Invoke(this);
         }
 

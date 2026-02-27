@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Game.Scripts.PoolSystem
 {
     [Serializable]
-    public class PoolConfig<T> where T : Component, IPoolable
+    public class PoolConfig<T> where T : Component
     {
         [SerializeField] private PoolType _poolType;
         [SerializeField] private T _prefab;

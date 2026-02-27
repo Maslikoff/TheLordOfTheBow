@@ -4,6 +4,5 @@ namespace Game.Scripts
 {
     public class Wall : MonoBehaviour
     {
-        
     }
 }
