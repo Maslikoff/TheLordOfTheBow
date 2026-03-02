@@ -1,72 +1,53 @@
 using System;
-using System.Collections;
-using Game.Scripts.Characters.Bullets;
 using UnityEngine;
 using Game.Scripts.ObjectPool;
+using Game.Scripts.Spawners;
 
 namespace Game.Scripts.Characters.Enemy
 {
+    [RequireComponent(typeof(EnemyShoot))]
+    [RequireComponent(typeof(EnemyRotation))]
     public abstract class Enemy : MonoBehaviour, IPoolable
     {
-        [SerializeField] protected Bullet _bulletPrefab;
         [SerializeField] protected Race _race;
-        [SerializeField] protected Transform _shootPoint;
-        [SerializeField] protected float _attackCooldown;
-        [SerializeField] protected float _damage;
-        [SerializeField] protected float _rotationSpeed = 5f;
+        [SerializeField] protected EnemyShoot _enemyShoot;
+        [SerializeField] protected EnemyRotation _enemyRotation;
 
-        private Coroutine _attackCoroutine;
-        protected bool _isActive;
-
-        public Race EnemyRace => _race;
+        public Race Race => _race;
+        public Transform PlayerTarget { get; protected set; }
+        public BulletSpawner Bullets { get; protected set; }
 
         public event Action<IPoolable> Released;
 
-        protected void OnEnable()
+        protected virtual void OnEnable()
         {
-            _attackCoroutine = StartCoroutine(AttackRoutine());
+            if (_enemyShoot != null)
+                _enemyShoot.ResetShootState();
         }
 
-        protected void Update()
+        private void OnValidate()
         {
-            RotateTowardsPlayer();
+            _enemyShoot ??= GetComponent<EnemyShoot>();
+            _enemyRotation ??= GetComponent<EnemyRotation>();
         }
 
         protected virtual void OnDisable()
         {
-            if (_attackCoroutine != null)
-            {
-                StopCoroutine(_attackCoroutine);
-                _attackCoroutine = null;
-            }
+            Release();
         }
 
-        protected abstract void Attack();
-
-        protected void RotateTowardsPlayer()
+        public void Initialize(Transform playerTarget, BulletSpawner bulletSpawner)
         {
+            PlayerTarget = playerTarget;
+            Bullets = bulletSpawner;
             
-        }
-        
-        public void Initialize()
-        {
-            _isActive = true;
-            gameObject.SetActive(true);
+            if (_enemyRotation != null)
+                _enemyRotation.SetTarget(playerTarget);
         }
 
         public void Release()
         {
-            _isActive = false;
             Released?.Invoke(this);
-        }
-
-        private IEnumerator AttackRoutine()
-        {
-            while (enabled)
-            {
-                Attack();
-                yield return new WaitForSeconds(_attackCooldown);
-            }
         }
     }
 }

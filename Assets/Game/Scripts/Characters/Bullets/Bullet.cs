@@ -11,6 +11,10 @@ namespace Game.Scripts.Characters.Bullets
         [SerializeField] protected float _damage;
         [SerializeField] protected Rigidbody _rigidbody;
 
+        protected Vector3 _direction;
+        
+        public float Speed => _speed;
+        
         public event Action<IPoolable> Released;
 
         protected virtual void OnValidate()
@@ -41,6 +45,12 @@ namespace Game.Scripts.Characters.Bullets
             return other.gameObject.TryGetComponent(out Enemy.Enemy _) ||
                    other.gameObject.TryGetComponent(out Wall _) ||
                    other.gameObject.TryGetComponent(out Player.Player _);
+        }
+
+        public virtual void SetDirection(Vector3 direction)
+        {
+            _direction = direction.normalized;
+            Debug.Log($"Bullet.SetDirection called: {_direction}"); 
         }
 
         public virtual void Release()

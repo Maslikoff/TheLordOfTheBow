@@ -4,24 +4,21 @@ using UnityEngine;
 
 namespace Game.Scripts.Characters
 {
-    public class ShootEntity : MonoBehaviour
+    public abstract class ShootEntity : MonoBehaviour
     {
-        [SerializeField] private float _cooldownTime = 1f;
-        [SerializeField] private int _maxShotsPerBurst = 3;
+        [SerializeField] protected float _cooldownTime = 1f;
+        [SerializeField] protected int _maxShotsPerBurst = 1;
     
-        private int _currentShotsInBurst;
-        private bool _isReloading;
-        private bool _canShoot = true;
+        protected int _currentShotsInBurst;
+        protected bool _isReloading;
+        protected bool _canShoot = true;
     
         public event Action<float> ReloadProgressUpdated;
         public event Action ShotFired;
-    
-        private void Start()
-        {
-            InvokeRepeating(nameof(TryShoot), 0f, 1f);
-        }
+        
+        protected abstract void OnShotFired();
 
-        public void TryShoot()
+        public virtual void TryShoot()
         {
             if (_canShoot == false || _isReloading) 
                 return;
@@ -29,15 +26,24 @@ namespace Game.Scripts.Characters
             if (_currentShotsInBurst < _maxShotsPerBurst)
             {
                 _currentShotsInBurst++;
-    
+                OnShotFired();
+                
                 ShotFired?.Invoke();
     
                 if (_currentShotsInBurst >= _maxShotsPerBurst)
                     StartReload();
             }
         }
+        
+        public virtual void ResetShootState()
+        {
+            _currentShotsInBurst = 0;
+            _isReloading = false;
+            _canShoot = true;
+            StopAllCoroutines();
+        }
     
-        private void StartReload()
+        protected virtual void StartReload()
         {
             _isReloading = true;
             _canShoot = false;
@@ -46,7 +52,7 @@ namespace Game.Scripts.Characters
             StartCoroutine(ReloadCoroutine());
         }
     
-        private IEnumerator ReloadCoroutine()
+        protected virtual IEnumerator ReloadCoroutine()
         {
             float elapsedTime = 0f;
     

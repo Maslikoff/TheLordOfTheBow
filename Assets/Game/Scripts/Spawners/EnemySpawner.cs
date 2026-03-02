@@ -67,9 +67,9 @@ namespace Game.Scripts.Spawners
         
         private void SpawnNextInOrder()
         {
-            if (_spawnGrid == null) return;
+            if (_spawnGrid == null) 
+                return;
             
-            // Проверяем, не вышли ли за пределы сетки
             if (_currentY >= _spawnGrid.GridHeight)
             {
                 _currentY = 0;
@@ -79,8 +79,8 @@ namespace Game.Scripts.Spawners
             Vector3 spawnPosition = _spawnGrid.GetSpawnPosition(_currentX, _currentY);
             SpawnEnemyAtPosition(spawnPosition);
             
-            // Переход к следующей позиции
             _currentX++;
+            
             if (_currentX >= _spawnGrid.GridWidth)
             {
                 _currentX = 0;
@@ -90,7 +90,8 @@ namespace Game.Scripts.Spawners
 
         private void SpawnRandomInGrid()
         {
-            if (_spawnGrid == null) return;
+            if (_spawnGrid == null) 
+                return;
             
             Vector3 spawnPosition = _spawnGrid.GetRandomSpawnPosition();
             SpawnEnemyAtPosition(spawnPosition);

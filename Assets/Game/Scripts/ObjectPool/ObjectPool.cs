@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Game.Scripts.Characters.Enemy;
 using UnityEngine;
 
 namespace Game.Scripts.ObjectPool

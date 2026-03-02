@@ -118,6 +118,10 @@ GameObject:
   - component: {fileID: 375185218342545519}
   - component: {fileID: 1914759719130602957}
   - component: {fileID: 6185163539357125147}
+  - component: {fileID: 417350280539501992}
+  - component: {fileID: 2289498996976275222}
+  - component: {fileID: 3385524659509358488}
+  - component: {fileID: 4446122166797689373}
   m_Layer: 8
   m_Name: Goblin
   m_TagString: Untagged
@@ -133,7 +137,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6980581485061825696}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -141,7 +145,7 @@ Transform:
   - {fileID: 7474894997169421007}
   - {fileID: 6460695943593031293}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!33 &2430645776521425287
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -227,12 +231,69 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25ef3b004b2045479e753a8119b8075b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _bulletPrefab: {fileID: 946251025819167630, guid: 84ad99515f1be5840a70348eea73390a, type: 3}
   _race: 0
-  _shootPoint: {fileID: 7474894997169421007}
-  _attackCooldown: 3
-  _damage: 10
+  _enemyShoot: {fileID: 417350280539501992}
+  _enemyRotation: {fileID: 2289498996976275222}
+--- !u!114 &417350280539501992
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6980581485061825696}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e21127a5d1e4741bc524a9921546af3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _cooldownTime: 3
+  _maxShotsPerBurst: 1
+  _firePoint: {fileID: 7474894997169421007}
+  _bulletPool: {fileID: 3385524659509358488}
+--- !u!114 &2289498996976275222
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6980581485061825696}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 17a1874de1524fb880247cede6b502b8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   _rotationSpeed: 5
+--- !u!114 &3385524659509358488
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6980581485061825696}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 82f401204a404bda8e9daebb047eb434, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _prefab: {fileID: 946251025819167630, guid: 84ad99515f1be5840a70348eea73390a, type: 3}
+  _poolSize: 4
+--- !u!114 &4446122166797689373
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6980581485061825696}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00d9d60bc9b0426fa657fbd25b20847e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _spawnInterval: 3
+  _maxObjects: 3
+  _spawnArea: {x: 0, y: 1, z: 0}
+  _bulletSpawnPoint: {fileID: 7474894997169421007}
+  _direction: {x: 0, y: 0, z: -1}
 --- !u!1 &9154791814352156675
 GameObject:
   m_ObjectHideFlags: 0
@@ -258,7 +319,7 @@ Transform:
   m_GameObject: {fileID: 9154791814352156675}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0.5}
+  m_LocalPosition: {x: 0, y: 0, z: 0.572}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

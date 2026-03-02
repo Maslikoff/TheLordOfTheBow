@@ -118,6 +118,8 @@ GameObject:
   - component: {fileID: 375185218342545519}
   - component: {fileID: 1914759719130602957}
   - component: {fileID: 5485061371042244070}
+  - component: {fileID: 417350280539501992}
+  - component: {fileID: 2289498996976275222}
   m_Layer: 8
   m_Name: Orc
   m_TagString: Untagged
@@ -133,7 +135,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6980581485061825696}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -141,7 +143,7 @@ Transform:
   - {fileID: 1125771996524662607}
   - {fileID: 6887007350178692146}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!33 &2430645776521425287
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -227,11 +229,40 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 818a5e3d536e4ac787f3e9b4c2a8966e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _bulletPrefab: {fileID: 1780773475850581207, guid: 84ad99515f1be5840a70348eea73390a, type: 3}
   _race: 1
-  _shootPoint: {fileID: 0}
-  _attackCooldown: 4
-  _damage: 15
+  _enemyShoot: {fileID: 417350280539501992}
+  _enemyRotation: {fileID: 2289498996976275222}
+--- !u!114 &417350280539501992
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6980581485061825696}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e21127a5d1e4741bc524a9921546af3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _cooldownTime: 1
+  _maxShotsPerBurst: 3
+  _bulletSpawner: {fileID: 0}
+  _firePoint: {fileID: 0}
+  _target: {fileID: 0}
+  _shootRange: 10
+  _shootCooldown: 2
+--- !u!114 &2289498996976275222
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6980581485061825696}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 17a1874de1524fb880247cede6b502b8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   _rotationSpeed: 5
 --- !u!1 &8613605847239550163
 GameObject:
