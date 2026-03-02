@@ -50,7 +50,6 @@ namespace Game.Scripts.Characters.Bullets
         public virtual void SetDirection(Vector3 direction)
         {
             _direction = direction.normalized;
-            Debug.Log($"Bullet.SetDirection called: {_direction}"); 
         }
 
         public virtual void Release()

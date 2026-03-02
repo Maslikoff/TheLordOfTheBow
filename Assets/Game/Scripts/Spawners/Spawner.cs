@@ -8,7 +8,7 @@ namespace Game.Scripts.Spawners
     {
         [SerializeField] protected float _spawnInterval;
         [SerializeField] protected int _maxObjects;
-        [SerializeField] protected Vector3 _spawnArea = new Vector3(10f, 0f, 10f);
+        [SerializeField] protected Vector3 _spawnArea;
 
         protected int _currentObjectsCount;
         protected Coroutine _spawnCoroutine;
@@ -34,7 +34,7 @@ namespace Game.Scripts.Spawners
             if (_objectPool == null)
                 _objectPool = GetComponent<ObjectPool<T>>();
         }
-        
+
         protected virtual void StartSpawning()
         {
             if (_spawnCoroutine != null)
@@ -71,7 +71,8 @@ namespace Game.Scripts.Spawners
 
         protected virtual Vector3 GetRandomSpawnPosition()
         {
-            Vector3 randomPoint = new Vector3(Random.Range(-_spawnArea.x, _spawnArea.x), 0f, Random.Range(-_spawnArea.z, _spawnArea.z));
+            Vector3 randomPoint = new Vector3(Random.Range(-_spawnArea.x, _spawnArea.x), 0f,
+                Random.Range(-_spawnArea.z, _spawnArea.z));
 
             return transform.position + randomPoint;
         }

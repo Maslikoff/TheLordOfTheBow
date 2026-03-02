@@ -9,9 +9,25 @@ namespace Game.Scripts.Spawners
         [SerializeField] private SpawnGrid _spawnGrid;
         [SerializeField] private bool _useGridSpawning = true;
         [SerializeField] private bool _spawnInOrder = false; 
+        
+        [Header("Enemy Race Settings")]
+        [SerializeField] private bool _useMultipleRaces = false;
+        [SerializeField] private bool _useWeightedRandom = true;
+        [SerializeField] private Race _singleRace = Race.Goblin;
+        [SerializeField] private Race[] _multipleRaces;
 
+        private EnemyPool _enemyPool;
+        private int _currentRaceIndex = 0;
         private int _currentX;
         private int _currentY;
+        
+        protected override void OnEnable()
+        {
+            base.OnEnable();
+            
+            if (_spawnGrid != null)
+                _spawnGrid.SpawnEnemyAtPosition += SpawnEnemyAtPosition;
+        }
 
         protected override void OnDisable()
         {
@@ -24,9 +40,8 @@ namespace Game.Scripts.Spawners
         protected override void Initialize()
         {
             base.Initialize();
-
-            if (_spawnGrid != null)
-                _spawnGrid.SpawnEnemyAtPosition += SpawnEnemyAtPosition;
+            
+            _enemyPool = _objectPool as EnemyPool;
         }
 
         protected override void SpawnObject()
@@ -47,13 +62,10 @@ namespace Game.Scripts.Spawners
         private void SpawnEnemyAtPosition(Vector3 position)
         {
             if (_objectPool == null)
-            {
-                Debug.LogError("ObjectPool is not initialized!");
                 return;
-            }
             
-            Enemy enemy = _objectPool.GetFromPool();
-            
+            Enemy enemy = GetEnemyFromPool();
+
             if (enemy != null)
             {
                 enemy.transform.position = position;
@@ -62,8 +74,23 @@ namespace Game.Scripts.Spawners
                 enemy.Released += OnEnemyReleased;
                 
                 IncreaseObjectCount();
+
+                if (_useMultipleRaces && _multipleRaces.Length > 0)
+                    _currentRaceIndex = (_currentRaceIndex + 1) % _multipleRaces.Length;
             }
         }
+        
+        private Enemy GetEnemyFromPool()
+        {
+            if (_enemyPool == null)
+                return _objectPool.GetFromPool();
+
+            if (_useMultipleRaces && _multipleRaces.Length > 0)
+                return _enemyPool.GetRandomEnemyByWeight();
+            else
+                return _enemyPool.GetEnemy(_singleRace);
+        }
+
         
         private void SpawnNextInOrder()
         {

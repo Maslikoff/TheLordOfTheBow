@@ -61,13 +61,7 @@ namespace Game.Scripts.Characters.Enemy
                 bullet.transform.rotation = Quaternion.LookRotation(direction);
                 bullet.SetDirection(direction);
                 
-                Debug.Log($"Bullet type: {bullet.GetType()}");
-                
                 bullet.gameObject.SetActive(true);
-            }
-            else
-            {
-                Debug.LogError("Bullet is null from pool");
             }
         }
     }

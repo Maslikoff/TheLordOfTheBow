@@ -11,7 +11,7 @@ namespace Game.Scripts.ObjectPool
         protected Queue<T> _pool = new Queue<T>();
         protected Transform _poolParent;
 
-        private bool _isInitialized = false;
+        protected bool _isInitialized = false;
 
         public int GetPoolSize() => _pool.Count;
 
@@ -19,6 +19,7 @@ namespace Game.Scripts.ObjectPool
         {
             _poolParent = new GameObject($"{typeof(T).Name}Pool").transform;
             _poolParent.SetParent(transform);
+            _poolParent.SetParent(null);
         }
 
         protected virtual void Start()

@@ -9,7 +9,22 @@ namespace Game.Scripts.Spawners
     {
         [SerializeField] private Transform _bulletSpawnPoint;
         [SerializeField] private Vector3 _direction = Vector3.forward;
+        
+        [Header("Bullet Type Settings")]
+        [SerializeField] private bool _useMultipleBulletTypes = false;
+        [SerializeField] private BulletType _singleBulletType = BulletType.Arrow;
+        [SerializeField] private BulletType[] _multipleBulletTypes;
 
+        private BulletPool _bulletPool;
+        private int _currentBulletIndex = 0;
+        
+        protected override void Initialize()
+        {
+            base.Initialize();
+            
+            _bulletPool = _objectPool as BulletPool;
+        }
+        
         protected override void SpawnObject()
         {
             SpawnBullet();
@@ -17,17 +32,27 @@ namespace Game.Scripts.Spawners
 
         public void SpawnBullet()
         {
-            Bullet bullet = _objectPool.GetFromPool();
+            if (_objectPool == null)
+            {
+                Debug.LogError("ObjectPool is not initialized!");
+                return;
+            }
+
+            Bullet bullet = GetBulletFromPool();
 
             if (bullet != null)
             {
                 bullet.transform.position = _bulletSpawnPoint != null ? _bulletSpawnPoint.position : transform.position;
                 bullet.transform.rotation = Quaternion.LookRotation(_direction);
                 bullet.gameObject.SetActive(true);
+                bullet.SetDirection(_direction);
 
                 bullet.Released += OnBulletReleased;
-
+                
                 IncreaseObjectCount();
+
+                if (_useMultipleBulletTypes && _multipleBulletTypes.Length > 0)
+                    _currentBulletIndex = (_currentBulletIndex + 1) % _multipleBulletTypes.Length;
             }
         }
 
@@ -39,6 +64,17 @@ namespace Game.Scripts.Spawners
         public void SetFirePoint(Transform bulletSpawnPoint)
         {
             _bulletSpawnPoint = bulletSpawnPoint;
+        }
+        
+        private Bullet GetBulletFromPool()
+        {
+            if (_bulletPool == null)
+                return _objectPool.GetFromPool();
+
+            if (_useMultipleBulletTypes && _multipleBulletTypes.Length > 0)
+                return _bulletPool.GetBullet(_multipleBulletTypes[_currentBulletIndex]);
+            else
+                return _bulletPool.GetBullet(_singleBulletType);
         }
 
         private void OnBulletReleased(IPoolable poolable)

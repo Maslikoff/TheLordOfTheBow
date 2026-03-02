@@ -7,14 +7,7 @@ namespace Game.Scripts.Characters.Bullets
         protected override void MoveBullet()
         {
             if (_rigidbody != null && _direction != Vector3.zero)
-            {
                 _rigidbody.velocity = _direction * _speed;
-                Debug.Log($"Moving bullet: {_direction} * {_speed} = {_direction * _speed}");
-            }
-            else
-            {
-                Debug.LogError($"Bullet not moving: direction={_direction}, rb={_rigidbody != null}");
-            }
         }
 
         protected override void HandleCollision(Collision other)

@@ -1,4 +1,5 @@
 using System.Collections;
+using Game.Scripts.Characters.Bullets;
 using Game.Scripts.Spawners;
 using UnityEngine;
 
@@ -9,6 +10,7 @@ namespace Game.Scripts.Characters.Player
         private const float MinimumDelay = 0.1f;
         
         [SerializeField] private BulletSpawner _bulletSpawner;
+        [SerializeField] private BulletType _bulletType;
         [SerializeField] private Transform _firePoint;
         [SerializeField] private bool _autoFire = false;
 

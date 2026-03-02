@@ -277,6 +277,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _prefab: {fileID: 946251025819167630, guid: 84ad99515f1be5840a70348eea73390a, type: 3}
   _poolSize: 4
+  _bulletConfigs: []
 --- !u!114 &4446122166797689373
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -294,6 +295,9 @@ MonoBehaviour:
   _spawnArea: {x: 0, y: 1, z: 0}
   _bulletSpawnPoint: {fileID: 7474894997169421007}
   _direction: {x: 0, y: 0, z: -1}
+  _useMultipleBulletTypes: 0
+  _singleBulletType: 0
+  _multipleBulletTypes: 
 --- !u!1 &9154791814352156675
 GameObject:
   m_ObjectHideFlags: 0

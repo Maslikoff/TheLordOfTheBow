@@ -11,9 +11,6 @@ GameObject:
   - component: {fileID: 8690616237458035400}
   - component: {fileID: 5714510797088590162}
   - component: {fileID: 5427966749699303339}
-  - component: {fileID: 3399756696577151773}
-  - component: {fileID: 368100933368325870}
-  - component: {fileID: 7169359265676688717}
   m_Layer: 0
   m_Name: PoolService
   m_TagString: Untagged
@@ -53,6 +50,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _prefab: {fileID: 5500303543803767547, guid: 284cf5c90bbf1e74d95e09721124c345, type: 3}
   _poolSize: 10
+  _bulletConfigs: []
 --- !u!114 &5427966749699303339
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -70,59 +68,9 @@ MonoBehaviour:
   _spawnArea: {x: 0, y: 0, z: 0}
   _bulletSpawnPoint: {fileID: 0}
   _direction: {x: 0, y: 0, z: 1}
---- !u!114 &3399756696577151773
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 675336176799941651}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 233e5749c0d518941bc02ab6b8335a69, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _enemySpawnPoint: {fileID: 0}
-  _gridWidth: 5
-  _gridHeight: 3
-  _gridOffset: {x: 0, y: 0, z: 0}
-  _centerGrid: 1
-  _horizontalSpacing: 2
-  _verticalSpacing: 2
---- !u!114 &368100933368325870
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 675336176799941651}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 22ee26bbb22146f7b7a19bab621f4912, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _spawnInterval: 2
-  _maxObjects: 13
-  _spawnArea: {x: 10, y: 0, z: 10}
-  _spawnGrid: {fileID: 3399756696577151773}
-  _useGridSpawning: 1
-  _spawnInOrder: 0
---- !u!114 &7169359265676688717
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 675336176799941651}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 08fa428adbb8413c8079059b5c2ecfc7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _prefab: {fileID: 6185163539357125147, guid: 75033cba042740549a4a342cdf8522b1, type: 3}
-  _poolSize: 10
-  _playerTarget: {fileID: 0}
-  _bulletSpawner: {fileID: 0}
+  _useMultipleBulletTypes: 0
+  _singleBulletType: 0
+  _multipleBulletTypes: 
 --- !u!1 &3986049398304335167
 GameObject:
   m_ObjectHideFlags: 0
