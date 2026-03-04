@@ -19,7 +19,6 @@ namespace Game.Scripts.ObjectPool
         {
             _poolParent = new GameObject($"{typeof(T).Name}Pool").transform;
             _poolParent.SetParent(transform);
-            _poolParent.SetParent(null);
         }
 
         protected virtual void Start()
@@ -87,7 +86,7 @@ namespace Game.Scripts.ObjectPool
             OnObjectReturn(obj);
         }
 
-        private void HandleObjectReleased(IPoolable poolable)
+        protected virtual void HandleObjectReleased(IPoolable poolable)
         {
             if (poolable is T obj)
                 ReturnToPool(obj);

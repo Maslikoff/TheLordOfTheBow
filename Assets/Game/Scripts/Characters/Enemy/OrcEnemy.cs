@@ -6,6 +6,9 @@ namespace Game.Scripts.Characters.Enemy
     public class OrcEnemy: Enemy
 
     {
-        
+        protected void Awake()
+        {
+            _race = Race.Orc;
+        }
     }
 }

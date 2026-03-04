@@ -112,6 +112,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8379639594751380630}
+  - component: {fileID: 4011770484560313510}
+  - component: {fileID: 8270352627581246602}
+  - component: {fileID: 6888097065496297021}
   m_Layer: 0
   m_Name: EnemySpawnerPoint
   m_TagString: Untagged
@@ -135,3 +138,73 @@ Transform:
   - {fileID: 977500032739418634}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4011770484560313510
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6890762659205012621}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 233e5749c0d518941bc02ab6b8335a69, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _enemySpawnPoint: {fileID: 8379639594751380630}
+  _gridWidth: 5
+  _gridHeight: 3
+  _gridOffset: {x: 0, y: 0, z: 0}
+  _centerGrid: 1
+  _horizontalSpacing: 2
+  _verticalSpacing: 2
+--- !u!114 &8270352627581246602
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6890762659205012621}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 08fa428adbb8413c8079059b5c2ecfc7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _prefab: {fileID: 0}
+  _poolSize: 10
+  _enemyConfigs:
+  - _race: 0
+    _prefab: {fileID: 7080309792819254836, guid: d5bd6346056e6a647b4f66f149d5864b, type: 3}
+    _poolSize: 5
+    _spawnWeight: 26.5
+  - _race: 1
+    _prefab: {fileID: 7371531689036714625, guid: 0987bbdc63c89a54d9eaeb7bbb073472, type: 3}
+    _poolSize: 5
+    _spawnWeight: 28.6
+  - _race: 2
+    _prefab: {fileID: 4670338830001340343, guid: a2cd61c0cec42c34ebaf42f831b78e52, type: 3}
+    _poolSize: 5
+    _spawnWeight: 32.2
+  _playerTarget: {fileID: 0}
+  _bulletSpawner: {fileID: 0}
+--- !u!114 &6888097065496297021
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6890762659205012621}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 22ee26bbb22146f7b7a19bab621f4912, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _spawnInterval: 2
+  _maxObjects: 13
+  _spawnArea: {x: 0, y: 0, z: 0}
+  _spawnGrid: {fileID: 4011770484560313510}
+  _useGridSpawning: 1
+  _spawnInOrder: 0
+  _useMultipleRaces: 1
+  _useWeightedRandom: 1
+  _singleRace: 0
+  _multipleRaces: 000000000100000002000000

@@ -1,10 +1,10 @@
-using System;
 using UnityEngine;
 
 namespace Game.Scripts.Characters.Enemy
 {
     public class EnemyRotation : MonoBehaviour
     {
+        [SerializeField] private Transform _visualRoot;
         [SerializeField] private float _rotationSpeed = 5f;
         
         private Transform _target;
@@ -34,7 +34,7 @@ namespace Game.Scripts.Characters.Enemy
                 return;
                 
             Quaternion targetRotation = Quaternion.LookRotation(direction);
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
+            _visualRoot.rotation = Quaternion.Slerp(_visualRoot.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
         }
     }
 }

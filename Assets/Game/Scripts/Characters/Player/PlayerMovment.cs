@@ -21,9 +21,9 @@ namespace Game.Scripts.Characters.Player
         {
             Vector3 move = new Vector3(direction.x, 0, direction.y);
 
-            _characterController.Move(move * _speed * Time.deltaTime);
+            _characterController.Move(move * (_speed * Time.deltaTime));
 
-            if (move.magnitude > 0.1f && _visualRoot != null)
+            if (move.magnitude > MinDistance && _visualRoot != null)
                 RotateTowardsDirection(move);
         }
 

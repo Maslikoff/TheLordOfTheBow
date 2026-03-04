@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Game.Scripts
+namespace Game.Scripts.Environment
 {
     public class Wall : MonoBehaviour
     {
