@@ -7,12 +7,12 @@ namespace Game.Scripts.ObjectPool
 {
     public class GroundPool : ObjectPool<Ground>
     {
-        [SerializeField] private List<GroundPrefabConfig> _groundPrefabs = new List<GroundPrefabConfig>();
+        [SerializeField] private List<GroundPrefabConfig> _groundPrefabs = new();
         [SerializeField] private float _groundLength = 20f;
 
-        private List<Queue<Ground>> _typePools = new List<Queue<Ground>>();
-        private List<Transform> _typeParents = new List<Transform>();
-        private List<Ground> _typePrefabs = new List<Ground>();
+        private List<Queue<Ground>> _typePools = new();
+        private List<Transform> _typeParents = new();
+        private List<Ground> _typePrefabs = new();
         
         private int _currentPrefabIndex = 0;
         private float _lastSpawnZ = 0f;
@@ -23,13 +23,21 @@ namespace Game.Scripts.ObjectPool
         
         protected override void Awake()
         {
+            base.Awake();
+            
             InitializePools();
         }
         
-        protected override void HandleObjectReleased(IPoolable poolable)
+        protected override void OnHandleObjectReleased(IPoolable poolable)
         {
             if (poolable is Ground ground)
                 ReturnGround(ground); 
+        }
+        
+        protected override Ground CreateNewObject()
+        {
+            Debug.LogError("GroundPool should use GetFromPool or GetNextGround!");
+            return null;
         }
         
         public void ReturnGround(Ground ground)
@@ -64,10 +72,7 @@ namespace Game.Scripts.ObjectPool
                 ground = CreateGroundForIndex(_currentPrefabIndex);
 
             if (ground != null)
-            {
-                ground.gameObject.SetActive(true);
                 OnObjectGet(ground);
-            }
 
             return ground;
         }
@@ -120,14 +125,15 @@ namespace Game.Scripts.ObjectPool
             Ground ground = Instantiate(_typePrefabs[index], _typeParents[index]);
             ground.gameObject.SetActive(false);
             
-            ground.Released += HandleObjectReleased; 
+            ground.Released += OnHandleObjectReleased; 
             
             return ground;
         }
 
         private void ReturnGroundToPool(Ground ground, int index)
         {
-            if (ground == null) return;
+            if (ground == null) 
+                return;
 
             ground.gameObject.SetActive(false);
             ground.transform.SetParent(_typeParents[index]);

@@ -10,6 +10,7 @@ namespace Game.Scripts.Characters.Bullets
     {
         [SerializeField] [Min(0)] protected float _speed;
         [SerializeField] protected float _damage;
+        [SerializeField] protected BulletType _bulletType;
         [SerializeField] protected Rigidbody _rigidbody;
 
         protected Vector3 _direction;

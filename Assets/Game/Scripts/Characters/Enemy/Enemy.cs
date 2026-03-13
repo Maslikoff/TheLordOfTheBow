@@ -2,16 +2,20 @@ using System;
 using UnityEngine;
 using Game.Scripts.ObjectPool;
 using Game.Scripts.Spawners;
+using Game.Scripts.UI;
 
 namespace Game.Scripts.Characters.Enemy
 {
     [RequireComponent(typeof(EnemyShoot))]
     [RequireComponent(typeof(EnemyRotation))]
+    [RequireComponent(typeof(Health))]
     public abstract class Enemy : MonoBehaviour, IPoolable
     {
         [SerializeField] protected Race _race;
         [SerializeField] protected EnemyShoot _enemyShoot;
         [SerializeField] protected EnemyRotation _enemyRotation;
+        [SerializeField] protected Health _health;
+        [SerializeField] protected DamagePopup _damagePopup;
 
         public Race Race => _race;
         public Transform PlayerTarget { get; protected set; }
@@ -23,17 +27,34 @@ namespace Game.Scripts.Characters.Enemy
         {
             if (_enemyShoot != null)
                 _enemyShoot.ResetShootState();
+            
+            if (_damagePopup != null)
+                _damagePopup.ResetPopup();
+            
+            if (_health != null)
+            {
+                _health.DamageTaken += OnDamageTaken;
+                _health.Death += Release;
+            }
         }
 
         private void OnValidate()
         {
             _enemyShoot ??= GetComponent<EnemyShoot>();
             _enemyRotation ??= GetComponent<EnemyRotation>();
+            _health ??= GetComponent<Health>();
         }
 
         protected virtual void OnDisable()
         {
-            Release();
+            if (_health != null)
+            {
+                _health.DamageTaken -= OnDamageTaken;
+                _health.Death -= Release;
+            }
+            
+            if (_damagePopup != null)
+                _damagePopup.ResetPopup();
         }
 
         public void Initialize(Transform playerTarget, BulletSpawner bulletSpawner)
@@ -48,6 +69,12 @@ namespace Game.Scripts.Characters.Enemy
         public void Release()
         {
             Released?.Invoke(this);
+        }
+        
+        private void OnDamageTaken(float damage)
+        {
+            if (_damagePopup != null)
+                _damagePopup.ShowDamage(damage);
         }
     }
 }

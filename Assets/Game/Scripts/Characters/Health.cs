@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace Game.Scripts.Characters.Health
+namespace Game.Scripts.Characters
 {
     public class Health: MonoBehaviour
 

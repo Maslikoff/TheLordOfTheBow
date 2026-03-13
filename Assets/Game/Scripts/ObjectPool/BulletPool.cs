@@ -6,28 +6,34 @@ namespace Game.Scripts.ObjectPool
 {
     public class BulletPool : ObjectPool<Bullet>
     {
-        [SerializeField] private List<BulletTypeConfig> _bulletConfigs = new List<BulletTypeConfig>();
+        [SerializeField] private List<BulletTypeConfig> _bulletConfigs = new();
 
-        private Dictionary<BulletType, Queue<Bullet>> _typePools = new Dictionary<BulletType, Queue<Bullet>>();
-        private Dictionary<BulletType, Transform> _typeParents = new Dictionary<BulletType, Transform>();
-        private Dictionary<BulletType, Bullet> _typePrefabs = new Dictionary<BulletType, Bullet>();
+        private Dictionary<BulletType, Queue<Bullet>> _typePools = new();
+        private Dictionary<BulletType, Transform> _typeParents = new();
+        private Dictionary<BulletType, Bullet> _typePrefabs = new();
 
-        private void Start()
+        protected override void Awake()
         {
             if (_isInitialized == false)
                 InitializePools();
         }
 
-        private void OnDestroy()
+        protected override void OnDestroy()
         {
             foreach (var pool in _typePools)
             {
                 foreach (var bullet in pool.Value)
                 {
                     if(bullet != null)
-                        bullet.Released -= HandleBulletReleased;
+                        bullet.Released -= OnHandleBulletReleased;
                 }
             }
+        }
+        
+        protected override Bullet CreateNewObject()
+        {
+            Debug.LogError("BulletPool should use GetBullet with type parameter!");
+            return null;
         }
         
         public void ReturnBullet(Bullet bullet)
@@ -111,7 +117,7 @@ namespace Game.Scripts.ObjectPool
             Bullet bullet = Instantiate(_typePrefabs[type], _typeParents[type]);
             bullet.gameObject.SetActive(false);
             
-            bullet.Released += HandleBulletReleased;
+            bullet.Released += OnHandleBulletReleased;
             
             return bullet;
         }
@@ -128,7 +134,7 @@ namespace Game.Scripts.ObjectPool
             _typePools[type].Enqueue(bullet);
         }
         
-        private void HandleBulletReleased(IPoolable poolable)
+        private void OnHandleBulletReleased(IPoolable poolable)
         {
             if (poolable is Bullet bullet)
                 ReturnBullet(bullet);

@@ -1,3 +1,4 @@
+using System;
 using Game.Scripts.Characters.Enemy;
 using Game.Scripts.ObjectPool;
 using UnityEngine;
@@ -11,15 +12,17 @@ namespace Game.Scripts.Spawners
         [SerializeField] private bool _spawnInOrder = false; 
         
         [Header("Enemy Race Settings")]
-        [SerializeField] private bool _useMultipleRaces = false;
-        [SerializeField] private bool _useWeightedRandom = true;
         [SerializeField] private Race _singleRace = Race.Goblin;
         [SerializeField] private Race[] _multipleRaces;
+        [SerializeField] private bool _useMultipleRaces = false;
+        [SerializeField] private bool _useWeightedRandom = true;
 
         private EnemyPool _enemyPool;
         private int _currentRaceIndex = 0;
         private int _currentX;
         private int _currentY;
+        
+        public event Action EnemyReleased;
         
         protected override void OnEnable()
         {
@@ -58,6 +61,22 @@ namespace Game.Scripts.Spawners
                 SpawnEnemyAtPosition(GetRandomSpawnPosition());
             }
         }
+        
+        public void ResetCurrentCount()
+        {
+            _currentObjectsCount = 0;
+        }
+        
+        public bool ForceSpawn()
+        {
+            if (CanSpawn() == false) return false;
+            
+            SpawnObject();
+            
+            return true;
+        }
+
+        public float GetSpawnInterval() => _spawnInterval;
         
         private void SpawnEnemyAtPosition(Vector3 position)
         {
@@ -129,6 +148,7 @@ namespace Game.Scripts.Spawners
             if (poolable is Enemy enemy)
             {
                 enemy.Released -= OnEnemyReleased;
+                EnemyReleased?.Invoke();
                 
                 DecreaseObjectCount();
             }

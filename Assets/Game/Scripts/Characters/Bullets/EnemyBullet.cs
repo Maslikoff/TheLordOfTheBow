@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Game.Scripts.Characters.Bullets
 {
-    public class BulletGoblins : Bullet
+    public class EnemyBullet : Bullet
     {
         protected override void MoveBullet()
         {
@@ -12,7 +12,7 @@ namespace Game.Scripts.Characters.Bullets
 
         protected override void HandleCollision(Collision other)
         {
-            if (other.gameObject.TryGetComponent(out Health.Health player))
+            if (other.gameObject.TryGetComponent(out Health player))
             {
                 player.TakeDamage(_damage);
                 Release();

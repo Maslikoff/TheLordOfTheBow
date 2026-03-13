@@ -1,8 +1,6 @@
-using System;
 using System.Collections;
 using Game.Scripts.Characters.Bullets;
 using Game.Scripts.ObjectPool;
-using Game.Scripts.Spawners;
 using UnityEngine;
 
 namespace Game.Scripts.Characters.Enemy
@@ -13,6 +11,7 @@ namespace Game.Scripts.Characters.Enemy
         
         [SerializeField] private Transform _firePoint;
         [SerializeField] private BulletPool _bulletPool;
+        [SerializeField] private BulletType _bulletType = BulletType.Arrow;
 
         private Coroutine _autoFireCoroutine;
         private Enemy _enemy;
@@ -51,7 +50,7 @@ namespace Game.Scripts.Characters.Enemy
             if (_bulletPool == null || _firePoint == null || _enemy?.PlayerTarget == null) 
                 return;
 
-            Bullet bullet = _bulletPool.GetFromPool();
+            Bullet bullet = _bulletPool.GetBullet(_bulletType);
             
             if (bullet != null)
             {

@@ -7,33 +7,40 @@ namespace Game.Scripts.ObjectPool
 {
     public class EnemyPool : ObjectPool<Enemy>
     {
-        [SerializeField] private List<EnemyRaceConfig> _enemyConfigs = new List<EnemyRaceConfig>();
+        [SerializeField] private List<EnemyRaceConfig> _enemyConfigs = new();
         [SerializeField] private Transform _playerTarget;
         [SerializeField] private BulletSpawner _bulletSpawner;
 
-        private Dictionary<Race, Queue<Enemy>> _racePools = new Dictionary<Race, Queue<Enemy>>();
-        private Dictionary<Race, Transform> _raceParents = new Dictionary<Race, Transform>();
-        private Dictionary<Race, Enemy> _racePrefabs = new Dictionary<Race, Enemy>();
-        private Dictionary<Race, float> _raceWeights = new Dictionary<Race, float>();
+        private Dictionary<Race, Queue<Enemy>> _racePools = new();
+        private Dictionary<Race, Transform> _raceParents = new();
+        private Dictionary<Race, Enemy> _racePrefabs = new();
+        private Dictionary<Race, float> _raceWeights = new();
         
         private float _totalWeight;
         
         protected override void Awake()
         {
             base.Awake();
+            
             InitializePools();
         }
-        
-        private void OnDestroy()
+
+        protected override void OnDestroy()
         {
             foreach (var pool in _racePools)
             {
                 foreach (var enemy in pool.Value)
                 {
                     if (enemy != null)
-                        enemy.Released -= HandleEnemyReleased;
+                        enemy.Released -= OnHandleEnemyReleased;
                 }
             }
+        }
+        
+        protected override Enemy CreateNewObject()
+        {
+            Debug.LogError("EnemyPool should use GetEnemy with race parameter!");
+            return null;
         }
         
         public void ReturnEnemy(Enemy enemy)
@@ -152,7 +159,7 @@ namespace Game.Scripts.ObjectPool
             Enemy enemy = Instantiate(_racePrefabs[race], _raceParents[race]);
             enemy.gameObject.SetActive(false);
             
-            enemy.Released += HandleEnemyReleased;
+            enemy.Released += OnHandleEnemyReleased;
             
             return enemy;
         }
@@ -170,30 +177,10 @@ namespace Game.Scripts.ObjectPool
             _racePools[race].Enqueue(enemy);
         }
 
-        private void HandleEnemyReleased(IPoolable poolable)
+        private void OnHandleEnemyReleased(IPoolable poolable)
         {
             if (poolable is Enemy enemy)
                 ReturnEnemy(enemy);
-        }
-        
-        protected override Enemy CreateNewObject()
-        {
-            Enemy enemy = base.CreateNewObject();
-            
-            if (enemy != null && _playerTarget != null)
-                enemy.Initialize(_playerTarget, _bulletSpawner);
-                
-            return enemy;
-        }
-
-        public override Enemy GetFromPool()
-        {
-            Enemy enemy = base.GetFromPool();
-            
-            if (enemy != null && _playerTarget != null)
-                enemy.Initialize(_playerTarget, _bulletSpawner);
-                
-            return enemy;
         }
     }
 }

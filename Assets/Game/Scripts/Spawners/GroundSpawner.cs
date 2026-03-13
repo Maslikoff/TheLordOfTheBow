@@ -1,3 +1,4 @@
+using System;
 using Game.Scripts.Environment;
 using Game.Scripts.ObjectPool;
 using UnityEngine;
@@ -7,12 +8,10 @@ namespace Game.Scripts.Spawners
     public class GroundSpawner : Spawner<Ground>
     {
         [SerializeField] private GroundPool _groundPool;
-        [SerializeField] private int _initialSegmentCount = 3;
+        [SerializeField] private int _initialSegmentCount = 6;
         [SerializeField] private Vector3 _startPosition = Vector3.zero;
-        
-        private float _nextSpawnZ;
 
-        protected override void OnEnable() { }
+        protected override bool CanSpawn() => true;
 
         protected override void OnDisable()
         {
@@ -23,40 +22,31 @@ namespace Game.Scripts.Spawners
         protected override void Initialize()
         {
             base.Initialize();
-            
-            if (_groundPool == null)
-                _groundPool = _objectPool as GroundPool;
-            
+
+            if (_groundPool == null) _groundPool = _objectPool as GroundPool;
+            if (_groundPool == null) throw new NullReferenceException("Can't get for ground pool");
+
             _groundPool.GroundReturned += SpawnObject;
-            
+
             for (int i = 0; i < _initialSegmentCount; i++)
-            {
-                SpawnGroundSegment();
-            }
+                SpawnGroundAtIndexedPosition(i);
         }
 
-        protected override void SpawnObject()
-        {
-            SpawnGroundSegment();
-        }
+        protected override void SpawnObject() => SpawnGroundAtIndexedPosition(_initialSegmentCount - 1);
 
-        protected override bool CanSpawn() => true;
-
-        private void SpawnGroundSegment()
+        private void SpawnGroundAtIndexedPosition(int index)
         {
             if (_groundPool == null) return;
-            
+
             Ground newGround = _groundPool.GetNextGround();
+
+            if (newGround == null) return;
+
+            Vector3 newGroundPosition = new Vector3(_startPosition.x, _startPosition.y, _groundPool.GroundLength * index);
+            newGround.transform.position = newGroundPosition;
+            newGround.gameObject.SetActive(true);
             
-            if (newGround != null)
-            {
-                newGround.transform.position = new Vector3(_startPosition.x, _startPosition.y, _nextSpawnZ);
-                
-                newGround.gameObject.SetActive(true);
-                _nextSpawnZ += _groundPool.GroundLength;
-                
-                IncreaseObjectCount();
-            }
+            IncreaseObjectCount();
         }
     }
 }

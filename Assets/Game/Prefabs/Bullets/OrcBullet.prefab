@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 6715459730368479186}
   - component: {fileID: 946251025819167630}
   m_Layer: 10
-  m_Name: EnemyBullet
+  m_Name: OrcBullet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -64,7 +64,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: e69d9abb20012144ea401d3c3933e045, type: 2}
+  - {fileID: 2100000, guid: 8e0463966656a4940a7046da00171014, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -147,5 +147,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _speed: 10
-  _damage: 10
+  _damage: 12
+  _bulletType: 3
   _rigidbody: {fileID: 6715459730368479186}

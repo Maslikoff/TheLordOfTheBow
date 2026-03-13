@@ -2,7 +2,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Game.Scripts.Characters.Health
+namespace Game.Scripts.Characters.UI
 {
     public class HealthBar : MonoBehaviour
     {

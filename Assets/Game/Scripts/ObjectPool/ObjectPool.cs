@@ -5,15 +5,10 @@ namespace Game.Scripts.ObjectPool
 {
     public abstract class ObjectPool<T> : MonoBehaviour where T : Component, IPoolable
     {
-        [SerializeField] protected T _prefab;
-        [SerializeField] protected int _poolSize = 10;
-
-        protected Queue<T> _pool = new Queue<T>();
-        protected Transform _poolParent;
+        private Queue<T> _pool = new();
+        private Transform _poolParent;
 
         protected bool _isInitialized = false;
-
-        public int GetPoolSize() => _pool.Count;
 
         protected virtual void Awake()
         {
@@ -21,47 +16,19 @@ namespace Game.Scripts.ObjectPool
             _poolParent.SetParent(transform);
         }
 
-        protected virtual void Start()
-        {
-            if (_isInitialized == false)
-            {
-                InitializePool();
-                _isInitialized = true;
-            }
-        }
-
         protected virtual void OnDestroy()
         {
             foreach (var obj in _pool)
                 if (obj != null)
-                    obj.Released -= HandleObjectReleased;
+                    obj.Released -= OnHandleObjectReleased;
         }
 
-        protected virtual void OnObjectGet(T obj)
+        protected void OnObjectGet(T obj)
         {
         }
 
-        protected virtual void OnObjectReturn(T obj)
+        private void ObjectReturn(T obj)
         {
-        }
-
-        protected void InitializePool()
-        {
-            for (int i = 0; i < _poolSize; i++)
-            {
-                T obj = CreateNewObject();
-                ReturnToPool(obj);
-            }
-        }
-
-        protected virtual T CreateNewObject()
-        {
-            T obj = Instantiate(_prefab, _poolParent);
-            obj.gameObject.SetActive(false);
-
-            obj.Released += HandleObjectReleased;
-
-            return obj;
         }
 
         public virtual T GetFromPool()
@@ -83,10 +50,12 @@ namespace Game.Scripts.ObjectPool
         {
             obj.gameObject.SetActive(false);
             _pool.Enqueue(obj);
-            OnObjectReturn(obj);
+            ObjectReturn(obj);
         }
 
-        protected virtual void HandleObjectReleased(IPoolable poolable)
+        protected abstract T CreateNewObject();
+
+        protected virtual void OnHandleObjectReleased(IPoolable poolable)
         {
             if (poolable is T obj)
                 ReturnToPool(obj);

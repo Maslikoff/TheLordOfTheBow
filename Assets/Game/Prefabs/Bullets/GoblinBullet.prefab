@@ -13,9 +13,9 @@ GameObject:
   - component: {fileID: 1613845712189557190}
   - component: {fileID: 6703091461290541697}
   - component: {fileID: 6715459730368479186}
-  - component: {fileID: 5500303543803767547}
-  m_Layer: 6
-  m_Name: Arrow
+  - component: {fileID: 946251025819167630}
+  m_Layer: 10
+  m_Name: GoblinBullet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -31,7 +31,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.1, y: 0.1, z: 0.44}
+  m_LocalScale: {x: 0.2, y: 0.2, z: 0.2}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -64,7 +64,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 75efba329f4fd8d49bcf1bf9d254d05a, type: 2}
+  - {fileID: 2100000, guid: e69d9abb20012144ea401d3c3933e045, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -134,7 +134,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &5500303543803767547
+--- !u!114 &946251025819167630
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -143,9 +143,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 2110184989629228765}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: caa9d9de8def42dfbcb829e76d74083b, type: 3}
+  m_Script: {fileID: 11500000, guid: fb80fe5abcfd4d5383869049f20fa6ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _speed: 10
-  _damage: 15
+  _damage: 10
+  _bulletType: 0
   _rigidbody: {fileID: 6715459730368479186}

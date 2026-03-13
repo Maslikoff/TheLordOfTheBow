@@ -10,9 +10,10 @@ namespace Game.Scripts.Spawners
         [SerializeField] protected int _maxObjects;
         [SerializeField] protected Vector3 _spawnArea;
 
-        protected int _currentObjectsCount;
-        protected Coroutine _spawnCoroutine;
         protected ObjectPool<T> _objectPool;
+        protected int _currentObjectsCount;
+        
+        private Coroutine _spawnCoroutine;
 
         protected virtual void OnEnable()
         {
@@ -35,7 +36,7 @@ namespace Game.Scripts.Spawners
                 _objectPool = GetComponent<ObjectPool<T>>();
         }
 
-        protected virtual void StartSpawning()
+        private void StartSpawning()
         {
             if (_spawnCoroutine != null)
                 StopCoroutine(_spawnCoroutine);
@@ -43,7 +44,7 @@ namespace Game.Scripts.Spawners
             _spawnCoroutine = StartCoroutine(SpawnRoutine());
         }
 
-        protected virtual void StopSpawning()
+        private void StopSpawning()
         {
             if (_spawnCoroutine != null)
             {
@@ -52,7 +53,7 @@ namespace Game.Scripts.Spawners
             }
         }
 
-        protected virtual IEnumerator SpawnRoutine()
+        private IEnumerator SpawnRoutine()
         {
             WaitForSeconds waitForSeconds = new WaitForSeconds(_spawnInterval);
 
@@ -69,7 +70,7 @@ namespace Game.Scripts.Spawners
 
         protected abstract void SpawnObject();
 
-        protected virtual Vector3 GetRandomSpawnPosition()
+        protected Vector3 GetRandomSpawnPosition()
         {
             Vector3 randomPoint = new Vector3(Random.Range(-_spawnArea.x, _spawnArea.x), 0f,
                 Random.Range(-_spawnArea.z, _spawnArea.z));
@@ -77,7 +78,7 @@ namespace Game.Scripts.Spawners
             return transform.position + randomPoint;
         }
 
-        protected virtual IEnumerator DelayedSpawnCheck()
+        private IEnumerator DelayedSpawnCheck()
         {
             yield return new WaitForSeconds(_spawnInterval);
 
@@ -85,7 +86,7 @@ namespace Game.Scripts.Spawners
                 StartSpawning();
         }
 
-        public virtual void OnObjectTaken()
+        public void OnObjectTaken()
         {
             _currentObjectsCount--;
 
@@ -93,12 +94,12 @@ namespace Game.Scripts.Spawners
                 StartCoroutine(DelayedSpawnCheck());
         }
 
-        public virtual void IncreaseObjectCount()
+        protected void IncreaseObjectCount()
         {
             _currentObjectsCount++;
         }
 
-        public virtual void DecreaseObjectCount()
+        protected void DecreaseObjectCount()
         {
             _currentObjectsCount = Mathf.Max(0, _currentObjectsCount - 1);
         }

@@ -1,5 +1,4 @@
 using Game.Scripts.Characters.Bullets;
-using Game.Scripts.Characters.Enemy;
 using Game.Scripts.ObjectPool;
 using UnityEngine;
 
