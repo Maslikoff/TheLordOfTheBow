@@ -16,8 +16,8 @@ namespace Game.Scripts.Characters.Enemy
         [SerializeField] protected EnemyRotation _enemyRotation;
         [SerializeField] protected Health _health;
         [SerializeField] protected DamagePopup _damagePopup;
-
-        public Race Race => _race;
+        
+        public Race RaceEnemy => _race;
         public Transform PlayerTarget { get; protected set; }
         public BulletSpawner Bullets { get; protected set; }
 

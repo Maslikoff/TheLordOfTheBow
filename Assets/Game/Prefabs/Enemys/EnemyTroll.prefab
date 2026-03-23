@@ -263,7 +263,7 @@ MonoBehaviour:
   _bulletConfigs:
   - _type: 4
     _prefab: {fileID: 946251025819167630, guid: 60ef32920345bd44ab33f62da36b5e76, type: 3}
-    _poolSize: 0
+    _poolSize: 3
 --- !u!114 &3409407878353850894
 MonoBehaviour:
   m_ObjectHideFlags: 0

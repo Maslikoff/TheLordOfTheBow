@@ -7,28 +7,34 @@ namespace Game.Scripts.Characters.Player
 {
     public class PlayerShoot : ShootEntity
     {
-        private const float MinimumDelay = 0.1f;
-        
         [SerializeField] private BulletSpawner _bulletSpawner;
         [SerializeField] private BulletType _bulletType;
         [SerializeField] private Transform _firePoint;
         [SerializeField] private bool _autoFire = false;
-
-        private Coroutine _autoFireCoroutine;
         
         protected void Start()
         {
-            _autoFireCoroutine = StartCoroutine(AutoFireRoutine());
+            ResetShootState();
+            
+            if (_autoFire)
+                StartCoroutine(AutoFireRoutine());
+        }
+        
+        private void OnDisable()
+        {
+            StopAllCoroutines();
         }
 
         private IEnumerator AutoFireRoutine()
         {
-            while (_autoFire)
+            WaitForSeconds wait = new WaitForSeconds(_cooldownTime);
+            
+            while (_autoFire && enabled && gameObject.activeInHierarchy)
             {
                 TryShoot();
-                yield return new WaitForSeconds(MinimumDelay); 
+                
+                yield return wait; 
             }
-            _autoFireCoroutine = null;
         }
 
         protected override void OnShotFired()

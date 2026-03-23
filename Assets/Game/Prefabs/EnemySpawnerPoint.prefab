@@ -169,21 +169,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 08fa428adbb8413c8079059b5c2ecfc7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _prefab: {fileID: 0}
-  _poolSize: 10
   _enemyConfigs:
   - _race: 0
     _prefab: {fileID: 7080309792819254836, guid: d5bd6346056e6a647b4f66f149d5864b, type: 3}
     _poolSize: 5
-    _spawnWeight: 26.5
+    _spawnWeight: 33
   - _race: 1
     _prefab: {fileID: 7371531689036714625, guid: 0987bbdc63c89a54d9eaeb7bbb073472, type: 3}
     _poolSize: 5
-    _spawnWeight: 28.6
+    _spawnWeight: 33
   - _race: 2
     _prefab: {fileID: 4670338830001340343, guid: a2cd61c0cec42c34ebaf42f831b78e52, type: 3}
     _poolSize: 5
-    _spawnWeight: 32.2
+    _spawnWeight: 33
   _playerTarget: {fileID: 0}
   _bulletSpawner: {fileID: 0}
 --- !u!114 &6888097065496297021
@@ -204,7 +202,7 @@ MonoBehaviour:
   _spawnGrid: {fileID: 4011770484560313510}
   _useGridSpawning: 1
   _spawnInOrder: 0
-  _useMultipleRaces: 1
-  _useWeightedRandom: 1
   _singleRace: 0
   _multipleRaces: 000000000100000002000000
+  _useMultipleRaces: 1
+  _useWeightedRandom: 1

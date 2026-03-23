@@ -14,9 +14,7 @@ namespace Game.Scripts.Characters.Bullets
         [SerializeField] protected Rigidbody _rigidbody;
 
         protected Vector3 _direction;
-        
-        public float Speed => _speed;
-        
+
         public event Action<IPoolable> Released;
 
         protected virtual void OnValidate()
@@ -29,7 +27,7 @@ namespace Game.Scripts.Characters.Bullets
             MoveBullet();
         }
 
-        protected virtual void OnCollisionEnter(Collision other)
+        protected void OnCollisionEnter(Collision other)
         {
             if (CanCollide(other))
             {
@@ -49,9 +47,10 @@ namespace Game.Scripts.Characters.Bullets
                    other.gameObject.TryGetComponent(out Player.Player _);
         }
 
-        public virtual void SetDirection(Vector3 direction)
+        public void SetDirection(Vector3 direction)
         {
             _direction = direction.normalized;
+            transform.rotation = Quaternion.LookRotation(_direction);
         }
 
         public virtual void Release()

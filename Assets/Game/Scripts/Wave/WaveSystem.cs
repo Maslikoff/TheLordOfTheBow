@@ -14,7 +14,7 @@ namespace Game.Scripts.Wave
         private Coroutine _waveRoutine;
         private int _currentWaveIndex = -1;
         private int _enemiesSpawnedInWave;
-        private int _enemiesRemainingInWave;
+        private int _enemiesKilledInWave;
         private int _totalEnemiesInWave;
         
         private bool _isWaveInProgress;
@@ -22,7 +22,7 @@ namespace Game.Scripts.Wave
 
         public int CurrentWaveIndex => _currentWaveIndex + 1;
         public int TotalWaves => _config.WavesEnemyCount.Count;
-        public int EnemiesRemaining => _enemiesRemainingInWave;
+        public int EnemiesRemaining => _enemiesSpawnedInWave - _enemiesKilledInWave;
         public int TotalEnemiesInWave => _totalEnemiesInWave;
 
         public event Action<int> WaveStarted;
@@ -55,9 +55,7 @@ namespace Game.Scripts.Wave
         public void StartWaves()
         {
             if (_waveRoutine != null)
-            {
                 StopCoroutine(_waveRoutine);
-            }
 
             _currentWaveIndex = -1;
             _waveRoutine = StartCoroutine(WaveRoutine());
@@ -110,13 +108,12 @@ namespace Game.Scripts.Wave
         {
             _isWaveInProgress = true;
             _enemiesSpawnedInWave = 0;
-            _enemiesRemainingInWave = 0;
+            _enemiesKilledInWave = 0;
             _waveSpawningComplete = false;
             
             _enemySpawner.SetMaxObjects(enemyCount);
             _enemySpawner.ResetCurrentCount();
-            
-            _enemySpawner.enabled = true;
+            _enemySpawner.ForceResetCount();
             
             WaveStarted?.Invoke(_currentWaveIndex);
             EnemiesCountChanged?.Invoke(0, enemyCount, 0);
@@ -128,12 +125,14 @@ namespace Game.Scripts.Wave
     
             while (_enemiesSpawnedInWave < enemyCount)
             {
-                if (_enemySpawner.ForceSpawn())
+                bool spawnResult = _enemySpawner.ForceSpawn();
+                
+                if (spawnResult)
                 {
                     _enemiesSpawnedInWave++;
-                    _enemiesRemainingInWave++;
+                    int remaining = _enemiesSpawnedInWave - _enemiesKilledInWave;
             
-                    EnemiesCountChanged?.Invoke(_enemiesSpawnedInWave, enemyCount, _enemiesRemainingInWave);
+                    EnemiesCountChanged?.Invoke(_enemiesSpawnedInWave, enemyCount, remaining);
                 }
 
                 yield return spawnDelay;
@@ -145,7 +144,7 @@ namespace Game.Scripts.Wave
         
         private IEnumerator WaitForWaveCompletion()
         {
-            while (_enemiesRemainingInWave > 0)
+            while (_enemiesKilledInWave < _enemiesSpawnedInWave)
                 yield return null;
         }
 
@@ -158,13 +157,13 @@ namespace Game.Scripts.Wave
         
         private void OnEnemyReleased()
         {
-            if (_isWaveInProgress && _enemiesRemainingInWave > 0)
+            if (_isWaveInProgress && _enemiesKilledInWave < _enemiesSpawnedInWave)
             {
-                _enemiesRemainingInWave--;
+                _enemiesKilledInWave++;
                 
-                EnemiesCountChanged?.Invoke(_enemiesSpawnedInWave, _totalEnemiesInWave, _enemiesRemainingInWave);
+                int remaining = _enemiesSpawnedInWave - _enemiesKilledInWave;
                 
-                Debug.Log($"Enemy released. Remaining in wave: {_enemiesRemainingInWave}");
+                EnemiesCountChanged?.Invoke(_enemiesSpawnedInWave, _totalEnemiesInWave, remaining);
             }
         }
     }

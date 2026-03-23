@@ -216,6 +216,7 @@ MonoBehaviour:
   _maxShotsPerBurst: 1
   _firePoint: {fileID: 835231929664828639}
   _bulletPool: {fileID: 6396690143539088900}
+  _bulletType: 0
 --- !u!114 &6339784672399867816
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -259,12 +260,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 82f401204a404bda8e9daebb047eb434, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _prefab: {fileID: 946251025819167630, guid: 84ad99515f1be5840a70348eea73390a, type: 3}
-  _poolSize: 5
   _bulletConfigs:
   - _type: 0
     _prefab: {fileID: 946251025819167630, guid: 84ad99515f1be5840a70348eea73390a, type: 3}
-    _poolSize: 1
+    _poolSize: 3
 --- !u!114 &3409407878353850894
 MonoBehaviour:
   m_ObjectHideFlags: 0

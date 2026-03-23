@@ -21,6 +21,14 @@ namespace Game.Scripts.Spawners
         {
             base.Initialize();
             
+            if (_objectPool == null)
+            {
+                _objectPool = GetComponent<BulletPool>();
+        
+                if (_objectPool == null)
+                    _objectPool = GetComponentInParent<BulletPool>();
+            }
+            
             _bulletPool = _objectPool as BulletPool;
         }
         
@@ -33,8 +41,10 @@ namespace Game.Scripts.Spawners
         {
             if (_objectPool == null)
             {
-                Debug.LogError("ObjectPool is not initialized!");
-                return;
+                Initialize();
+        
+                if (_objectPool == null)
+                    return;
             }
 
             Bullet bullet = GetBulletFromPool();
@@ -47,7 +57,7 @@ namespace Game.Scripts.Spawners
                 bullet.SetDirection(_direction);
 
                 bullet.Released += OnBulletReleased;
-                
+        
                 IncreaseObjectCount();
 
                 if (_useMultipleBulletTypes && _multipleBulletTypes.Length > 0)

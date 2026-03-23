@@ -8,7 +8,8 @@ namespace Game.Scripts.Characters
     {
         [SerializeField] private float _maxCount = 100f;
         [SerializeField] private bool _isInvulnerable = false;
-
+        
+        private Coroutine _invulnerabilityCoroutine;
         private float _currentCount;
 
         public float MaxCount => _maxCount;
@@ -18,11 +19,25 @@ namespace Game.Scripts.Characters
         public event Action<float> Changed;
         public event Action<float> DamageTaken;
 
-        private void Start()
+        private void Awake()
         {
             _currentCount = _maxCount;
-
+        }
+        
+        private void Start()
+        {
             Changed?.Invoke(_currentCount);
+        }
+        
+        private void OnDisable()
+        {
+            if (_invulnerabilityCoroutine != null)
+            {
+                StopCoroutine(_invulnerabilityCoroutine);
+                _invulnerabilityCoroutine = null;
+            }
+            
+            _isInvulnerable = false;
         }
 
         public void TakeDamage(float damage)
@@ -56,6 +71,20 @@ namespace Game.Scripts.Characters
             if (_currentCount > _maxCount)
                 _currentCount = _maxCount;
 
+            Changed?.Invoke(_currentCount);
+        }
+        
+        public void ResetHealth()
+        {
+            _currentCount = _maxCount;
+            _isInvulnerable = false;
+            
+            if (_invulnerabilityCoroutine != null)
+            {
+                StopCoroutine(_invulnerabilityCoroutine);
+                _invulnerabilityCoroutine = null;
+            }
+            
             Changed?.Invoke(_currentCount);
         }
 

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Game.Scripts.Characters;
 using Game.Scripts.Characters.Enemy;
 using Game.Scripts.Spawners;
 using UnityEngine;
@@ -15,34 +16,26 @@ namespace Game.Scripts.ObjectPool
         private Dictionary<Race, Transform> _raceParents = new();
         private Dictionary<Race, Enemy> _racePrefabs = new();
         private Dictionary<Race, float> _raceWeights = new();
-        
+
         private float _totalWeight;
-        
+
         protected override void Awake()
         {
             base.Awake();
-            
+
             InitializePools();
         }
 
         protected override void OnDestroy()
         {
             foreach (var pool in _racePools)
-            {
                 foreach (var enemy in pool.Value)
-                {
                     if (enemy != null)
                         enemy.Released -= OnHandleEnemyReleased;
-                }
-            }
         }
-        
-        protected override Enemy CreateNewObject()
-        {
-            Debug.LogError("EnemyPool should use GetEnemy with race parameter!");
-            return null;
-        }
-        
+
+        protected override Enemy CreateNewObject() => null;
+
         public void ReturnEnemy(Enemy enemy)
         {
             if (enemy == null) return;
@@ -56,7 +49,7 @@ namespace Game.Scripts.ObjectPool
                 }
             }
         }
-        
+
         public Enemy GetEnemy(Race race)
         {
             if (_isInitialized == false)
@@ -84,38 +77,39 @@ namespace Game.Scripts.ObjectPool
 
             return enemy;
         }
-        
+
         public Enemy GetRandomEnemyByWeight()
         {
             if (_racePrefabs.Count == 0)
                 return null;
-            
+
             if (_totalWeight <= 0)
             {
                 foreach (var race in _racePrefabs.Keys)
                     return GetEnemy(race);
             }
-            
+
             float randomValue = Random.Range(0, _totalWeight);
             float currentSum = 0;
-            
+
             foreach (var pair in _raceWeights)
             {
                 currentSum += pair.Value;
+                
                 if (randomValue <= currentSum)
                     return GetEnemy(pair.Key);
             }
-            
+
             foreach (var race in _racePrefabs.Keys)
                 return GetEnemy(race);
-                
+
             return null;
         }
-        
+
         private void InitializePools()
         {
             if (_isInitialized) return;
-            
+
             Transform rootParent = new GameObject("EnemyPool").transform;
             rootParent.SetParent(transform);
 
@@ -132,22 +126,22 @@ namespace Game.Scripts.ObjectPool
 
                 Transform parent = new GameObject($"{config.Race}Pool").transform;
                 parent.SetParent(rootParent);
-                
+
                 _raceParents[config.Race] = parent;
                 _racePrefabs[config.Race] = config.Prefab;
                 _raceWeights[config.Race] = config.SpawnWeight;
                 _totalWeight += config.SpawnWeight;
-                
+
                 Queue<Enemy> pool = new Queue<Enemy>();
                 _racePools[config.Race] = pool;
-                
+
                 for (int i = 0; i < config.PoolSize; i++)
                 {
                     Enemy enemy = CreateEnemyForRace(config.Race);
                     ReturnEnemyToRacePool(enemy, config.Race);
                 }
             }
-            
+
             _isInitialized = true;
         }
 
@@ -158,22 +152,45 @@ namespace Game.Scripts.ObjectPool
 
             Enemy enemy = Instantiate(_racePrefabs[race], _raceParents[race]);
             enemy.gameObject.SetActive(false);
-            
+
             enemy.Released += OnHandleEnemyReleased;
-            
+
             return enemy;
         }
 
         private void ReturnEnemyToRacePool(Enemy enemy, Race race)
         {
-            if (enemy == null) 
+            if (enemy == null)
                 return;
+
+            var enemyShoot = enemy.GetComponent<EnemyShoot>();
+
+            if (enemyShoot != null)
+            {
+                enemyShoot.ResetShootState();
+                enemyShoot.StopAllCoroutines();
+                enemyShoot.enabled = false;
+            }
+
+            var rb = enemy.GetComponent<Rigidbody>();
+
+            if (rb != null)
+            {
+                rb.velocity = Vector3.zero;
+                rb.angularVelocity = Vector3.zero;
+                rb.Sleep();
+            }
+
+            var health = enemy.GetComponent<Health>();
+
+            if (health != null)
+                health.ResetHealth();
 
             enemy.gameObject.SetActive(false);
             enemy.transform.SetParent(_raceParents[race]);
             enemy.transform.localPosition = Vector3.zero;
             enemy.transform.localRotation = Quaternion.identity;
-            
+
             _racePools[race].Enqueue(enemy);
         }
 

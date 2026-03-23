@@ -10,7 +10,7 @@ namespace Game.Scripts.Characters.Enemy
         private Transform _target;
         private Enemy _enemy;
 
-        private void Start()
+        private void Awake()
         {
             _enemy = GetComponent<Enemy>();
             _target = _enemy.PlayerTarget;

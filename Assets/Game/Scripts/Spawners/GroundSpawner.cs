@@ -12,6 +12,10 @@ namespace Game.Scripts.Spawners
         [SerializeField] private Vector3 _startPosition = Vector3.zero;
 
         protected override bool CanSpawn() => true;
+        
+        protected override void OnEnable()
+        {
+        }
 
         protected override void OnDisable()
         {
@@ -21,8 +25,6 @@ namespace Game.Scripts.Spawners
 
         protected override void Initialize()
         {
-            base.Initialize();
-
             if (_groundPool == null) _groundPool = _objectPool as GroundPool;
             if (_groundPool == null) throw new NullReferenceException("Can't get for ground pool");
 

@@ -7,15 +7,15 @@ namespace Game.Scripts.Characters.Enemy
 {
     public class EnemyShoot : ShootEntity
     {
-        private const float MinimumDelay = 0.1f;
-        
+        private const float MinimumDelay = 0.2f;
+
         [SerializeField] private Transform _firePoint;
         [SerializeField] private BulletPool _bulletPool;
         [SerializeField] private BulletType _bulletType = BulletType.Arrow;
 
-        private Coroutine _autoFireCoroutine;
         private Enemy _enemy;
-        
+        private Coroutine _autoFireCoroutine;
+
         protected void Start()
         {
             _enemy = GetComponent<Enemy>();

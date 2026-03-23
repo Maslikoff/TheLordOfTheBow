@@ -45,8 +45,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6fd7ee4c4e394a16a7771ffe72b9eec8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _prefab: {fileID: 0}
-  _poolSize: 10
   _groundPrefabs:
   - _groundPrefab: {fileID: 4746381803217578268, guid: d7805310aed4344458a22c9cf6699fe8, type: 3}
     _poolSize: 3
@@ -68,7 +66,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _spawnInterval: 1
-  _maxObjects: 18
+  _maxObjects: 6
   _spawnArea: {x: 0, y: 0, z: 0}
   _groundPool: {fileID: 2819825592234075779}
   _initialSegmentCount: 6
