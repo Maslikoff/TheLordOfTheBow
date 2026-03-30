@@ -10,8 +10,8 @@ namespace Game.Scripts.Characters.Bullets
     {
         [SerializeField] [Min(0)] protected float _speed;
         [SerializeField] protected float _damage;
-        [SerializeField] protected BulletType _bulletType;
         [SerializeField] protected Rigidbody _rigidbody;
+        [SerializeField] protected bool _destroyOnCollision = true;
 
         protected Vector3 _direction;
 
@@ -32,7 +32,9 @@ namespace Game.Scripts.Characters.Bullets
             if (CanCollide(other))
             {
                 HandleCollision(other);
-                Release();
+
+                if (_destroyOnCollision)
+                    Release();
             }
         }
 
@@ -40,12 +42,9 @@ namespace Game.Scripts.Characters.Bullets
 
         protected abstract void HandleCollision(Collision other);
 
-        protected virtual bool CanCollide(Collision other)
-        {
-            return other.gameObject.TryGetComponent(out Enemy.Enemy _) ||
-                   other.gameObject.TryGetComponent(out Wall _) ||
-                   other.gameObject.TryGetComponent(out Player.Player _);
-        }
+        protected virtual bool CanCollide(Collision other) => other.gameObject.TryGetComponent(out Enemy.Enemy _) ||
+                                                              other.gameObject.TryGetComponent(out Wall _) ||
+                                                              other.gameObject.TryGetComponent(out Player.Player _);
 
         public void SetDirection(Vector3 direction)
         {

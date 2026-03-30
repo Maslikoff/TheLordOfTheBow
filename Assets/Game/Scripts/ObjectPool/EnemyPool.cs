@@ -163,15 +163,6 @@ namespace Game.Scripts.ObjectPool
             if (enemy == null)
                 return;
 
-            var enemyShoot = enemy.GetComponent<EnemyShoot>();
-
-            if (enemyShoot != null)
-            {
-                enemyShoot.ResetShootState();
-                enemyShoot.StopAllCoroutines();
-                enemyShoot.enabled = false;
-            }
-
             var rb = enemy.GetComponent<Rigidbody>();
 
             if (rb != null)

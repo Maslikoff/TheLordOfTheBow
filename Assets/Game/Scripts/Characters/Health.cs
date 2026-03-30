@@ -4,7 +4,6 @@ using UnityEngine;
 namespace Game.Scripts.Characters
 {
     public class Health: MonoBehaviour
-
     {
         [SerializeField] private float _maxCount = 100f;
         [SerializeField] private bool _isInvulnerable = false;
@@ -84,6 +83,14 @@ namespace Game.Scripts.Characters
                 StopCoroutine(_invulnerabilityCoroutine);
                 _invulnerabilityCoroutine = null;
             }
+            
+            Changed?.Invoke(_currentCount);
+        }
+        
+        public void IncreaseMaxHealth(float amount)
+        {
+            _maxCount += amount;
+            _currentCount += amount;
             
             Changed?.Invoke(_currentCount);
         }

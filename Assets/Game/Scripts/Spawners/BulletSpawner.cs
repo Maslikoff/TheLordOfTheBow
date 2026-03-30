@@ -4,95 +4,34 @@ using UnityEngine;
 
 namespace Game.Scripts.Spawners
 {
-    public class BulletSpawner : Spawner<Bullet>
+    public class BulletSpawner : MonoBehaviour
     {
+        [SerializeField] private BulletPool _bulletPool;
         [SerializeField] private Transform _bulletSpawnPoint;
-        [SerializeField] private Vector3 _direction = Vector3.forward;
-        
-        [Header("Bullet Type Settings")]
-        [SerializeField] private bool _useMultipleBulletTypes = false;
-        [SerializeField] private BulletType _singleBulletType = BulletType.Arrow;
-        [SerializeField] private BulletType[] _multipleBulletTypes;
 
-        private BulletPool _bulletPool;
-        private int _currentBulletIndex = 0;
-        
-        protected override void Initialize()
+        public void SpawnBullet(BulletType bulletType, Vector3 direction)
         {
-            base.Initialize();
+            if(_bulletPool == null) return;
             
-            if (_objectPool == null)
-            {
-                _objectPool = GetComponent<BulletPool>();
-        
-                if (_objectPool == null)
-                    _objectPool = GetComponentInParent<BulletPool>();
-            }
-            
-            _bulletPool = _objectPool as BulletPool;
-        }
-        
-        protected override void SpawnObject()
-        {
-            SpawnBullet();
-        }
-
-        public void SpawnBullet()
-        {
-            if (_objectPool == null)
-            {
-                Initialize();
-        
-                if (_objectPool == null)
-                    return;
-            }
-
-            Bullet bullet = GetBulletFromPool();
+            Bullet bullet = _bulletPool.GetBullet(bulletType);
 
             if (bullet != null)
             {
                 bullet.transform.position = _bulletSpawnPoint != null ? _bulletSpawnPoint.position : transform.position;
-                bullet.transform.rotation = Quaternion.LookRotation(_direction);
+                bullet.transform.rotation = Quaternion.LookRotation(direction);
+                bullet.SetDirection(direction);
                 bullet.gameObject.SetActive(true);
-                bullet.SetDirection(_direction);
-
-                bullet.Released += OnBulletReleased;
-        
-                IncreaseObjectCount();
-
-                if (_useMultipleBulletTypes && _multipleBulletTypes.Length > 0)
-                    _currentBulletIndex = (_currentBulletIndex + 1) % _multipleBulletTypes.Length;
             }
         }
-
-        public void SetDirection(Vector3 direction)
+        
+        public void SetFirePoint(Transform firePoint)
         {
-            _direction = direction.normalized;
-        }
-
-        public void SetFirePoint(Transform bulletSpawnPoint)
-        {
-            _bulletSpawnPoint = bulletSpawnPoint;
+            _bulletSpawnPoint = firePoint;
         }
         
-        private Bullet GetBulletFromPool()
+        public void SetBulletPool(BulletPool pool)
         {
-            if (_bulletPool == null)
-                return _objectPool.GetFromPool();
-
-            if (_useMultipleBulletTypes && _multipleBulletTypes.Length > 0)
-                return _bulletPool.GetBullet(_multipleBulletTypes[_currentBulletIndex]);
-            else
-                return _bulletPool.GetBullet(_singleBulletType);
-        }
-
-        private void OnBulletReleased(IPoolable poolable)
-        {
-            if (poolable is Bullet bullet)
-            {
-                bullet.Released -= OnBulletReleased;
-                DecreaseObjectCount();
-            }
+            _bulletPool = pool;
         }
     }
 }

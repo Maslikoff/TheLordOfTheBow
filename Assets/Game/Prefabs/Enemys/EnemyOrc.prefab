@@ -295,6 +295,7 @@ GameObject:
   - component: {fileID: 6396690143539088900}
   - component: {fileID: 3409407878353850894}
   - component: {fileID: 9079312985571784494}
+  - component: {fileID: 1725953445841327401}
   m_Layer: 8
   m_Name: EnemyOrc
   m_TagString: Untagged
@@ -355,11 +356,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e21127a5d1e4741bc524a9921546af3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _bulletSpawner: {fileID: 3409407878353850894}
+  _bulletType: 3
+  _firePoint: {fileID: 835231929664828639}
   _cooldownTime: 10
   _maxShotsPerBurst: 1
-  _firePoint: {fileID: 835231929664828639}
-  _bulletPool: {fileID: 6396690143539088900}
-  _bulletType: 3
 --- !u!114 &6339784672399867816
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -419,14 +420,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00d9d60bc9b0426fa657fbd25b20847e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _spawnInterval: 3
-  _maxObjects: 1
-  _spawnArea: {x: 0, y: 0, z: 0}
+  _bulletPool: {fileID: 6396690143539088900}
   _bulletSpawnPoint: {fileID: 835231929664828639}
-  _direction: {x: 0, y: 0, z: -1}
-  _useMultipleBulletTypes: 0
-  _singleBulletType: 3
-  _multipleBulletTypes: 
 --- !u!114 &9079312985571784494
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -441,6 +436,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _maxCount: 80
   _isInvulnerable: 0
+--- !u!114 &1725953445841327401
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4537468585123427311}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e789bfa2bde48e8baec744379c0569a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _experienceReward: 15
+  _rewardOnDeath: 1
 --- !u!1 &4601785401517980001
 GameObject:
   m_ObjectHideFlags: 0

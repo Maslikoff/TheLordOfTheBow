@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1613845712189557190}
   - component: {fileID: 6703091461290541697}
   - component: {fileID: 6715459730368479186}
-  - component: {fileID: 5500303543803767547}
+  - component: {fileID: -2522443774078639428}
   m_Layer: 6
   m_Name: FireArrow
   m_TagString: Untagged
@@ -132,9 +132,9 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 116
   m_CollisionDetection: 0
---- !u!114 &5500303543803767547
+--- !u!114 &-2522443774078639428
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -143,9 +143,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 2110184989629228765}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: caa9d9de8def42dfbcb829e76d74083b, type: 3}
+  m_Script: {fileID: 11500000, guid: 4f49c34ce1e7408d96860fbca1ac2d89, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _speed: 10
+  _speed: 20
   _damage: 15
   _rigidbody: {fileID: 6715459730368479186}
+  _destroyOnCollision: 1
+  _lifeTime: 10
+  _horizontalDrift: 1.5

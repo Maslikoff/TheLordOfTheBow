@@ -129,7 +129,7 @@ namespace Game.Scripts.Spawners
                 enemy.gameObject.SetActive(true);
 
                 enemy.Released += OnEnemyReleased;
-
+                
                 IncreaseObjectCount();
             }
         }
