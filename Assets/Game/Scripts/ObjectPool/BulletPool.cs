@@ -71,6 +71,7 @@ namespace Game.Scripts.ObjectPool
             if (bullet != null)
             {
                 bullet.gameObject.SetActive(true);
+                
                 OnObjectGet(bullet);
             }
 

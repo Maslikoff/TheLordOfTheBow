@@ -6,14 +6,12 @@ namespace Game.Scripts.Upgrades
 {
     public class UpgradeApplier : MonoBehaviour
     {
-        [SerializeField] private Arrow _arrow;
-        [SerializeField] private FireArrow _fireArrow;
-        [SerializeField] private PoisonArrow _poisonArrow;
-        
+        private ShootEntity _playerShoot;
         private Health _playerHealth;
         
         private void Awake()
         {
+            _playerShoot = GetComponent<ShootEntity>();
             _playerHealth = GetComponent<Health>();
         }
 
@@ -59,37 +57,37 @@ namespace Game.Scripts.Upgrades
 
         private void ApplyArrowDamageUpgrade(float bonusDamage)
         {
-            _arrow.UpgradeDamage(bonusDamage);
+            //_playerShoot.UpgradeBulletDamage(BulletType.Arrow, bonusDamage);
             Debug.Log($"Arrow damage increased by {bonusDamage}");
         }
 
         private void ApplyFireArrowDamageUpgrade(float bonusDamage)
         {
-            _fireArrow.UpgradeDamage(bonusDamage);
+            //_playerShoot.UpgradeBulletDamage(BulletType.FireArrow, bonusDamage);
             Debug.Log($"Fire Arrow damage increased by {bonusDamage}");
         }
 
         private void ApplyPoisonArrowDamageUpgrade(float bonusDamage)
         {
-            _poisonArrow.UpgradeDamage(bonusDamage);
+            //_playerShoot.UpgradeBulletDamage(BulletType.PoisonArrow, bonusDamage);
             Debug.Log($"Poison Arrow damage increased by {bonusDamage}");
         }
 
         private void ApplyArrowCountUpgrade(float bonusCount)
         {
-            _arrow.UpgradeArrowCount();
+            //_playerShoot.UpgradeBulletCount(BulletType.Arrow, (int)bonusCount);
             Debug.Log($"Arrow count increased by {bonusCount}");
         }
 
         private void ApplyFireArrowLifeTimeUpgrade(float bonusLifeTime)
         {
-            _fireArrow.UpgradeLifeTime(bonusLifeTime);
+            //_playerShoot.UpgradeBulletLifeTime(BulletType.FireArrow, bonusLifeTime);
             Debug.Log($"Fire Arrow LifeTime increased by {bonusLifeTime}");
         }
 
         private void ApplyPoisonArrowLifeTimeUpgrade(float bonusLifeTime)
         {
-            _poisonArrow.UpgradeLifeTime(bonusLifeTime);
+            //_playerShoot.UpgradeBulletLifeTime(BulletType.PoisonArrow, bonusLifeTime);
             Debug.Log($"Poison Arrow LifeTime increased by {bonusLifeTime}");
         }
     }

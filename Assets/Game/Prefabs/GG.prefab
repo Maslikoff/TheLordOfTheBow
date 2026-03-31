@@ -860,9 +860,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 880734e52ba4485a82aa7dae43a54506, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _arrow: {fileID: 5500303543803767547, guid: 284cf5c90bbf1e74d95e09721124c345, type: 3}
-  _fireArrow: {fileID: -2522443774078639428, guid: 5fce0b17aaf48d943902bd91b4023121, type: 3}
-  _poisonArrow: {fileID: 596725794803919738, guid: 5e9da090ddaf0e843a311cdcfae40713, type: 3}
 --- !u!1 &7648752383265175782
 GameObject:
   m_ObjectHideFlags: 0
@@ -925,7 +922,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
