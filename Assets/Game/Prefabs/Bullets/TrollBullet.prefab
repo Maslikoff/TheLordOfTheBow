@@ -147,6 +147,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _speed: 5
-  _damage: 15
+  _baseDamage: 20
   _rigidbody: {fileID: 6715459730368479186}
   _destroyOnCollision: 1

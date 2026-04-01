@@ -9,13 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 75142a6bca8940688e4d2449c7b2f593, type: 3}
-  m_Name: MaxHealthUpgrate
+  m_Script: {fileID: 11500000, guid: dbbb646a69374b149c9c8a223a028767, type: 3}
+  m_Name: MaxHealthUpgradeCard
   m_EditorClassIdentifier: 
   _cardName: "\u0411\u0443\u0434\u044C \u0417\u0434\u043E\u0440\u043E\u0432!"
   _description: "\u0423\u0432\u0435\u043B\u0438\u0447\u0438\u0442\u044C \u043C\u0430\u043A\u0441\u0435\u043C\u0430\u043B\u044C\u043D\u043E\u0435
     \u0437\u0434\u043E\u0440\u043E\u0432\u044C\u0435"
   _cardIcon: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
-  _upgradeType: 0
-  _value: 10
-  _cardColor: {r: 0.79861426, g: 1, b: 0.6745283, a: 1}
+  _cardColor: {r: 0.6618576, g: 1, b: 0.5518868, a: 1}
+  _bonusHealth: 10

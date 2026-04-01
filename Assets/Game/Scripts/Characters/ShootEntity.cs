@@ -31,8 +31,15 @@ namespace Game.Scripts.Characters
         {
             TryShoot();
         }
+
+        protected virtual void PerformShot()
+        {
+            Vector3 direction = GetShootDirection();
+            _bulletSpawner.SetFirePoint(_firePoint);
+            _bulletSpawner.SpawnBullet(_bulletType, direction, new BulletData(1,0));
+        }
         
-         protected void TryShoot()
+        protected void TryShoot()
         {
             if (enabled == false || _canShoot == false || _isReloading || _bulletSpawner == null || _firePoint == null) 
                 return;
@@ -48,10 +55,8 @@ namespace Game.Scripts.Characters
             if (_currentShotsInBurst < _maxShotsPerBurst)
             {
                 _currentShotsInBurst++;
-                
-                Vector3 direction = GetShootDirection();
-                _bulletSpawner.SetFirePoint(_firePoint);
-                _bulletSpawner.SpawnBullet(_bulletType, direction);
+
+                PerformShot();
                 
                 ShotFired?.Invoke();
     
@@ -87,12 +92,15 @@ namespace Game.Scripts.Characters
             {
                 elapsedTime += Time.deltaTime;
                 float progress = elapsedTime / _cooldownTime;
+                
                 ReloadProgressUpdated?.Invoke(progress);
+                
                 yield return null;
             }
             
             _isReloading = false;
             _canShoot = true;
+            
             ReloadProgressUpdated?.Invoke(1f);
         }
     }

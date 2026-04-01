@@ -19,7 +19,7 @@ namespace Game.Scripts.UI
         [SerializeField] private Button _skipButton;
         
         [Header("Upgrades Pool")]
-        [SerializeField] private List<UpgradeCard> _allUpgrades = new List<UpgradeCard>();
+        [SerializeField] private List<Upgrades.UpgradeCard> _allUpgrades = new();
         
         private List<UpgradeCardUI> _currentCards = new List<UpgradeCardUI>();
         
@@ -72,7 +72,7 @@ namespace Game.Scripts.UI
             
             var selectedCards = GetRandomUpgradeCards(CountCards);
             
-            foreach (var upgrade in selectedCards)
+            foreach (Upgrades.UpgradeCard upgrade in selectedCards)
             {
                 var cardGO = Instantiate(_cardPrefab, _cardsContainer);
                 var cardUI = cardGO.GetComponent<UpgradeCardUI>();
@@ -81,11 +81,11 @@ namespace Game.Scripts.UI
             }
         }
         
-        private List<UpgradeCard> GetRandomUpgradeCards(int count)
+        private List<Upgrades.UpgradeCard> GetRandomUpgradeCards(int count)
         {
             
-            var availableUpgrades = new List<UpgradeCard>(_allUpgrades);
-            var selected = new List<UpgradeCard>();
+            var availableUpgrades = new List<Upgrades.UpgradeCard>(_allUpgrades);
+            var selected = new List<Upgrades.UpgradeCard>();
             
             for (int i = 0; i < count && availableUpgrades.Count > 0; i++)
             {
@@ -97,7 +97,7 @@ namespace Game.Scripts.UI
             return selected;
         }
         
-        private void OnUpgradeSelected(UpgradeCard selectedUpgrade)
+        private void OnUpgradeSelected(Upgrades.UpgradeCard selectedUpgrade)
         {
             _upgradeApplier.ApplyUpgrade(selectedUpgrade);
             

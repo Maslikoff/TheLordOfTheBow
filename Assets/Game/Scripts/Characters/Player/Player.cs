@@ -2,27 +2,27 @@ using UnityEngine;
 
 namespace Game.Scripts.Characters.Player
 {
-    [RequireComponent(typeof(PlayerMovment))]
+    [RequireComponent(typeof(PlayerMovement))]
     [RequireComponent(typeof(InputHandler))]
     public class Player : MonoBehaviour
     {
-        [SerializeField] private PlayerMovment _movment;
+        [SerializeField] private PlayerMovement movement;
         [SerializeField] private InputHandler _inputHandler;
 
         private void OnEnable()
         {
-            _inputHandler.MoveInput += _movment.Move;
+            _inputHandler.MoveInput += movement.Move;
         }
 
         private void OnValidate()
         {
-            _movment ??= GetComponent<PlayerMovment>();
+            movement ??= GetComponent<PlayerMovement>();
             _inputHandler ??= GetComponent<InputHandler>();
         }
 
         private void OnDisable()
         {
-            _inputHandler.MoveInput -= _movment.Move;
+            _inputHandler.MoveInput -= movement.Move;
         }
     }
 }

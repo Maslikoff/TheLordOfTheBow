@@ -1267,13 +1267,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 705507993}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.40821788, y: -0.23456968, z: 0.10938163, w: 0.8754261}
+  m_LocalRotation: {x: -0.2399813, y: 0.7460147, z: -0.34787235, w: -0.5146416}
   m_LocalPosition: {x: 0, y: 3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+  m_LocalEulerAnglesHint: {x: 50, y: -470.8, z: 0}
 --- !u!114 &705507996
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2543,10 +2543,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -8263397902290848026, guid: 366cf5e604426424da205cfd2802de6a, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: ccba89365c578224ab7d578a174241dc, type: 2}
+    - target: {fileID: -514521820524033739, guid: 366cf5e604426424da205cfd2802de6a, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 75efba329f4fd8d49bcf1bf9d254d05a, type: 2}
     - target: {fileID: 919132149155446097, guid: 366cf5e604426424da205cfd2802de6a, type: 3}
       propertyPath: m_Name
       value: Elf@Running
       objectReference: {fileID: 0}
+    - target: {fileID: 6696144226069823909, guid: 366cf5e604426424da205cfd2802de6a, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: ccba89365c578224ab7d578a174241dc, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2746,13 +2758,7 @@ MonoBehaviour:
   _cardPrefab: {fileID: 8072967651649535090, guid: abb389ac1b108c0478bfbdda679a67c4, type: 3}
   _skipButton: {fileID: 1554551436}
   _allUpgrades:
-  - {fileID: 11400000, guid: 7606350610d7eee44beff79c12df505a, type: 2}
-  - {fileID: 11400000, guid: 64a3775190789fa49a15ecc4a3d3df4d, type: 2}
-  - {fileID: 11400000, guid: 69963f02ac4d25543b4637c5f5ef6689, type: 2}
-  - {fileID: 11400000, guid: 5bb36ab56a165e741abd3e1e5485f279, type: 2}
-  - {fileID: 11400000, guid: 4cd33f440bfe8504a9cf195a7a05fd72, type: 2}
-  - {fileID: 11400000, guid: bf12bc6bc9e9d2f4982ace7ae28d3e12, type: 2}
-  - {fileID: 11400000, guid: 2c72f30595c160f4e9cfc63d67c0f381, type: 2}
+  - {fileID: 11400000, guid: 6499ce8c34536364c884fbd833bba48e, type: 2}
 --- !u!224 &1710023899 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8135886326569738822, guid: 56fae09712773584fb63896d473a98ee, type: 3}
@@ -3413,10 +3419,6 @@ PrefabInstance:
       value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 4125751615949567351, guid: 058ba08b1d7613849954026be682e226, type: 3}
-      propertyPath: _bulletType
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4125751615949567351, guid: 058ba08b1d7613849954026be682e226, type: 3}
       propertyPath: _bulletSpawner
       value: 
       objectReference: {fileID: 541154773}
@@ -3531,11 +3533,11 @@ PrefabInstance:
       objectReference: {fileID: 541154773}
     - target: {fileID: 8270352627581246602, guid: fa4fd4d8c186d0b4c9f29d4f9d327b06, type: 3}
       propertyPath: _enemyConfigs.Array.data[0]._spawnWeight
-      value: 100
+      value: 31.4
       objectReference: {fileID: 0}
     - target: {fileID: 8270352627581246602, guid: fa4fd4d8c186d0b4c9f29d4f9d327b06, type: 3}
       propertyPath: _enemyConfigs.Array.data[1]._spawnWeight
-      value: 0
+      value: 64.5
       objectReference: {fileID: 0}
     - target: {fileID: 8270352627581246602, guid: fa4fd4d8c186d0b4c9f29d4f9d327b06, type: 3}
       propertyPath: _enemyConfigs.Array.data[2]._spawnWeight

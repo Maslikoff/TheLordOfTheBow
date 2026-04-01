@@ -4,9 +4,10 @@ namespace Game.Scripts.Characters.Bullets
 {
     public class FireArrow : Bullet
     {
-        [SerializeField] private float _lifeTime = 10f;
+        [SerializeField] private float _defaultLifeTime = 10f;
         [SerializeField] private float _horizontalDrift = 1.5f;
 
+        private float _maxLifeTime;
         private float _currentLifeTime;
         private Vector3 _currentVelocity;
         private float _currentHorizontalOffset;
@@ -22,17 +23,22 @@ namespace Game.Scripts.Characters.Bullets
 
         protected override void FixedUpdate()
         {
-            base.FixedUpdate();
-
             _currentLifeTime += Time.fixedDeltaTime;
 
-            if (_currentLifeTime >= _lifeTime)
+            if (_currentLifeTime >= _maxLifeTime)
             {
                 Release();
                 return;
             }
 
             MoveBullet();
+        }
+
+        public override void Initialize(BulletData bulletData)
+        {
+            base.Initialize(bulletData);
+            
+            _maxLifeTime = bulletData.LifeTime > 0 ? bulletData.LifeTime : _defaultLifeTime;
         }
 
         protected override void MoveBullet()
@@ -51,7 +57,7 @@ namespace Game.Scripts.Characters.Bullets
         {
             if (other.gameObject.TryGetComponent(out Enemy.Enemy enemy))
                 if (enemy.TryGetComponent(out Health health))
-                    health.TakeDamage(_damage);
+                    health.TakeDamage(_currentDamage);
 
             BounceVertically(other);
         }
@@ -67,20 +73,8 @@ namespace Game.Scripts.Characters.Bullets
         public override void Release()
         {
             _currentLifeTime = 0f;
-
+            
             base.Release();
-        }
-
-        public void UpgradeLifeTime(float additionalTime)
-        {
-            _lifeTime += additionalTime;
-            Debug.Log($"Fire arrow life time increased to {_lifeTime} seconds");
-        }
-
-        public void UpgradeDamage(float additionalDamage)
-        {
-            _damage += additionalDamage;
-            Debug.Log($"Fire arrow damage increased to {_damage} damage");
         }
 
         private void BounceVertically(Collision other)

@@ -9,11 +9,12 @@ namespace Game.Scripts.Characters.Bullets
     public abstract class Bullet : MonoBehaviour, IPoolable
     {
         [SerializeField] [Min(0)] protected float _speed;
-        [SerializeField] protected float _damage;
+        [SerializeField] protected float _baseDamage;
         [SerializeField] protected Rigidbody _rigidbody;
         [SerializeField] protected bool _destroyOnCollision = true;
 
         protected Vector3 _direction;
+        protected float _currentDamage;
 
         public event Action<IPoolable> Released;
 
@@ -36,6 +37,11 @@ namespace Game.Scripts.Characters.Bullets
                 if (_destroyOnCollision)
                     Release();
             }
+        }
+
+        public virtual void Initialize(BulletData bulletData)
+        {
+            _currentDamage = bulletData.Damage;
         }
 
         protected abstract void MoveBullet();

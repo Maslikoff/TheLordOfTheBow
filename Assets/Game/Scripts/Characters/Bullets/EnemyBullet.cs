@@ -14,7 +14,7 @@ namespace Game.Scripts.Characters.Bullets
         {
             if (other.gameObject.TryGetComponent(out Health player) == false) return;
             
-            player.TakeDamage(_damage);
+            player.TakeDamage(_baseDamage);
         }
 
         protected override bool CanCollide(Collision other) => other.gameObject.TryGetComponent(out Enemy.Enemy _) == false &&

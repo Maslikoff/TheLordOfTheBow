@@ -3,7 +3,7 @@ using UnityEngine;
 namespace Game.Scripts.Characters.Player
 {
     [RequireComponent(typeof(CharacterController))]
-    public class PlayerMovment : MonoBehaviour
+    public class PlayerMovement : MonoBehaviour
     {
         private const float MinDistance = 0.1f;
 

@@ -13,8 +13,8 @@ namespace Game.Scripts.UI
         [SerializeField] private TextMeshProUGUI _descriptionText;
         [SerializeField] private Button _selectButton;
         
-        private UpgradeCard _upgradeData;
-        private System.Action<UpgradeCard> _selectedCallback;
+        private Upgrades.UpgradeCard _upgradeData;
+        private System.Action<Upgrades.UpgradeCard> _selectedCallback;
         
         private void Awake()
         {
@@ -28,7 +28,7 @@ namespace Game.Scripts.UI
                  _selectButton.onClick.RemoveListener(OnCardClicked);
          }
 
-        public void Initialize(UpgradeCard upgradeData, System.Action<UpgradeCard> selectedCallback)
+        public void Initialize(Upgrades.UpgradeCard upgradeData, System.Action<Upgrades.UpgradeCard> selectedCallback)
         {
             _upgradeData = upgradeData;
             _selectedCallback = selectedCallback;

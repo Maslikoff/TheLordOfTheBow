@@ -699,6 +699,8 @@ GameObject:
   - component: {fileID: 8375185548954724957}
   - component: {fileID: 4125751615949567351}
   - component: {fileID: 1037923821876120557}
+  - component: {fileID: 6090680883856418403}
+  - component: {fileID: 2058010488146395543}
   m_Layer: 9
   m_Name: GG
   m_TagString: Untagged
@@ -828,7 +830,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf673b0a0e82df445b7938c406877da7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _movment: {fileID: 1256778914574875483}
+  movement: {fileID: 1256778914574875483}
   _inputHandler: {fileID: 1852851616149074306}
 --- !u!114 &4125751615949567351
 MonoBehaviour:
@@ -847,6 +849,8 @@ MonoBehaviour:
   _firePoint: {fileID: 933322400030493837}
   _cooldownTime: 3
   _maxShotsPerBurst: 1
+  _bulletUpgrades: {fileID: 2058010488146395543}
+  _arrowSpreadAngle: 45
   _autoFire: 1
 --- !u!114 &1037923821876120557
 MonoBehaviour:
@@ -860,6 +864,52 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 880734e52ba4485a82aa7dae43a54506, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &6090680883856418403
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7274130376151034353}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a55bf74c2f040c498cc00c8c24492aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _playerShoot: {fileID: 4125751615949567351}
+  _playerHealth: {fileID: 7515841742046995333}
+  _collection: {fileID: 2058010488146395543}
+--- !u!114 &2058010488146395543
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7274130376151034353}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f0047a7d4cc439c9496740ffb8287ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _entries:
+  - _bulletType: 0
+    _isUnlocked: 1
+    _damage: 10
+    _lifeTime: 0
+    _count: 1
+    _maxCount: 3
+  - _bulletType: 1
+    _isUnlocked: 0
+    _damage: 15
+    _lifeTime: 15
+    _count: 1
+    _maxCount: 1
+  - _bulletType: 2
+    _isUnlocked: 0
+    _damage: 20
+    _lifeTime: 15
+    _count: 1
+    _maxCount: 1
 --- !u!1 &7648752383265175782
 GameObject:
   m_ObjectHideFlags: 0
