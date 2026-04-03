@@ -10,12 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 93f37503c03b4173a6ba229b993f7001, type: 3}
-  m_Name: BulletUpgradeCard
+  m_Name: ArrowDamagetUpgradeCard
   m_EditorClassIdentifier: 
-  _cardName: "\u0440\u043F\u043E\u043B\u043B\u043E\u0430\u0440"
-  _description: "\u0440\u0430\u043E\u043B\u0440\u043F\u0430\u043E"
+  _cardName: "\u0417\u0430\u0442\u043E\u0447\u0438\u0442\u044C \u043D\u0430\u043A\u043E\u043D\u0435\u0447\u043D\u0438\u043A"
+  _description: "\u0423\u0432\u0435\u043B\u0438\u0447\u0438\u0442\u044C \u0443\u0440\u043E\u043D
+    \u0441\u0442\u0440\u0435\u043B\u0430\u043C"
   _cardIcon: {fileID: 21300000, guid: 48c0d4d6bebaa934384b07aa1e2f8184, type: 3}
-  _cardColor: {r: 1, g: 1, b: 1, a: 1}
+  _cardColor: {r: 0.9189866, g: 1, b: 0.41037738, a: 1}
   _bulletType: 0
   _bulletUpgradeType: 0
   _value: 2

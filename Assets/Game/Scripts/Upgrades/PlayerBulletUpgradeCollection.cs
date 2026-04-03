@@ -11,6 +11,8 @@ namespace Game.Scripts.Upgrades
 
         [SerializeField] private List<PlayerBulletUpgradeEntry> _entries = new();
 
+        public event Action<BulletType> BulletUnlocked;
+        
         private void Awake()
         {
             _entriesByType.Clear();
@@ -34,6 +36,7 @@ namespace Game.Scripts.Upgrades
         {
             PlayerBulletUpgradeEntry entry = Get(bulletType);
             entry.Unlock();
+            BulletUnlocked?.Invoke(bulletType);
         }
 
         public void AddDamage(BulletType bulletType, float damage)

@@ -28,12 +28,12 @@ namespace Game.Scripts.Upgrades
         
         public void AddDamage(float damage)
         {
-            _damage = damage;
+            _damage += damage;
         }
         
         public void AddLifeTime(float lifeTime)
         {
-            _lifeTime = lifeTime;
+            _lifeTime += lifeTime;
         }
 
         public void AddCount(int count)

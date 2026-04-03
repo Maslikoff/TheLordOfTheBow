@@ -39,7 +39,7 @@ namespace Game.Scripts.Characters
             _bulletSpawner.SpawnBullet(_bulletType, direction, new BulletData(1,0));
         }
         
-        protected void TryShoot()
+        protected virtual void TryShoot()
         {
             if (enabled == false || _canShoot == false || _isReloading || _bulletSpawner == null || _firePoint == null) 
                 return;
@@ -63,6 +63,11 @@ namespace Game.Scripts.Characters
                 if (_currentShotsInBurst >= _maxShotsPerBurst)
                     StartReload();
             }
+        }
+        
+        protected void OnReloadProgressUpdated(float progress)
+        {
+            ReloadProgressUpdated?.Invoke(progress);
         }
         
         protected abstract Vector3 GetShootDirection();
@@ -93,7 +98,7 @@ namespace Game.Scripts.Characters
                 elapsedTime += Time.deltaTime;
                 float progress = elapsedTime / _cooldownTime;
                 
-                ReloadProgressUpdated?.Invoke(progress);
+                OnReloadProgressUpdated(progress);
                 
                 yield return null;
             }
@@ -101,7 +106,7 @@ namespace Game.Scripts.Characters
             _isReloading = false;
             _canShoot = true;
             
-            ReloadProgressUpdated?.Invoke(1f);
+            OnReloadProgressUpdated(1f);
         }
     }
 }
