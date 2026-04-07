@@ -3,6 +3,7 @@ using UnityEngine;
 using Game.Scripts.ObjectPool;
 using Game.Scripts.Spawners;
 using Game.Scripts.UI;
+using Assets.Game.Scripts.Characters.Player;
 
 namespace Game.Scripts.Characters.Enemy
 {
@@ -18,7 +19,7 @@ namespace Game.Scripts.Characters.Enemy
         [SerializeField] protected DamagePopup _damagePopup;
         
         public Race RaceEnemy => _race;
-        public Transform PlayerTarget { get; protected set; }
+        public ITransformHolder PlayerTarget { get; protected set; }
         public BulletSpawner Bullets { get; protected set; }
 
         public event Action<IPoolable> Released;
@@ -57,7 +58,7 @@ namespace Game.Scripts.Characters.Enemy
                 _damagePopup.ResetPopup();
         }
 
-        public void Initialize(Transform playerTarget, BulletSpawner bulletSpawner)
+        public void Initialize(ITransformHolder playerTarget, BulletSpawner bulletSpawner)
         {
             PlayerTarget = playerTarget;
             Bullets = bulletSpawner;

@@ -1,15 +1,16 @@
 using System.Collections.Generic;
+using Assets.Game.Scripts.Characters.Player;
 using Game.Scripts.Characters;
 using Game.Scripts.Characters.Enemy;
 using Game.Scripts.Spawners;
 using UnityEngine;
+using VContainer;
 
 namespace Game.Scripts.ObjectPool
 {
     public class EnemyPool : ObjectPool<Enemy>
     {
         [SerializeField] private List<EnemyRaceConfig> _enemyConfigs = new();
-        [SerializeField] private Transform _playerTarget;
         [SerializeField] private BulletSpawner _bulletSpawner;
 
         private Dictionary<Race, Queue<Enemy>> _racePools = new();
@@ -18,6 +19,14 @@ namespace Game.Scripts.ObjectPool
         private Dictionary<Race, float> _raceWeights = new();
 
         private float _totalWeight;
+
+        private ITransformHolder _playerTarget;
+
+        [Inject] 
+        public void Construct(ITransformHolder playerTarget)
+        {
+            _playerTarget = playerTarget; 
+        }
 
         protected override void Awake()
         {

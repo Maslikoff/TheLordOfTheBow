@@ -16,7 +16,7 @@ namespace Game.Scripts.Characters.Enemy
         protected override Vector3 GetShootDirection()
         {
             if (_enemy?.PlayerTarget != null)
-                return (_enemy.PlayerTarget.position - _firePoint.position).normalized;
+                return (_enemy.PlayerTarget.Transform.position - _firePoint.position).normalized;
             
             return transform.forward;
         }

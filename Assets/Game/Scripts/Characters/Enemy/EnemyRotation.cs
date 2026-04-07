@@ -1,3 +1,4 @@
+using Assets.Game.Scripts.Characters.Player;
 using UnityEngine;
 
 namespace Game.Scripts.Characters.Enemy
@@ -7,7 +8,7 @@ namespace Game.Scripts.Characters.Enemy
         [SerializeField] private Transform _visualRoot;
         [SerializeField] private float _rotationSpeed = 5f;
         
-        private Transform _target;
+        private ITransformHolder _target;
         private Enemy _enemy;
 
         private void Awake()
@@ -21,14 +22,14 @@ namespace Game.Scripts.Characters.Enemy
             RotateTowardsTarget();
         }
         
-        public void SetTarget(Transform target)
+        public void SetTarget(ITransformHolder target)
         {
             _target = target;
         }
         
         private void RotateTowardsTarget()
         {
-            Vector3 direction = (_target.position - transform.position).normalized;
+            Vector3 direction = (_target.Transform.position - transform.position).normalized;
             
             if (direction == Vector3.zero) 
                 return;
