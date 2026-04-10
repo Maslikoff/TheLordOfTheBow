@@ -117,10 +117,8 @@ namespace Game.Scripts.ObjectPool
 
         private void InitializePools()
         {
-            if (_isInitialized) return;
-
-            Transform rootParent = new GameObject("EnemyPool").transform;
-            rootParent.SetParent(transform);
+            if (_isInitialized) 
+                return;
 
             _totalWeight = 0;
             _raceWeights.Clear();
@@ -133,10 +131,7 @@ namespace Game.Scripts.ObjectPool
                 if (config.Prefab == null)
                     continue;
 
-                Transform parent = new GameObject($"{config.Race}Pool").transform;
-                parent.SetParent(rootParent);
-
-                _raceParents[config.Race] = parent;
+                _raceParents[config.Race] = _poolParent;
                 _racePrefabs[config.Race] = config.Prefab;
                 _raceWeights[config.Race] = config.SpawnWeight;
                 _totalWeight += config.SpawnWeight;

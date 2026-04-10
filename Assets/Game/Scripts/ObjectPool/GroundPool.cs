@@ -7,15 +7,15 @@ namespace Game.Scripts.ObjectPool
 {
     public class GroundPool : ObjectPool<Ground>
     {
+        private readonly List<Queue<Ground>> _typePools = new();
+        private readonly List<Transform> _typeParents = new();
+        private readonly List<Ground> _typePrefabs = new();
+
         [SerializeField] private List<GroundPrefabConfig> _groundPrefabs = new();
         [SerializeField] private float _groundLength = 20f;
-
-        private List<Queue<Ground>> _typePools = new();
-        private List<Transform> _typeParents = new();
-        private List<Ground> _typePrefabs = new();
         
-        private int _currentPrefabIndex = 0;
-        private float _lastSpawnZ = 0f;
+        private int _currentPrefabIndex;
+        private float _lastSpawnZ;
 
         public float GroundLength => _groundLength;
         
@@ -87,9 +87,6 @@ namespace Game.Scripts.ObjectPool
 
         private void InitializePools()
         {
-            Transform rootParent = new GameObject("GroundPool").transform;
-            rootParent.SetParent(transform);
-
             foreach (var config in _groundPrefabs)
             {
                 if (config.GroundPrefab == null)
@@ -98,7 +95,7 @@ namespace Game.Scripts.ObjectPool
                     continue;
                 }
                 
-                _typeParents.Add(rootParent);
+                _typeParents.Add(_poolParent);
                 _typePrefabs.Add(config.GroundPrefab);
                 
                 Queue<Ground> pool = new Queue<Ground>();

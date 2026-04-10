@@ -13,9 +13,7 @@ namespace Game.Scripts.Spawners
 
         protected override bool CanSpawn() => true;
         
-        protected override void OnEnable()
-        {
-        }
+        protected override void OnEnable() { }
 
         protected override void OnDisable()
         {
@@ -25,8 +23,11 @@ namespace Game.Scripts.Spawners
 
         protected override void Initialize()
         {
-            if (_groundPool == null) _groundPool = _objectPool as GroundPool;
-            if (_groundPool == null) throw new NullReferenceException("Can't get for ground pool");
+            if (_groundPool == null) 
+                _groundPool = _objectPool as GroundPool;
+            
+            if (_groundPool == null) 
+                throw new NullReferenceException("Can't get for ground pool");
 
             _groundPool.GroundReturned += SpawnObject;
 
@@ -38,11 +39,13 @@ namespace Game.Scripts.Spawners
 
         private void SpawnGroundAtIndexedPosition(int index)
         {
-            if (_groundPool == null) return;
+            if (_groundPool == null)
+                return;
 
             Ground newGround = _groundPool.GetNextGround();
 
-            if (newGround == null) return;
+            if (newGround == null)
+                return;
 
             Vector3 newGroundPosition = new Vector3(_startPosition.x, _startPosition.y, _groundPool.GroundLength * index);
             newGround.transform.position = newGroundPosition;

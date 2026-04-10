@@ -18,7 +18,6 @@ namespace Game.Scripts.Wave
         private int _totalEnemiesInWave;
         
         private bool _isWaveInProgress;
-        private bool _waveSpawningComplete;
 
         public int CurrentWaveIndex => _currentWaveIndex + 1;
         public int TotalWaves => _config.WavesEnemyCount.Count;
@@ -109,7 +108,6 @@ namespace Game.Scripts.Wave
             _isWaveInProgress = true;
             _enemiesSpawnedInWave = 0;
             _enemiesKilledInWave = 0;
-            _waveSpawningComplete = false;
             
             _enemySpawner.SetMaxObjects(enemyCount);
             _enemySpawner.ResetCurrentCount();
@@ -138,7 +136,6 @@ namespace Game.Scripts.Wave
                 yield return spawnDelay;
             }
     
-            _waveSpawningComplete = true;
             _enemySpawner.enabled = false;
         }
         

@@ -12,12 +12,14 @@ namespace Game.Scripts.Characters.Bullets
 
         protected override void HandleCollision(Collision other)
         {
-            if (other.gameObject.TryGetComponent(out Health player) == false) return;
+            if (other.gameObject.TryGetComponent(out Health player) == false) 
+                return;
             
             player.TakeDamage(_baseDamage);
         }
 
-        protected override bool CanCollide(Collision other) => other.gameObject.TryGetComponent(out Enemy.Enemy _) == false &&
-                                                               base.CanCollide(other);
+        protected override bool CanCollide(Collision other) => 
+            other.gameObject.TryGetComponent(out Enemy.Enemy _) == false &&
+            base.CanCollide(other);
     }
 }

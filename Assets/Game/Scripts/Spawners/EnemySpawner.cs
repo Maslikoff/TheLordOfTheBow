@@ -9,16 +9,16 @@ namespace Game.Scripts.Spawners
     {
         [SerializeField] private SpawnGrid _spawnGrid;
         [SerializeField] private bool _useGridSpawning = true;
-        [SerializeField] private bool _spawnInOrder = false;
+        [SerializeField] private bool _spawnInOrder;
 
         [Header("Enemy Race Settings")] 
         [SerializeField] private Race _singleRace = Race.Goblin;
         [SerializeField] private Race[] _multipleRaces;
-        [SerializeField] private bool _useMultipleRaces = false;
+        [SerializeField] private bool _useMultipleRaces;
         [SerializeField] private bool _useWeightedRandom = true;
 
         private EnemyPool _enemyPool;
-        private int _currentRaceIndex = 0;
+        private int _currentRaceIndex;
         private int _currentX;
         private int _currentY;
 

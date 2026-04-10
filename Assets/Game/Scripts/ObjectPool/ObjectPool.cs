@@ -6,7 +6,7 @@ namespace Game.Scripts.ObjectPool
     public abstract class ObjectPool<T> : MonoBehaviour where T : Component, IPoolable
     {
         private Queue<T> _pool = new();
-        private Transform _poolParent;
+        protected Transform _poolParent;
 
         protected bool _isInitialized = false;
 

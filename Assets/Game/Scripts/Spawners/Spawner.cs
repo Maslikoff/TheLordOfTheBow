@@ -36,23 +36,6 @@ namespace Game.Scripts.Spawners
                 _objectPool = GetComponent<ObjectPool<T>>();
         }
 
-        private void StartSpawning()
-        {
-            if (_spawnCoroutine != null)
-                StopCoroutine(_spawnCoroutine);
-
-            _spawnCoroutine = StartCoroutine(SpawnRoutine());
-        }
-
-        private void StopSpawning()
-        {
-            if (_spawnCoroutine != null)
-            {
-                StopCoroutine(_spawnCoroutine);
-                _spawnCoroutine = null;
-            }
-        }
-
         private IEnumerator SpawnRoutine()
         {
             WaitForSeconds waitForSeconds = new WaitForSeconds(_spawnInterval);
@@ -67,6 +50,23 @@ namespace Game.Scripts.Spawners
         }
 
         protected virtual bool CanSpawn() => _currentObjectsCount < _maxObjects;
+        
+        protected virtual void StartSpawning()
+        {
+            if (_spawnCoroutine != null)
+                StopCoroutine(_spawnCoroutine);
+
+            _spawnCoroutine = StartCoroutine(SpawnRoutine());
+        }
+
+        protected virtual void StopSpawning()
+        {
+            if (_spawnCoroutine != null)
+            {
+                StopCoroutine(_spawnCoroutine);
+                _spawnCoroutine = null;
+            }
+        }
 
         protected abstract void SpawnObject();
 

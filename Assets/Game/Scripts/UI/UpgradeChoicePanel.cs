@@ -45,21 +45,14 @@ namespace Game.Scripts.UI
         
         private void OnPlayerLevelUp(int newLevel)
         {
-            Debug.Log($"OnPlayerLevelUp called! Level: {newLevel}");
             ShowUpgradeChoice();
         }
         
         public void ShowUpgradeChoice()
         {
-             Debug.Log($"ShowUpgradeChoice called. UpgradeApplier is null? {_upgradeApplier == null}");
-            
             if (_upgradeApplier == null)
-            {
-                Debug.LogError("UpgradeApplier not found!");
                 return;
-            }
             
-            Debug.Log("Showing upgrade panel");
             Time.timeScale = 0f;
             _panelRoot.SetActive(true);
             
