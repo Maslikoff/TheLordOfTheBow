@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
+using Game.Scripts.Environment.Effect;
 using Game.Scripts.ObjectPool;
 using UnityEngine;
+using VContainer;
 
 namespace Game.Scripts.Characters.PickupObjects
 {
@@ -12,6 +14,13 @@ namespace Game.Scripts.Characters.PickupObjects
 
         private Coroutine _rotationCoroutine;
         private Transform _transform;
+        private IEffectService _effectService;
+
+        [Inject]
+        public void Construct(IEffectService effectService)
+        {
+            _effectService = effectService;
+        }
 
         public event Action<IPoolable> Released;
 
@@ -32,6 +41,8 @@ namespace Game.Scripts.Characters.PickupObjects
                 if(player.CurrentCount < player.MaxCount)
                 {
                     player.Heal(_healCount);
+                    _effectService?.PlayEffect(EffectType.HealthPickup, transform.position);
+                    
                     Release();
                 }
             }

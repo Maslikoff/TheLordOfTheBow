@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 8690616237458035400}
   - component: {fileID: 5714510797088590162}
   - component: {fileID: 5427966749699303339}
+  - component: {fileID: 8326561931983357704}
+  - component: {fileID: 4682698554497937145}
   m_Layer: 0
   m_Name: PoolService
   m_TagString: Untagged
@@ -51,9 +53,12 @@ MonoBehaviour:
   _bulletConfigs:
   - _type: 0
     _prefab: {fileID: 5500303543803767547, guid: 284cf5c90bbf1e74d95e09721124c345, type: 3}
-    _poolSize: 5
+    _poolSize: 10
   - _type: 1
-    _prefab: {fileID: 5500303543803767547, guid: 5fce0b17aaf48d943902bd91b4023121, type: 3}
+    _prefab: {fileID: -2522443774078639428, guid: 5fce0b17aaf48d943902bd91b4023121, type: 3}
+    _poolSize: 5
+  - _type: 2
+    _prefab: {fileID: 596725794803919738, guid: 5e9da090ddaf0e843a311cdcfae40713, type: 3}
     _poolSize: 5
 --- !u!114 &5427966749699303339
 MonoBehaviour:
@@ -67,14 +72,42 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00d9d60bc9b0426fa657fbd25b20847e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _bulletPool: {fileID: 5714510797088590162}
+  _bulletSpawnPoint: {fileID: 0}
+--- !u!114 &8326561931983357704
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 675336176799941651}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d11794de8dfe4e13b48e6f3f9d26e85d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _effectConfigs:
+  - <Type>k__BackingField: 0
+    <Prefab>k__BackingField: {fileID: 4834398947016134513, guid: e73000b12fb76244cbffd6abbf8bb6e4, type: 3}
+    <PoolSize>k__BackingField: 5
+  - <Type>k__BackingField: 1
+    <Prefab>k__BackingField: {fileID: -2227072471677741860, guid: 448ffbcf71db27749b98c4ed68e15143, type: 3}
+    <PoolSize>k__BackingField: 5
+--- !u!114 &4682698554497937145
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 675336176799941651}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eaf41a63639a46dea177fb2ae9e8af5b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   _spawnInterval: 3
   _maxObjects: 1
   _spawnArea: {x: 0, y: 0, z: 0}
-  _bulletSpawnPoint: {fileID: 0}
-  _direction: {x: 0, y: 0, z: 1}
-  _useMultipleBulletTypes: 0
-  _singleBulletType: 0
-  _multipleBulletTypes: 0000000001000000
 --- !u!1 &3986049398304335167
 GameObject:
   m_ObjectHideFlags: 0

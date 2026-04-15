@@ -4,6 +4,8 @@ using Game.Scripts.ObjectPool;
 using Game.Scripts.Spawners;
 using Game.Scripts.UI;
 using Assets.Game.Scripts.Characters.Player;
+using Game.Scripts.Environment.Effect;
+using VContainer;
 
 namespace Game.Scripts.Characters.Enemy
 {
@@ -17,6 +19,14 @@ namespace Game.Scripts.Characters.Enemy
         [SerializeField] protected EnemyRotation _enemyRotation;
         [SerializeField] protected Health _health;
         [SerializeField] protected DamagePopup _damagePopup;
+        
+        private IEffectService _effectService;
+
+        [Inject]
+        public void Construct(IEffectService effectService)
+        {
+            _effectService = effectService;
+        }
         
         public Race RaceEnemy => _race;
         public ITransformHolder PlayerTarget { get; protected set; }
@@ -35,7 +45,7 @@ namespace Game.Scripts.Characters.Enemy
             if (_health != null)
             {
                 _health.DamageTaken += OnDamageTaken;
-                _health.Death += Release;
+                _health.Death += OnDeath;
             }
         }
 
@@ -51,7 +61,7 @@ namespace Game.Scripts.Characters.Enemy
             if (_health != null)
             {
                 _health.DamageTaken -= OnDamageTaken;
-                _health.Death -= Release;
+                _health.Death -= OnDeath;
             }
             
             if (_damagePopup != null)
@@ -76,6 +86,12 @@ namespace Game.Scripts.Characters.Enemy
         {
             if (_damagePopup != null)
                 _damagePopup.ShowDamage(damage);
+        }
+
+        private void OnDeath()
+        {
+            _effectService?.PlayEffect(EffectType.EnemyDeath, transform.position);
+            Release();
         }
     }
 }

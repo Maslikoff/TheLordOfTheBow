@@ -818,6 +818,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 371693353}
   m_CullTransparentMesh: 1
+--- !u!1 &377129685 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 675336176799941651, guid: aa0abdfbc95e4a74a80961bf33af6edc, type: 3}
+  m_PrefabInstance: {fileID: 2471357533884714545}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &414768669
 GameObject:
   m_ObjectHideFlags: 0
@@ -1177,7 +1182,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5427966749699303339, guid: aa0abdfbc95e4a74a80961bf33af6edc, type: 3}
   m_PrefabInstance: {fileID: 2471357533884714545}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 377129685}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 00d9d60bc9b0426fa657fbd25b20847e, type: 3}
@@ -1720,7 +1725,10 @@ MonoBehaviour:
   autoRun: 1
   autoInjectGameObjects:
   - {fileID: 998877170}
+  - {fileID: 377129685}
   _playerTransformHolder: {fileID: 2000916692}
+  _effectsPool: {fileID: 988614239}
+  _effectSpawner: {fileID: 988614238}
 --- !u!4 &750940617
 Transform:
   m_ObjectHideFlags: 0
@@ -1822,6 +1830,7 @@ GameObject:
   - component: {fileID: 963194228}
   - component: {fileID: 963194227}
   - component: {fileID: 963194226}
+  - component: {fileID: 963194229}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -1903,6 +1912,50 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 35, y: 0, z: 0}
+--- !u!114 &963194229
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 963194225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a79441f348de89743a2939f4d699eac1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_RenderShadows: 1
+  m_RequiresDepthTextureOption: 2
+  m_RequiresOpaqueTextureOption: 2
+  m_CameraType: 0
+  m_Cameras: []
+  m_RendererIndex: -1
+  m_VolumeLayerMask:
+    serializedVersion: 2
+    m_Bits: 1
+  m_VolumeTrigger: {fileID: 0}
+  m_VolumeFrameworkUpdateModeOption: 2
+  m_RenderPostProcessing: 0
+  m_Antialiasing: 0
+  m_AntialiasingQuality: 2
+  m_StopNaN: 0
+  m_Dithering: 0
+  m_ClearDepth: 1
+  m_AllowXRRendering: 1
+  m_AllowHDROutput: 1
+  m_UseScreenCoordOverride: 0
+  m_ScreenSizeOverride: {x: 0, y: 0, z: 0, w: 0}
+  m_ScreenCoordScaleBias: {x: 0, y: 0, z: 0, w: 0}
+  m_RequiresDepthTexture: 0
+  m_RequiresColorTexture: 0
+  m_Version: 2
+  m_TaaSettings:
+    m_Quality: 3
+    m_FrameInfluence: 0.1
+    m_JitterScale: 1
+    m_MipBias: 0
+    m_VarianceClampScale: 0.9
+    m_ContrastAdaptiveSharpening: 0
 --- !u!1 &981970714
 GameObject:
   m_ObjectHideFlags: 0
@@ -1992,15 +2045,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2868811f38da40a2b055567007384a85, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &988614237 stripped
+--- !u!114 &988614238 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5714510797088590162, guid: aa0abdfbc95e4a74a80961bf33af6edc, type: 3}
+  m_CorrespondingSourceObject: {fileID: 4682698554497937145, guid: aa0abdfbc95e4a74a80961bf33af6edc, type: 3}
   m_PrefabInstance: {fileID: 2471357533884714545}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 377129685}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 82f401204a404bda8e9daebb047eb434, type: 3}
+  m_Script: {fileID: 11500000, guid: eaf41a63639a46dea177fb2ae9e8af5b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &988614239 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8326561931983357704, guid: aa0abdfbc95e4a74a80961bf33af6edc, type: 3}
+  m_PrefabInstance: {fileID: 2471357533884714545}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 377129685}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d11794de8dfe4e13b48e6f3f9d26e85d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &998877170 stripped
@@ -3734,14 +3798,10 @@ PrefabInstance:
       propertyPath: _enemySpawnPoint
       value: 
       objectReference: {fileID: 135343225}
-    - target: {fileID: 5427966749699303339, guid: aa0abdfbc95e4a74a80961bf33af6edc, type: 3}
-      propertyPath: m_Enabled
-      value: 1
+    - target: {fileID: 4682698554497937145, guid: aa0abdfbc95e4a74a80961bf33af6edc, type: 3}
+      propertyPath: _maxObjects
+      value: 3
       objectReference: {fileID: 0}
-    - target: {fileID: 5427966749699303339, guid: aa0abdfbc95e4a74a80961bf33af6edc, type: 3}
-      propertyPath: _bulletPool
-      value: 
-      objectReference: {fileID: 988614237}
     - target: {fileID: 5427966749699303339, guid: aa0abdfbc95e4a74a80961bf33af6edc, type: 3}
       propertyPath: _bulletType
       value: 1
@@ -3750,30 +3810,6 @@ PrefabInstance:
       propertyPath: _bulletSpawnPoint
       value: 
       objectReference: {fileID: 191711218}
-    - target: {fileID: 5714510797088590162, guid: aa0abdfbc95e4a74a80961bf33af6edc, type: 3}
-      propertyPath: _bulletConfigs.Array.size
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 5714510797088590162, guid: aa0abdfbc95e4a74a80961bf33af6edc, type: 3}
-      propertyPath: _bulletConfigs.Array.data[2]._type
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 5714510797088590162, guid: aa0abdfbc95e4a74a80961bf33af6edc, type: 3}
-      propertyPath: _bulletConfigs.Array.data[1]._prefab
-      value: 
-      objectReference: {fileID: -2522443774078639428, guid: 5fce0b17aaf48d943902bd91b4023121, type: 3}
-    - target: {fileID: 5714510797088590162, guid: aa0abdfbc95e4a74a80961bf33af6edc, type: 3}
-      propertyPath: _bulletConfigs.Array.data[2]._prefab
-      value: 
-      objectReference: {fileID: 596725794803919738, guid: 5e9da090ddaf0e843a311cdcfae40713, type: 3}
-    - target: {fileID: 5714510797088590162, guid: aa0abdfbc95e4a74a80961bf33af6edc, type: 3}
-      propertyPath: _bulletConfigs.Array.data[0]._poolSize
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 5714510797088590162, guid: aa0abdfbc95e4a74a80961bf33af6edc, type: 3}
-      propertyPath: _bulletConfigs.Array.data[2]._poolSize
-      value: 5
-      objectReference: {fileID: 0}
     - target: {fileID: 7169359265676688717, guid: aa0abdfbc95e4a74a80961bf33af6edc, type: 3}
       propertyPath: _playerTarget
       value: 
