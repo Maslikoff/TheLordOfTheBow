@@ -1,11 +1,9 @@
-using System;
 using Game.Scripts.Spawners;
 using UnityEngine;
 using VContainer;
 
 namespace Game.Scripts.Environment.Effect
 {
-    [Serializable]
     public class EffectService : IEffectService
     {
         private readonly EffectSpawner _effectSpawner;

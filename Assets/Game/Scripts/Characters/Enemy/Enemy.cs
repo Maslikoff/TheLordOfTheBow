@@ -76,7 +76,7 @@ namespace Game.Scripts.Characters.Enemy
             if (_enemyRotation != null)
                 _enemyRotation.SetTarget(playerTarget);
         }
-
+        
         public void Release()
         {
             Released?.Invoke(this);
@@ -91,6 +91,7 @@ namespace Game.Scripts.Characters.Enemy
         private void OnDeath()
         {
             _effectService?.PlayEffect(EffectType.EnemyDeath, transform.position);
+
             Release();
         }
     }

@@ -13,9 +13,9 @@ namespace Game.Scripts.Environment.Effect
         
         private Coroutine _lifeTimeCoroutine;
         
-        public EffectType EffectType => _effectType;
-        
         public event Action<IPoolable> Released;
+        
+        public EffectType EffectType => _effectType;
 
         private void OnValidate()
         {

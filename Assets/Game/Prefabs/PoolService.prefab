@@ -106,7 +106,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _spawnInterval: 3
-  _maxObjects: 1
+  _maxObjects: 3
   _spawnArea: {x: 0, y: 0, z: 0}
 --- !u!1 &3986049398304335167
 GameObject:

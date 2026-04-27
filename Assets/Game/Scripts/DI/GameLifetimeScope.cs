@@ -19,7 +19,7 @@ namespace Game.Scripts.DI
             builder.RegisterComponent(_playerTransformHolder)
                 .As<ITransformHolder>();
             
-            builder.Register<IEffectService, EffectService>(Lifetime.Singleton);
+            builder.Register<IEffectService, EffectService>(Lifetime.Scoped);
             
             builder.RegisterComponent(_effectsPool);
             builder.RegisterComponent(_effectSpawner);

@@ -41,6 +41,7 @@ namespace Game.Scripts.Characters.PickupObjects
                 if(player.CurrentCount < player.MaxCount)
                 {
                     player.Heal(_healCount);
+                    
                     _effectService?.PlayEffect(EffectType.HealthPickup, transform.position);
                     
                     Release();
