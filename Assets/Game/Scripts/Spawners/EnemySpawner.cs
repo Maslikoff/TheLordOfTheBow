@@ -1,7 +1,11 @@
 using System;
 using Game.Scripts.Characters.Enemy;
+using Game.Scripts.Characters.Player;
+using Game.Scripts.Experience;
+using Game.Scripts.Levels;
 using Game.Scripts.ObjectPool;
 using UnityEngine;
+using VContainer;
 
 namespace Game.Scripts.Spawners
 {
@@ -18,11 +22,18 @@ namespace Game.Scripts.Spawners
         [SerializeField] private bool _useWeightedRandom = true;
 
         private EnemyPool _enemyPool;
+        private IPlayerProvider _playerProvider;
         private int _currentRaceIndex;
         private int _currentX;
         private int _currentY;
 
         public event Action EnemyReleased;
+
+        [Inject]
+        private void Construct(IPlayerProvider playerProvider)
+        {
+            _playerProvider = playerProvider;
+        }
 
         protected override void OnEnable()
         {
@@ -61,17 +72,20 @@ namespace Game.Scripts.Spawners
 
         protected override void SpawnObject()
         {
+            TrySpawnObject();
+        }
+
+        private bool TrySpawnObject()
+        {
             if (_useGridSpawning && _spawnGrid != null)
             {
                 if (_spawnInOrder)
-                    SpawnNextInOrder();
-                else
-                    SpawnRandomInGrid();
+                    return TrySpawnNextInOrder();
+
+                return TrySpawnRandomInGrid();
             }
-            else
-            {
-                SpawnEnemyAtPosition(GetRandomSpawnPosition());
-            }
+
+            return TrySpawnEnemyAtPosition(GetRandomSpawnPosition());
         }
 
         public void ResetCurrentCount()
@@ -93,45 +107,54 @@ namespace Game.Scripts.Spawners
 
             if (canSpawn == false) return false;
 
-            SpawnObject();
-
-            return true;
+            return TrySpawnObject();
         }
 
         public float GetSpawnInterval() => _spawnInterval;
 
         private void SpawnEnemyAtPosition(Vector3 position)
         {
+            TrySpawnEnemyAtPosition(position);
+        }
+
+        private bool TrySpawnEnemyAtPosition(Vector3 position)
+        {
             if (_objectPool == null)
             {
                 Debug.LogError("[EnemySpawner] ObjectPool is null!");
-                return;
+                return false;
             }
 
             Enemy enemy = GetEnemyFromPool();
 
-            if (enemy != null)
+            if (enemy == null)
+                return false;
+
+            if (enemy.gameObject.activeSelf)
             {
-                if (enemy.gameObject.activeSelf)
+                enemy.Release();
+                enemy = GetEnemyFromPool();
+
+                if (enemy == null)
                 {
-                    
-                    enemy.Release();
-                    enemy = GetEnemyFromPool();
-
-                    if (enemy == null)
-                    {
-                        Debug.LogError("[EnemySpawner] Failed to get enemy after release!");
-                        return;
-                    }
+                    Debug.LogError("[EnemySpawner] Failed to get enemy after release!");
+                    return false;
                 }
-
-                enemy.transform.position = position;
-                enemy.gameObject.SetActive(true);
-
-                enemy.Released += OnEnemyReleased;
-                
-                IncreaseObjectCount();
             }
+
+            enemy.transform.position = position;
+
+            if (InitializeEnemy(enemy) == false)
+            {
+                enemy.Release();
+                return false;
+            }
+
+            enemy.gameObject.SetActive(true);
+            enemy.Released += OnEnemyReleased;
+
+            IncreaseObjectCount();
+            return true;
         }
 
         private Enemy GetEnemyFromPool()
@@ -155,11 +178,23 @@ namespace Game.Scripts.Spawners
             return enemy;
         }
 
+        private bool InitializeEnemy(Enemy enemy)
+        {
+            if (_playerProvider.CurrentPlayer == null)
+                return false;
 
-        private void SpawnNextInOrder()
+            enemy.Initialize(_playerProvider.CurrentPlayer.transform);
+
+            if (enemy.TryGetComponent(out ExperienceReward experienceReward))
+                experienceReward.Initialize(_playerProvider.CurrentPlayer.Experience);
+
+            return true;
+        }
+        
+        private bool TrySpawnNextInOrder()
         {
             if (_spawnGrid == null)
-                return;
+                return false;
 
             if (_currentY >= _spawnGrid.GridHeight)
             {
@@ -168,7 +203,10 @@ namespace Game.Scripts.Spawners
             }
 
             Vector3 spawnPosition = _spawnGrid.GetSpawnPosition(_currentX, _currentY);
-            SpawnEnemyAtPosition(spawnPosition);
+            bool spawned = TrySpawnEnemyAtPosition(spawnPosition);
+
+            if (spawned == false)
+                return false;
 
             _currentX++;
 
@@ -177,16 +215,17 @@ namespace Game.Scripts.Spawners
                 _currentX = 0;
                 _currentY++;
             }
+
+            return true;
         }
 
-        private void SpawnRandomInGrid()
+        private bool TrySpawnRandomInGrid()
         {
             if (_spawnGrid == null)
-                return;
+                return false;
 
             Vector3 spawnPosition = _spawnGrid.GetRandomSpawnPosition();
-            
-            SpawnEnemyAtPosition(spawnPosition);
+            return TrySpawnEnemyAtPosition(spawnPosition);
         }
 
         private void OnEnemyReleased(IPoolable poolable)

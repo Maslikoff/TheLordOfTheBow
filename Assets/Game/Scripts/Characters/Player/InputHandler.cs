@@ -7,17 +7,30 @@ namespace Game.Scripts.Characters.Player
     {
         private const string AxisHorizontal = "Horizontal";
         private const string AxisVertical = "Vertical";
+        private const float JoystickDeadZone = 0.01f;
 
-        [SerializeField] private DynamicJoystick _joystick;
-
+        private DynamicJoystick _joystick;
         private Vector2 _moveInput;
 
         public event Action<Vector2> MoveInput;
+        
+        public void SetJoystick(DynamicJoystick joystick)
+        {
+            _joystick = joystick;
+        }
 
         private void Update()
         {
-            HandleKeyboardInput();
-            HandleJoystickInput();
+            Vector2 keyboardInput = new Vector2(Input.GetAxis(AxisHorizontal), Input.GetAxis(AxisVertical));
+            keyboardInput = keyboardInput.magnitude > 1f ? keyboardInput.normalized : keyboardInput;
+
+            Vector2 joystickInput = _joystick != null ? _joystick.Direction : Vector2.zero;
+
+            _moveInput = joystickInput.sqrMagnitude > JoystickDeadZone * JoystickDeadZone
+                ? joystickInput
+                : keyboardInput;
+
+            MoveInput?.Invoke(_moveInput);
         }
 
         private void HandleKeyboardInput()

@@ -72,6 +72,11 @@ namespace Game.Scripts.Characters
         
         protected abstract Vector3 GetShootDirection();
         
+        public void Initialize(BulletSpawner bulletSpawner)
+        {
+            _bulletSpawner = bulletSpawner;
+        }
+        
         public void ResetShootState()
         {
             _currentShotsInBurst = 0;

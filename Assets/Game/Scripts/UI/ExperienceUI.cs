@@ -19,23 +19,6 @@ namespace Game.Scripts.UI
 
         private float _targetSliderValue;
 
-        private void Start()
-        {
-            if (_playerExperience == null)
-            {
-                enabled = false;
-
-                return;
-            }
-
-            _playerExperience.LevelUp += OnLevelUp;
-            _playerExperience.ExperienceProgressChanged += OnExperienceProgressChanged;
-            _playerExperience.ExperienceChanged += OnExperienceChanged;
-
-            UpdateUI();
-            UpdateProgressUI();
-        }
-
         private void Update()
         {
             if (_experienceSlider != null && Mathf.Abs(_experienceSlider.value - _targetSliderValue) > 0.01f)
@@ -55,6 +38,18 @@ namespace Game.Scripts.UI
             }
         }
 
+        public void Initialize(Experience.Experience playerExperience)
+        {
+            _playerExperience = playerExperience;
+            
+            _playerExperience.LevelUp += OnLevelUp;
+            _playerExperience.ExperienceProgressChanged += OnExperienceProgressChanged;
+            _playerExperience.ExperienceChanged += OnExperienceChanged;
+            
+            UpdateUI();
+            UpdateProgressUI();
+        }
+        
         private void OnLevelUp(int newLevel)
         {
             UpdateUI();

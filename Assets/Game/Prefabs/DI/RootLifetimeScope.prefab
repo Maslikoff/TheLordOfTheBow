@@ -48,3 +48,5 @@ MonoBehaviour:
     TypeName: 
   autoRun: 1
   autoInjectGameObjects: []
+  _startupConfig: {fileID: 11400000, guid: 22e5df17abac14b4a9166bf12c1d691d, type: 2}
+  _levelCatalog: {fileID: 11400000, guid: 032a1dc83927e3e4a96bfd3a180c06f9, type: 2}

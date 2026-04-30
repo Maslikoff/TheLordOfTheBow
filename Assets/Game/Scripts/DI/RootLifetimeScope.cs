@@ -1,10 +1,38 @@
+using Game.Scripts.Audio;
+using Game.Scripts.Levels;
+using UnityEngine;
 using VContainer;
 using VContainer.Unity;
 
-public class RootLifetimeScope : LifetimeScope
+namespace Game.Scripts.DI
 {
-    protected override void Configure(IContainerBuilder builder)
+    public class RootLifetimeScope : LifetimeScope
     {
+        [SerializeField] private GameStartupConfig _startupConfig;
+        [SerializeField] private LevelCatalog _levelCatalog;
+        
+        protected override void Configure(IContainerBuilder builder)
+        {
+            ConfigureSceneManagement(builder);
+            ConfigureConfigs(builder);
+            ConfigureServices(builder);
+        }
 
+        private void ConfigureSceneManagement(IContainerBuilder builder)
+        {
+            builder.Register<ISceneLoader, SceneLoader>(Lifetime.Singleton);
+        }
+        
+        private void ConfigureConfigs(IContainerBuilder builder)
+        {
+            builder.RegisterInstance(_startupConfig);
+            builder.RegisterInstance(_levelCatalog);
+        }
+        
+        private void ConfigureServices(IContainerBuilder builder)
+        {
+            builder.Register<ILevelService, LevelService>(Lifetime.Singleton);
+            builder.Register<IAudioService, AudioService>(Lifetime.Singleton);
+        }
     }
 }

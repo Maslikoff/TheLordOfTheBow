@@ -3,7 +3,6 @@ using UnityEngine;
 using Game.Scripts.ObjectPool;
 using Game.Scripts.Spawners;
 using Game.Scripts.UI;
-using Assets.Game.Scripts.Characters.Player;
 using Game.Scripts.Environment.Effect;
 using VContainer;
 
@@ -29,7 +28,7 @@ namespace Game.Scripts.Characters.Enemy
         }
         
         public Race RaceEnemy => _race;
-        public ITransformHolder PlayerTarget { get; protected set; }
+        public Transform PlayerTarget { get; protected set; }
         public BulletSpawner Bullets { get; protected set; }
 
         public event Action<IPoolable> Released;
@@ -68,13 +67,11 @@ namespace Game.Scripts.Characters.Enemy
                 _damagePopup.ResetPopup();
         }
 
-        public void Initialize(ITransformHolder playerTarget, BulletSpawner bulletSpawner)
+        public void Initialize(Transform playerTarget)
         {
             PlayerTarget = playerTarget;
-            Bullets = bulletSpawner;
             
-            if (_enemyRotation != null)
-                _enemyRotation.SetTarget(playerTarget);
+            _enemyRotation.SetTarget(playerTarget);
         }
         
         public void Release()

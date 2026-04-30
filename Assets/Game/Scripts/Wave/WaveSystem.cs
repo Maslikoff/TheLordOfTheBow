@@ -9,7 +9,6 @@ namespace Game.Scripts.Wave
     {
         [SerializeField] private EnemySpawner _enemySpawner;
         [SerializeField] private WaveConfig _config;
-        [SerializeField] private bool _autoStartWaves = true;
 
         private Coroutine _waveRoutine;
         private int _currentWaveIndex = -1;
@@ -40,9 +39,6 @@ namespace Game.Scripts.Wave
             _enemySpawner.enabled = false;
             
             _enemySpawner.EnemyReleased += OnEnemyReleased;
-
-            if (_autoStartWaves)
-                StartWaves();
         }
 
         private void OnDestroy()
@@ -53,6 +49,9 @@ namespace Game.Scripts.Wave
 
         public void StartWaves()
         {
+            if (IsConfigValid(_config) == false)
+                return;
+            
             if (_waveRoutine != null)
                 StopCoroutine(_waveRoutine);
 
@@ -69,6 +68,18 @@ namespace Game.Scripts.Wave
             }
             
             _isWaveInProgress = false;
+        }
+        
+        public void SetLevelWaveConfig(WaveConfig waveConfig)
+        {
+            _config = waveConfig;
+        }
+
+        private bool IsConfigValid(WaveConfig config)
+        {
+            return config != null &&
+                   config.WavesEnemyCount != null &&
+                   config.WavesEnemyCount.Count > 0;
         }
 
         private IEnumerator WaveRoutine()

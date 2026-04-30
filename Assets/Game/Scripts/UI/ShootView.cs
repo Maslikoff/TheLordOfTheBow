@@ -23,9 +23,6 @@ namespace Game.Scripts.UI
         private void Start()
         {
             InitializeDictionaries();
-            UpdateCellsVisibility();
-            SubscribeToEvents();
-            ResetAllViews();
         }
 
         private void OnDestroy()
@@ -33,6 +30,18 @@ namespace Game.Scripts.UI
             UnsubscribeFromEvents();
         }
 
+        public void Initialize(PlayerShoot shootController, PlayerBulletUpgradeCollection upgradeCollection)
+        {
+            UnsubscribeFromEvents();
+
+            _shootController = shootController;
+            _upgradeCollection = upgradeCollection;
+
+            UpdateCellsVisibility();
+            SubscribeToEvents();
+            ResetAllViews();
+        }
+        
         private void InitializeDictionaries()
         {
             foreach (BulletUIConfig config in _bulletUIConfigs)

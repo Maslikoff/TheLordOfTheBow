@@ -1,7 +1,12 @@
+using System;
 using System.Collections.Generic;
+using Game.Scripts.Levels;
 using Game.Scripts.Upgrades;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using VContainer;
+using Random = UnityEngine.Random;
 
 namespace Game.Scripts.UI
 {
@@ -9,19 +14,26 @@ namespace Game.Scripts.UI
     {
         private const int CountCards = 3;
         
-        [SerializeField] private UpgradeApplier _upgradeApplier;
-        [SerializeField] private Experience.Experience _playerExperience;
-        
         [Header("UI Settings")]
         [SerializeField] private GameObject _panelRoot;
         [SerializeField] private Transform _cardsContainer;
-        [SerializeField] private GameObject _cardPrefab;
+        [SerializeField] private UpgradeCardUI _cardPrefab;
         [SerializeField] private Button _skipButton;
         
         [Header("Upgrades Pool")]
         [SerializeField] private List<Upgrades.UpgradeCard> _allUpgrades = new();
         
         private List<UpgradeCardUI> _currentCards = new List<UpgradeCardUI>();
+        private UpgradeApplier _upgradeApplier;
+        private Experience.Experience _playerExperience;
+        
+        private IObjectFactory _objectFactory;
+
+        [Inject]
+        public void Construct(IObjectFactory objectFactory)
+        {
+            _objectFactory = objectFactory ?? throw new ArgumentNullException(nameof(objectFactory));
+        }
         
         private void Awake()
         {
@@ -31,16 +43,18 @@ namespace Game.Scripts.UI
                 _skipButton.onClick.AddListener(HidePanel);
         }
         
-        private void Start()
-        {
-            if (_playerExperience != null)
-                _playerExperience.LevelUp += OnPlayerLevelUp;
-        }
-        
         private void OnDestroy()
         {
             if (_playerExperience != null)
                 _playerExperience.LevelUp -= OnPlayerLevelUp;
+        }
+        
+        public void Initialize(Experience.Experience playerExperience, UpgradeApplier upgradeApplier)
+        {
+            _playerExperience = playerExperience ?? throw new ArgumentNullException(nameof(playerExperience));
+            _upgradeApplier = upgradeApplier ?? throw new ArgumentNullException(nameof(upgradeApplier));
+
+            _playerExperience.LevelUp += OnPlayerLevelUp;
         }
         
         private void OnPlayerLevelUp(int newLevel)
@@ -67,10 +81,9 @@ namespace Game.Scripts.UI
             
             foreach (Upgrades.UpgradeCard upgrade in selectedCards)
             {
-                var cardGO = Instantiate(_cardPrefab, _cardsContainer);
-                var cardUI = cardGO.GetComponent<UpgradeCardUI>();
-                cardUI.Initialize(upgrade, OnUpgradeSelected);
-                _currentCards.Add(cardUI);
+                var cardGO = _objectFactory.Create(_cardPrefab, _cardsContainer);
+                cardGO.Initialize(upgrade, OnUpgradeSelected);
+                _currentCards.Add(cardGO);
             }
         }
         

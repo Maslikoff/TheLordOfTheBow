@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Assets.Game.Scripts.Characters.Player;
 using Game.Scripts.Characters;
 using Game.Scripts.Characters.Enemy;
 using Game.Scripts.Spawners;
@@ -20,13 +19,7 @@ namespace Game.Scripts.ObjectPool
 
         private float _totalWeight;
 
-        private ITransformHolder _playerTarget;
-
-        [Inject] 
-        public void Construct(ITransformHolder playerTarget)
-        {
-            _playerTarget = playerTarget; 
-        }
+        
 
         protected override void Awake()
         {
@@ -77,9 +70,6 @@ namespace Game.Scripts.ObjectPool
             if (enemy != null)
             {
                 enemy.gameObject.SetActive(true);
-                
-                if (_playerTarget != null)
-                    enemy.Initialize(_playerTarget, _bulletSpawner);
                 
                 OnObjectGet(enemy);
             }

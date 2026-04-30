@@ -10,6 +10,7 @@ namespace Game.Scripts.Experience
 
         private Health _health;
         
+        private Experience _playerExperience;
         private bool _rewardGiven = false;
 
         private void OnEnable()
@@ -29,6 +30,11 @@ namespace Game.Scripts.Experience
                 _health.Death -= OnEnemyDeath;
         }
 
+        public void Initialize(Experience playerExperience)
+        {
+            _playerExperience = playerExperience;
+        }
+        
         public void GiveRewardManually()
         {
             OnEnemyDeath();
@@ -41,13 +47,12 @@ namespace Game.Scripts.Experience
 
         private void OnEnemyDeath()
         {
-            if (_rewardGiven) return;
+            if (_rewardGiven) 
+                return;
 
-            var playerExp = FindObjectOfType<Experience>();
-
-            if (playerExp != null)
+            if (_playerExperience != null)
             {
-                playerExp.AddExperience(_experienceReward);
+                _playerExperience.AddExperience(_experienceReward);
                 _rewardGiven = true;
 
                 OnExperienceRewarded();
