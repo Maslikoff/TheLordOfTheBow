@@ -75,14 +75,14 @@ namespace Game.Scripts.Wave
             _config = waveConfig;
         }
 
-        private bool IsConfigValid(WaveConfig config)
+        public bool IsConfigValid(WaveConfig config)
         {
             return config != null &&
                    config.WavesEnemyCount != null &&
                    config.WavesEnemyCount.Count > 0;
         }
 
-        private IEnumerator WaveRoutine()
+        public IEnumerator WaveRoutine()
         {
             WaitForSeconds wait = new WaitForSeconds(_config.TimeBetweenWaves);
             
@@ -103,7 +103,7 @@ namespace Game.Scripts.Wave
             _isWaveInProgress = false;
         }
 
-        private IEnumerator ExecuteWave(int enemyCount)
+        public IEnumerator ExecuteWave(int enemyCount)
         {
             InitializeWave(enemyCount);
 
@@ -114,7 +114,7 @@ namespace Game.Scripts.Wave
             FinalizeWave();
         }
 
-        private void InitializeWave(int enemyCount)
+        public void InitializeWave(int enemyCount)
         {
             _isWaveInProgress = true;
             _enemiesSpawnedInWave = 0;
@@ -127,8 +127,8 @@ namespace Game.Scripts.Wave
             WaveStarted?.Invoke(_currentWaveIndex);
             EnemiesCountChanged?.Invoke(0, enemyCount, 0);
         }
-        
-        private IEnumerator SpawnWaveEnemies(int enemyCount)
+
+        public IEnumerator SpawnWaveEnemies(int enemyCount)
         {
             WaitForSeconds spawnDelay = new WaitForSeconds(_enemySpawner.GetSpawnInterval());
     
@@ -149,21 +149,21 @@ namespace Game.Scripts.Wave
     
             _enemySpawner.enabled = false;
         }
-        
-        private IEnumerator WaitForWaveCompletion()
+
+        public IEnumerator WaitForWaveCompletion()
         {
             while (_enemiesKilledInWave < _enemiesSpawnedInWave)
                 yield return null;
         }
 
-        private void FinalizeWave()
+        public void FinalizeWave()
         {
             _isWaveInProgress = false;
             
             WaveCompleted?.Invoke(_currentWaveIndex);
         }
-        
-        private void OnEnemyReleased()
+
+        public void OnEnemyReleased()
         {
             if (_isWaveInProgress && _enemiesKilledInWave < _enemiesSpawnedInWave)
             {

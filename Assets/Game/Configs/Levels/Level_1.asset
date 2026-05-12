@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _sceneNames: 1
   _waveConfig:
-    _wavesEnemyCount: 010000000300000003000000
+    _wavesEnemyCount: 010000000200000003000000
     _timeBetweemWaves: 3

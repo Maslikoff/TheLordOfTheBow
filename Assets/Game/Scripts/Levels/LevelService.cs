@@ -58,6 +58,21 @@ namespace Game.Scripts.Levels
             await LoadLevelAsync(nextIndex);
         }
 
+        public UniTask OnRestartCurrentLevel()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public async UniTask RestartCurrentLevelAsync()
+        {
+            if (TryGetLevelConfig(_currentLevelIndex, out LevelConfig config) == false)
+                return;
+        
+            Debug.Log($"Restart level: {_currentLevelIndex}");
+        
+            await _sceneLoader.LoadAsync(config.SceneNames);
+        }
+
         private bool TryGetLevelConfig(int index, out LevelConfig config)
         {
             if (index < 0)

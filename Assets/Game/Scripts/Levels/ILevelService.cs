@@ -9,5 +9,6 @@ namespace Game.Scripts.Levels
         UniTask LoadCurrentLevelAsync();
         UniTask LoadLevelAsync(int index);
         UniTask LoadNextLevelAsync();
+        UniTask RestartCurrentLevelAsync();
     }
 }

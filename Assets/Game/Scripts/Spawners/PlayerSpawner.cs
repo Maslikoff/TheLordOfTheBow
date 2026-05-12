@@ -15,6 +15,7 @@ namespace Game.Scripts.Spawners
 
         private IObjectFactory _factory;
         private GameStartupConfig _startupConfig;
+        private IPlayerProvider _playerProvider;
 
         private Player _currentPlayer;
         
@@ -44,7 +45,7 @@ namespace Game.Scripts.Spawners
         {
             if (_currentPlayer == null)
                 return;
-
+            
             Destroy(_currentPlayer.gameObject);
             
             _currentPlayer = null;
