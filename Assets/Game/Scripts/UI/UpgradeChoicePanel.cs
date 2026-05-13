@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using Game.Scripts.Levels;
 using Game.Scripts.Upgrades;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using VContainer;
@@ -20,9 +19,7 @@ namespace Game.Scripts.UI
         [SerializeField] private UpgradeCardUI _cardPrefab;
         [SerializeField] private Button _skipButton;
         
-        [Header("Upgrades Pool")]
-        [SerializeField] private List<Upgrades.UpgradeCard> _allUpgrades = new();
-        
+        private List<Upgrades.UpgradeCard> _allUpgrades = new();
         private List<UpgradeCardUI> _currentCards = new List<UpgradeCardUI>();
         private UpgradeApplier _upgradeApplier;
         private Experience.Experience _playerExperience;
@@ -60,6 +57,14 @@ namespace Game.Scripts.UI
         private void OnPlayerLevelUp(int newLevel)
         {
             ShowUpgradeChoice();
+        }
+        
+        public void SetAvailableUpgrades(IReadOnlyList<Upgrades.UpgradeCard> upgrades)
+        {
+            _allUpgrades.Clear();
+        
+            if (upgrades != null && upgrades.Count > 0)
+                _allUpgrades.AddRange(upgrades);
         }
         
         public void ShowUpgradeChoice()

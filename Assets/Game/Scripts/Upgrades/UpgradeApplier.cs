@@ -11,7 +11,7 @@ namespace Game.Scripts.Upgrades
         {
             _playerUpgradeHolder = GetComponent<PlayerUpgradeHolder>();
         }
-
+        
         public void ApplyUpgrade(UpgradeCard upgrade)
         {
             if(upgrade == null)

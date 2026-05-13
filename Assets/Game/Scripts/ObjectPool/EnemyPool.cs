@@ -1,15 +1,15 @@
 using System.Collections.Generic;
 using Game.Scripts.Characters;
 using Game.Scripts.Characters.Enemy;
+using Game.Scripts.Levels;
 using Game.Scripts.Spawners;
 using UnityEngine;
-using VContainer;
 
 namespace Game.Scripts.ObjectPool
 {
     public class EnemyPool : ObjectPool<Enemy>
     {
-        [SerializeField] private List<EnemyRaceConfig> _enemyConfigs = new();
+        [SerializeField] private List<EnemyRaceConfig> _defaultEnemyConfigs  = new();
         [SerializeField] private BulletSpawner _bulletSpawner;
 
         private Dictionary<Race, Queue<Enemy>> _racePools = new();
@@ -19,21 +19,20 @@ namespace Game.Scripts.ObjectPool
 
         private float _totalWeight;
 
-        
-
         protected override void Awake()
         {
             base.Awake();
 
-            InitializePools();
+            if (_defaultEnemyConfigs.Count > 0)
+                InitializeWithConfig(_defaultEnemyConfigs);
         }
 
         protected override void OnDestroy()
         {
             foreach (var pool in _racePools)
-                foreach (var enemy in pool.Value)
-                    if (enemy != null)
-                        enemy.Released -= OnHandleEnemyReleased;
+            foreach (var enemy in pool.Value)
+                if (enemy != null)
+                    enemy.Released -= OnHandleEnemyReleased;
         }
 
         protected override Enemy CreateNewObject() => null;
@@ -55,13 +54,13 @@ namespace Game.Scripts.ObjectPool
         public Enemy GetEnemy(Race race)
         {
             if (_isInitialized == false)
-                InitializePools();
+                return null;
 
             if (_racePools.ContainsKey(race) == false)
                 return null;
 
             Enemy enemy;
-            
+
             if (_racePools[race].Count > 0)
                 enemy = _racePools[race].Dequeue();
             else
@@ -70,7 +69,7 @@ namespace Game.Scripts.ObjectPool
             if (enemy != null)
             {
                 enemy.gameObject.SetActive(true);
-                
+
                 OnObjectGet(enemy);
             }
 
@@ -94,7 +93,7 @@ namespace Game.Scripts.ObjectPool
             foreach (var pair in _raceWeights)
             {
                 currentSum += pair.Value;
-                
+
                 if (randomValue <= currentSum)
                     return GetEnemy(pair.Key);
             }
@@ -105,9 +104,71 @@ namespace Game.Scripts.ObjectPool
             return null;
         }
 
-        private void InitializePools()
+        public void SetEnemyPoolConfig(IReadOnlyList<EnemyRaceConfig> configs)
         {
-            if (_isInitialized) 
+            if (configs == null || configs.Count == 0)
+                return;
+
+            ClearPools();
+            InitializeWithConfig(configs);
+        }
+        
+        private void InitializeWithConfig(IReadOnlyList<EnemyRaceConfig> configs)
+        {
+            _totalWeight = 0;
+            _raceWeights.Clear();
+            _racePrefabs.Clear();
+            _racePools.Clear();
+            _raceParents.Clear();
+
+            foreach (var config in configs)
+            {
+                if (config.Prefab == null)
+                    continue;
+
+                _raceParents[config.Race] = _poolParent;
+                _racePrefabs[config.Race] = config.Prefab;
+                _raceWeights[config.Race] = config.SpawnWeight;
+                _totalWeight += config.SpawnWeight;
+
+                Queue<Enemy> pool = new Queue<Enemy>();
+                _racePools[config.Race] = pool;
+
+                for (int i = 0; i < config.PoolSize; i++)
+                {
+                    Enemy enemy = CreateEnemyForRace(config.Race);
+                    ReturnEnemyToRacePool(enemy, config.Race);
+                }
+            }
+
+            _isInitialized = true;
+        }
+        
+        private void ClearPools()
+        {
+            foreach (var pool in _racePools)
+            {
+                foreach (var enemy in pool.Value)
+                {
+                    if (enemy != null)
+                    {
+                        enemy.Released -= OnHandleEnemyReleased;
+                        Destroy(enemy.gameObject);
+                    }
+                }
+            }
+
+            _racePools.Clear();
+            _racePrefabs.Clear();
+            _raceWeights.Clear();
+            _raceParents.Clear();
+            _totalWeight = 0;
+            _isInitialized = false;
+        }
+
+        /*private void InitializePools()
+        {
+            if (_isInitialized)
                 return;
 
             _totalWeight = 0;
@@ -137,7 +198,7 @@ namespace Game.Scripts.ObjectPool
             }
 
             _isInitialized = true;
-        }
+        }*/
 
         private Enemy CreateEnemyForRace(Race race)
         {

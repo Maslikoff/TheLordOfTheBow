@@ -1,5 +1,8 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
+using Game.Scripts.Characters.Enemy;
+using Game.Scripts.Levels;
 using Game.Scripts.Spawners;
 using UnityEngine;
 
@@ -73,6 +76,11 @@ namespace Game.Scripts.Wave
         public void SetLevelWaveConfig(WaveConfig waveConfig)
         {
             _config = waveConfig;
+        }
+        
+        public void SetEnemyPoolConfig(IReadOnlyList<EnemyRaceConfig> configs)
+        {
+            _enemySpawner.SetEnemyPoolConfig(configs);
         }
 
         public bool IsConfigValid(WaveConfig config)

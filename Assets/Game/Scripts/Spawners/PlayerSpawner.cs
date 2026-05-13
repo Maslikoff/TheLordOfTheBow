@@ -35,7 +35,7 @@ namespace Game.Scripts.Spawners
             DespawnCurrentPlayer();
 
             _currentPlayer = _factory.Create(playerPrefab, _spawnPoint.Position, _spawnPoint.Rotation);
-
+            
             InitializeUI(_currentPlayer);
 
             return _currentPlayer;

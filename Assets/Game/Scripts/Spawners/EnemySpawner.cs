@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Game.Scripts.Characters.Enemy;
 using Game.Scripts.Characters.Player;
 using Game.Scripts.Experience;
@@ -86,6 +87,12 @@ namespace Game.Scripts.Spawners
             }
 
             return TrySpawnEnemyAtPosition(GetRandomSpawnPosition());
+        }
+        
+        public void SetEnemyPoolConfig(IReadOnlyList<EnemyRaceConfig> configs)
+        {
+            if (_enemyPool != null)
+                _enemyPool.SetEnemyPoolConfig(configs);
         }
 
         public void ResetCurrentCount()

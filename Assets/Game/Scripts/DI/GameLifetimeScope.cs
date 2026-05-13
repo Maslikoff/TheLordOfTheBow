@@ -3,6 +3,7 @@ using Game.Scripts.Environment.Effect;
 using Game.Scripts.Levels;
 using Game.Scripts.ObjectPool;
 using Game.Scripts.Spawners;
+using Game.Scripts.UI;
 using Game.Scripts.Wave;
 using UnityEngine;
 using VContainer;
@@ -18,12 +19,14 @@ namespace Game.Scripts.DI
         [SerializeField] private PlayerSpawner _playerSpawner;
         [SerializeField] private BulletSpawner _bulletSpawner;
         [SerializeField] private DynamicJoystick _playerJoystick;
+        [SerializeField] private UpgradeChoicePanel _upgradeChoicePanel;
 
         protected override void Configure(IContainerBuilder builder)
         {
             ConfigureEffects(builder);
             ConfigureLevelFlow(builder);
             ConfigurePlayerFlow(builder);
+            ConfigureUI(builder);
         }
 
         private void ConfigureEffects(IContainerBuilder builder)
@@ -46,6 +49,11 @@ namespace Game.Scripts.DI
             builder.Register<IPlayerProvider, PlayerProvider>(Lifetime.Scoped);
             builder.RegisterComponent(_bulletSpawner);
             builder.RegisterComponent(_playerJoystick);
+        }
+        
+        private void ConfigureUI(IContainerBuilder builder)
+        {
+            builder.RegisterComponent(_upgradeChoicePanel);
         }
     }
 }

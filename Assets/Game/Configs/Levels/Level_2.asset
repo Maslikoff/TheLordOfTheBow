@@ -12,7 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6961dbc4ceae4f7b878ff99a643422b5, type: 3}
   m_Name: Level_2
   m_EditorClassIdentifier: 
-  _sceneNames: 2
+  _sceneNames: 1
   _waveConfig:
     _wavesEnemyCount: 010000000300000003000000
     _timeBetweemWaves: 3
+  _enemyRaceConfigs:
+  - _race: 0
+    _prefab: {fileID: 7080309792819254836, guid: d5bd6346056e6a647b4f66f149d5864b, type: 3}
+    _poolSize: 5
+    _spawnWeight: 100
+  _availableUpgrades:
+  - {fileID: 11400000, guid: b44434e6d64dd7348a30df1c23fac640, type: 2}
+  - {fileID: 11400000, guid: 83680799321d7404cbaaa3f3b22e0ebf, type: 2}
+  - {fileID: 11400000, guid: aef6ff2ad5fa6f5418cef3510ffa93fc, type: 2}
+  - {fileID: 11400000, guid: d715889cfb6fce842916b37f38a1ebfd, type: 2}

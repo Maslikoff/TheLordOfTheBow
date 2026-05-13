@@ -16,3 +16,18 @@ MonoBehaviour:
   _waveConfig:
     _wavesEnemyCount: 010000000200000003000000
     _timeBetweemWaves: 3
+  _enemyRaceConfigs:
+  - _race: 0
+    _prefab: {fileID: 7080309792819254836, guid: d5bd6346056e6a647b4f66f149d5864b, type: 3}
+    _poolSize: 5
+    _spawnWeight: 100
+  - _race: 1
+    _prefab: {fileID: 7371531689036714625, guid: 0987bbdc63c89a54d9eaeb7bbb073472, type: 3}
+    _poolSize: 5
+    _spawnWeight: 0
+  - _race: 2
+    _prefab: {fileID: 4670338830001340343, guid: a2cd61c0cec42c34ebaf42f831b78e52, type: 3}
+    _poolSize: 5
+    _spawnWeight: 0
+  _availableUpgrades:
+  - {fileID: 11400000, guid: 6499ce8c34536364c884fbd833bba48e, type: 2}
