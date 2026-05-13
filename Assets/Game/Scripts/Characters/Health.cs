@@ -3,11 +3,11 @@ using UnityEngine;
 
 namespace Game.Scripts.Characters
 {
-    public class Health: MonoBehaviour
+    public class Health : MonoBehaviour
     {
         [SerializeField] private float _maxCount = 100f;
         [SerializeField] private bool _isInvulnerable = false;
-        
+
         private Coroutine _invulnerabilityCoroutine;
         private float _currentCount;
 
@@ -22,12 +22,12 @@ namespace Game.Scripts.Characters
         {
             _currentCount = _maxCount;
         }
-        
+
         private void Start()
         {
             Changed?.Invoke(_currentCount);
         }
-        
+
         private void OnDisable()
         {
             if (_invulnerabilityCoroutine != null)
@@ -35,7 +35,7 @@ namespace Game.Scripts.Characters
                 StopCoroutine(_invulnerabilityCoroutine);
                 _invulnerabilityCoroutine = null;
             }
-            
+
             _isInvulnerable = false;
         }
 
@@ -72,26 +72,26 @@ namespace Game.Scripts.Characters
 
             Changed?.Invoke(_currentCount);
         }
-        
+
         public void ResetHealth()
         {
             _currentCount = _maxCount;
             _isInvulnerable = false;
-            
+
             if (_invulnerabilityCoroutine != null)
             {
                 StopCoroutine(_invulnerabilityCoroutine);
                 _invulnerabilityCoroutine = null;
             }
-            
+
             Changed?.Invoke(_currentCount);
         }
-        
+
         public void IncreaseMaxHealth(float amount)
         {
             _maxCount += amount;
             _currentCount += amount;
-            
+
             Changed?.Invoke(_currentCount);
         }
 

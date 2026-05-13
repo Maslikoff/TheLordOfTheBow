@@ -155,6 +155,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _healCount: 15
   _healRotateSpeed: 100
+  _asset: {fileID: 11400000, guid: bb5b5f6a0c97a8c4f8dbd5556e0bd708, type: 2}
 --- !u!1 &2543675789227217408
 GameObject:
   m_ObjectHideFlags: 0

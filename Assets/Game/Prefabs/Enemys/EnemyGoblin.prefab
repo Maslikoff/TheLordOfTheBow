@@ -1284,6 +1284,8 @@ MonoBehaviour:
   _enemyRotation: {fileID: 6339784672399867816}
   _health: {fileID: 9079312985571784494}
   _damagePopup: {fileID: 3868169969473894452}
+  _spawnSound: {fileID: 11400000, guid: dd49bcfadb4483246a799f00fe31a9fa, type: 2}
+  _deathSound: {fileID: 11400000, guid: e45503f67bf91c248853e0a97cb4be15, type: 2}
 --- !u!114 &6396690143539088900
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1512,7 +1514,6 @@ GameObject:
   - component: {fileID: 6489492341434909908}
   - component: {fileID: 3804963760154453463}
   - component: {fileID: 8891697930818846132}
-  - component: {fileID: 4457661051427174703}
   m_Layer: 8
   m_Name: DamageText
   m_TagString: Untagged
@@ -1636,19 +1637,6 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!114 &4457661051427174703
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5090398351085327985}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eee0a5fcf0204d76b421aea44a67c7b4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _asset: {fileID: 11400000, guid: e45503f67bf91c248853e0a97cb4be15, type: 2}
 --- !u!1 &5323777111071477412
 GameObject:
   m_ObjectHideFlags: 0

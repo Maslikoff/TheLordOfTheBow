@@ -1553,6 +1553,8 @@ MonoBehaviour:
   _enemyRotation: {fileID: 6339784672399867816}
   _health: {fileID: 9079312985571784494}
   _damagePopup: {fileID: 8070187793290244683}
+  _spawnSound: {fileID: 11400000, guid: dd49bcfadb4483246a799f00fe31a9fa, type: 2}
+  _deathSound: {fileID: 11400000, guid: e45503f67bf91c248853e0a97cb4be15, type: 2}
 --- !u!114 &6396690143539088900
 MonoBehaviour:
   m_ObjectHideFlags: 0

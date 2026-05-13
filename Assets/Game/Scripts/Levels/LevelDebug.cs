@@ -46,14 +46,7 @@ namespace Game.Scripts.Levels
         private void Start()
         {
             if (_playerProvider.Player != null)
-            {
-                Debug.Log("[LevelDebug] Start: Player found, subscribing");
                 _playerProvider.Player.PlayerHealth.Death += OnOpenLosePanel;
-            }
-            else
-            {
-                Debug.LogError("[LevelDebug] Start: Player still null!");
-            }
         }
 
         private void OnDisable()

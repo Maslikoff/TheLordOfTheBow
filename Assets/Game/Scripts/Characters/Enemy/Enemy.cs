@@ -1,4 +1,5 @@
 using System;
+using Game.Scripts.Audio;
 using UnityEngine;
 using Game.Scripts.ObjectPool;
 using Game.Scripts.Spawners;
@@ -19,12 +20,18 @@ namespace Game.Scripts.Characters.Enemy
         [SerializeField] protected Health _health;
         [SerializeField] protected DamagePopup _damagePopup;
         
+        [Header("Sounds")]
+        [SerializeField] private AudioAsset _spawnSound;
+        [SerializeField] private AudioAsset _deathSound;
+        
         private IEffectService _effectService;
+        private IAudioService _audioService;
 
         [Inject]
-        public void Construct(IEffectService effectService)
+        public void Construct(IEffectService effectService, IAudioService audioService)
         {
-            _effectService = effectService;
+            _effectService = effectService?? throw new ArgumentNullException(nameof(effectService));
+            _audioService = audioService ?? throw new ArgumentNullException(nameof(audioService));
         }
         
         public Race RaceEnemy => _race;
@@ -69,8 +76,8 @@ namespace Game.Scripts.Characters.Enemy
 
         public void Initialize(Transform playerTarget)
         {
+            _audioService?.PlayOneShot(_spawnSound);
             PlayerTarget = playerTarget;
-            
             _enemyRotation.SetTarget(playerTarget);
         }
         
@@ -88,7 +95,8 @@ namespace Game.Scripts.Characters.Enemy
         private void OnDeath()
         {
             _effectService?.PlayEffect(EffectType.EnemyDeath, transform.position);
-
+            _audioService?.PlayOneShot(_deathSound);
+            
             Release();
         }
     }

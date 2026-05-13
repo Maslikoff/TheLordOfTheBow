@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using Game.Scripts.Audio;
 using Game.Scripts.Environment.Effect;
 using Game.Scripts.ObjectPool;
 using UnityEngine;
@@ -11,15 +12,18 @@ namespace Game.Scripts.Characters.PickupObjects
     {
         [SerializeField] private int _healCount = 15;
         [SerializeField] private float _healRotateSpeed = 5f;
+        [SerializeField] private AudioAsset _asset;
 
         private Coroutine _rotationCoroutine;
         private Transform _transform;
         private IEffectService _effectService;
+        private IAudioService _audioService;
 
         [Inject]
-        public void Construct(IEffectService effectService)
+        public void Construct(IEffectService effectService, IAudioService audioService)
         {
-            _effectService = effectService;
+            _effectService = effectService?? throw new ArgumentNullException(nameof(effectService));
+            _audioService = audioService ?? throw new ArgumentNullException(nameof(audioService));
         }
 
         public event Action<IPoolable> Released;
@@ -43,6 +47,7 @@ namespace Game.Scripts.Characters.PickupObjects
                     player.Heal(_healCount);
                     
                     _effectService?.PlayEffect(EffectType.HealthPickup, transform.position);
+                    _audioService.PlayOneShot(_asset);
                     
                     Release();
                 }
