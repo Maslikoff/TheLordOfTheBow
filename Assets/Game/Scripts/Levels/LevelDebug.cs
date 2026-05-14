@@ -8,11 +8,20 @@ namespace Game.Scripts.Levels
 {
     public class LevelDebug : MonoBehaviour
     {
+        [Header("Win Panel")]
         [SerializeField] private GameObject _winPanel;
-        [SerializeField] private GameObject _losePanel;
         [SerializeField] private Button _buttonNextLevel;
         [SerializeField] private Button _buttonRestartLevel;
+        
+        [Header("Lose Panel")]
+        [SerializeField] private GameObject _losePanel;
         [SerializeField] private Button _buttonRestartLevelLose;
+        
+        [Header("Pause")]
+        [SerializeField] private GameObject _pausePanel;
+        [SerializeField] private Button _buttonPause;
+        [SerializeField] private Button _buttonPauseResumeLevel;
+        [SerializeField] private Button _buttonPauseRestartLevel;
 
         private ILevelService _levelService;
         private WaveSystem _waveSystem;
@@ -30,11 +39,16 @@ namespace Game.Scripts.Levels
         {
             _winPanel.SetActive(false);
             _losePanel.SetActive(false);
+            _pausePanel.SetActive(false);
             Time.timeScale = 1;
             
             _buttonNextLevel.onClick.AddListener(() => _levelService.LoadNextLevelAsync());
             _buttonRestartLevel.onClick.AddListener(() => _levelService.RestartCurrentLevelAsync());
             _buttonRestartLevelLose.onClick.AddListener(() => _levelService.RestartCurrentLevelAsync());
+            
+            _buttonPause.onClick.AddListener(OnOpenPausePanel);
+            _buttonPauseResumeLevel.onClick.AddListener(OnResumeButtonClick);
+            _buttonPauseRestartLevel.onClick.AddListener(() => _levelService.RestartCurrentLevelAsync());
 
             _waveSystem.AllWavesCompleted += OnOpenWinPanel;
             _playerProvider.PlayerSpawned += OnPlayerSpawned;
@@ -61,6 +75,18 @@ namespace Game.Scripts.Levels
         private void OnPlayerSpawned(Player player)
         {
             player.PlayerHealth.Death += OnOpenLosePanel;
+        }
+
+        private void OnOpenPausePanel()
+        {
+            Time.timeScale = 0;
+            _pausePanel.SetActive(true);
+        }
+
+        private void OnResumeButtonClick()
+        {
+            Time.timeScale = 1;
+            _pausePanel.SetActive(false);
         }
 
         private void OnOpenWinPanel()

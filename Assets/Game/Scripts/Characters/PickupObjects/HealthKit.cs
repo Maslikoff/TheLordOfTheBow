@@ -46,7 +46,7 @@ namespace Game.Scripts.Characters.PickupObjects
                 {
                     player.Heal(_healCount);
                     
-                    _effectService?.PlayEffect(EffectType.HealthPickup, transform.position);
+                    _effectService.PlayEffect(EffectType.HealthPickup, transform.position);
                     _audioService.PlayOneShot(_asset);
                     
                     Release();

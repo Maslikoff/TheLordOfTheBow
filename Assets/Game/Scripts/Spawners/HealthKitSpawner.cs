@@ -7,7 +7,7 @@ namespace Game.Scripts.Spawners
     public class HealthKitSpawner : Spawner<HealthKit>
     {
         [SerializeField] private HealthKitPool _healthKitPool;
-
+        
         protected override void OnDisable()
         {
             StopAllCoroutines();
@@ -37,6 +37,7 @@ namespace Game.Scripts.Spawners
         
                 healthKit.transform.position = spawnPos;
                 healthKit.transform.rotation = Quaternion.identity;
+                healthKit.gameObject.SetActive(true);
         
                 healthKit.Released += OnHealthKitReleased;
                 
@@ -49,6 +50,7 @@ namespace Game.Scripts.Spawners
             if (poolable is HealthKit healthKit)
             {
                 healthKit.Released -= OnHealthKitReleased;
+                _healthKitPool.ReturnToPool(healthKit);
                 
                 DecreaseObjectCount();
             }

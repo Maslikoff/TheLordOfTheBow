@@ -4,6 +4,7 @@ using Game.Scripts.Characters.Enemy;
 using Game.Scripts.Levels;
 using Game.Scripts.Spawners;
 using UnityEngine;
+using VContainer;
 
 namespace Game.Scripts.ObjectPool
 {
@@ -18,6 +19,14 @@ namespace Game.Scripts.ObjectPool
         private Dictionary<Race, float> _raceWeights = new();
 
         private float _totalWeight;
+        
+        private IObjectFactory _factory;
+
+        [Inject]
+        private void Construct(IObjectFactory factory)
+        {
+            _factory = factory;
+        }
 
         protected override void Awake()
         {
@@ -166,46 +175,12 @@ namespace Game.Scripts.ObjectPool
             _isInitialized = false;
         }
 
-        /*private void InitializePools()
-        {
-            if (_isInitialized)
-                return;
-
-            _totalWeight = 0;
-            _raceWeights.Clear();
-            _racePrefabs.Clear();
-            _racePools.Clear();
-            _raceParents.Clear();
-
-            foreach (var config in _enemyConfigs)
-            {
-                if (config.Prefab == null)
-                    continue;
-
-                _raceParents[config.Race] = _poolParent;
-                _racePrefabs[config.Race] = config.Prefab;
-                _raceWeights[config.Race] = config.SpawnWeight;
-                _totalWeight += config.SpawnWeight;
-
-                Queue<Enemy> pool = new Queue<Enemy>();
-                _racePools[config.Race] = pool;
-
-                for (int i = 0; i < config.PoolSize; i++)
-                {
-                    Enemy enemy = CreateEnemyForRace(config.Race);
-                    ReturnEnemyToRacePool(enemy, config.Race);
-                }
-            }
-
-            _isInitialized = true;
-        }*/
-
         private Enemy CreateEnemyForRace(Race race)
         {
             if (_racePrefabs.ContainsKey(race) == false)
                 return null;
 
-            Enemy enemy = Instantiate(_racePrefabs[race], _raceParents[race]);
+            Enemy enemy = _factory.Create(_racePrefabs[race], _raceParents[race].position, _raceParents[race].rotation);
             enemy.gameObject.SetActive(false);
 
             enemy.Released += OnHandleEnemyReleased;

@@ -1,5 +1,7 @@
 using Game.Scripts.Characters.PickupObjects;
+using Game.Scripts.Levels;
 using UnityEngine;
+using VContainer;
 
 namespace Game.Scripts.ObjectPool
 {
@@ -7,6 +9,14 @@ namespace Game.Scripts.ObjectPool
     {
         [SerializeField] private HealthKit _healthKitPrefab;
         [SerializeField] private int _initialPoolSize = 5;
+        
+        private IObjectFactory _factory;
+
+        [Inject]
+        private void Construct(IObjectFactory factory)
+        {
+            _factory = factory;
+        }
         
         protected override void Awake()
         {
@@ -28,7 +38,7 @@ namespace Game.Scripts.ObjectPool
         
         protected override HealthKit CreateNewObject()
         {
-            HealthKit healthKit = Instantiate(_healthKitPrefab, _poolParent);
+            HealthKit healthKit = _factory.Create(_healthKitPrefab, _poolParent.position, _poolParent.rotation);
             healthKit.gameObject.SetActive(false);
             
             healthKit.Released += OnHandleObjectReleased;
