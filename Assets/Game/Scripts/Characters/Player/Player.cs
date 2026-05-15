@@ -1,8 +1,9 @@
-using System;
+using Game.Scripts.Levels;
 using Game.Scripts.Spawners;
 using Game.Scripts.Upgrades;
 using UnityEngine;
 using VContainer;
+using UniRx;
 
 namespace Game.Scripts.Characters.Player
 {
@@ -53,6 +54,7 @@ namespace Game.Scripts.Characters.Player
         private void OnDeath()
         {
             IsDead = true;
+            MessageBroker.Default.Publish(new M_PlayerDeath(this));
         }
     }
 }

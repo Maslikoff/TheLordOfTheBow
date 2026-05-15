@@ -3,6 +3,7 @@ using Game.Scripts.Levels;
 using Game.Scripts.UI;
 using UnityEngine;
 using VContainer;
+using UniRx;
 
 namespace Game.Scripts.Spawners
 {
@@ -15,7 +16,6 @@ namespace Game.Scripts.Spawners
 
         private IObjectFactory _factory;
         private GameStartupConfig _startupConfig;
-        private IPlayerProvider _playerProvider;
 
         private Player _currentPlayer;
         
@@ -37,6 +37,8 @@ namespace Game.Scripts.Spawners
             _currentPlayer = _factory.Create(playerPrefab, _spawnPoint.Position, _spawnPoint.Rotation);
             
             InitializeUI(_currentPlayer);
+            
+            MessageBroker.Default.Publish(new M_PlayerSpawned(_currentPlayer));
 
             return _currentPlayer;
         }

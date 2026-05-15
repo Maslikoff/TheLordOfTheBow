@@ -1,3 +1,4 @@
+using Game.Scripts.Audio;
 using Game.Scripts.Characters.Player;
 using Game.Scripts.Environment.Effect;
 using Game.Scripts.Levels;
@@ -6,6 +7,7 @@ using Game.Scripts.Spawners;
 using Game.Scripts.UI;
 using Game.Scripts.Wave;
 using UnityEngine;
+using UnityEngine.Audio;
 using VContainer;
 using VContainer.Unity;
 
@@ -20,12 +22,14 @@ namespace Game.Scripts.DI
         [SerializeField] private BulletSpawner _bulletSpawner;
         [SerializeField] private DynamicJoystick _playerJoystick;
         [SerializeField] private UpgradeChoicePanel _upgradeChoicePanel;
+        [SerializeField] private AudioMixer _audioMixer;
 
         protected override void Configure(IContainerBuilder builder)
         {
             ConfigureEffects(builder);
             ConfigureLevelFlow(builder);
             ConfigurePlayerFlow(builder);
+            ConfigureAudio(builder);
             ConfigureUI(builder);
         }
 
@@ -49,6 +53,12 @@ namespace Game.Scripts.DI
             builder.Register<IPlayerProvider, PlayerProvider>(Lifetime.Scoped);
             builder.RegisterComponent(_bulletSpawner);
             builder.RegisterComponent(_playerJoystick);
+        }
+        
+        private void ConfigureAudio(IContainerBuilder builder)
+        {
+            builder.RegisterComponent(_audioMixer);
+            builder.Register<IAudioSettingsService, AudioSettingsService>(Lifetime.Singleton);
         }
         
         private void ConfigureUI(IContainerBuilder builder)

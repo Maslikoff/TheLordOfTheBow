@@ -1,4 +1,3 @@
-using System;
 using Game.Scripts.Spawners;
 
 namespace Game.Scripts.Characters.Player
@@ -14,6 +13,5 @@ namespace Game.Scripts.Characters.Player
 
         public Player CurrentPlayer => _playerSpawner.CurrentPlayer;
         public Player Player { get; private set; }
-        public event Action<Player> PlayerSpawned;
     }
 }
