@@ -1187,6 +1187,7 @@ GameObject:
   - component: {fileID: 3409407878353850894}
   - component: {fileID: 9079312985571784494}
   - component: {fileID: -774871623736686699}
+  - component: {fileID: 2109008812353215831}
   m_Layer: 8
   m_Name: EnemyGoblin
   m_TagString: Untagged
@@ -1344,6 +1345,27 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _experienceReward: 100
   _rewardOnDeath: 1
+--- !u!114 &2109008812353215831
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4537468585123427311}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: daffecfe0d3a43b38cf88c3f8413e808, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _feedbackType: 0
+  _knockbackDistance: 0.5
+  _knockbackDuration: 0.2
+  _knockbackEase: 6
+  _flashDuration: 0.5
+  _flashCount: 2
+  _shakeDuration: 0.2
+  _shakeStrength: 0.3
+  _shakeVibrato: 10
 --- !u!1 &4601785401517980001
 GameObject:
   m_ObjectHideFlags: 0

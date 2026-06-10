@@ -9,6 +9,8 @@ namespace Game.Scripts.Levels
     public class LevelConfig : ScriptableObject
     {
         [SerializeField] private SceneNames _sceneNames;
+        [SerializeField] private SceneTransitionMode _sceneTransitionMode;
+        [SerializeField] private bool _onGameStarted;
         [SerializeField] private WaveConfig _waveConfig;
         [SerializeField] private List<EnemyRaceConfig> _enemyRaceConfigs = new();
         [SerializeField] private List<Upgrades.UpgradeCard> _availableUpgrades = new();

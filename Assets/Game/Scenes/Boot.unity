@@ -155,6 +155,7 @@ MonoBehaviour:
     TypeName: Game.Scripts.DI.RootLifetimeScope
   autoRun: 1
   autoInjectGameObjects: []
+  _loadingScreenPrefab: {fileID: 602547021688776025, guid: 8440f7edfdbc6824689e6a6198a03853, type: 3}
 --- !u!4 &1292493993
 Transform:
   m_ObjectHideFlags: 0

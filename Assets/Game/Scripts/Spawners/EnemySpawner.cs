@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using Game.Scripts.Characters.Enemy;
 using Game.Scripts.Characters.Player;
 using Game.Scripts.Experience;
-using Game.Scripts.Levels;
 using Game.Scripts.ObjectPool;
+using Game.Scripts.StateServices;
 using UnityEngine;
 using VContainer;
 
@@ -24,16 +24,20 @@ namespace Game.Scripts.Spawners
 
         private EnemyPool _enemyPool;
         private IPlayerProvider _playerProvider;
+        private IGameStateService _gameStateService;
         private int _currentRaceIndex;
         private int _currentX;
         private int _currentY;
+        
+        private bool _isGameReady = false;
 
         public event Action EnemyReleased;
-
+        
         [Inject]
-        private void Construct(IPlayerProvider playerProvider)
+        private void Construct(IPlayerProvider playerProvider, IGameStateService gameStateService)
         {
             _playerProvider = playerProvider;
+            _gameStateService = gameStateService;
         }
 
         protected override void OnEnable()
@@ -41,7 +45,7 @@ namespace Game.Scripts.Spawners
             if (_spawnGrid != null)
                 _spawnGrid.SpawnEnemyAtPosition += SpawnEnemyAtPosition;
         }
-        
+
         private void Awake()
         {
             if (_objectPool == null)
@@ -53,10 +57,44 @@ namespace Game.Scripts.Spawners
                 Debug.LogError("[EnemySpawner] Failed to get EnemyPool component in Awake!");
         }
 
+        private void Start()
+        {
+            if (_gameStateService == null)
+            {
+                Debug.LogError("[EnemySpawner] GameStateService is null!");
+                return;
+            }
+            
+            _gameStateService.GameStarted += OnGameStarted;
+            
+            if (_gameStateService.IsGameStarted)
+            {
+                OnGameStarted();
+            }
+            else
+            {
+                _isGameReady = false;
+                Debug.Log("[EnemySpawner] Waiting for game start...");
+            }
+        }
+
+        private void OnGameStarted()
+        {
+            Debug.Log("[EnemySpawner] Game started event received! Enemies can now spawn.");
+            _isGameReady = true;
+            
+            StartSpawning(); 
+        }
+        
         protected override void OnDisable()
         {
+            base.OnDisable();
+            
             if (_spawnGrid != null)
                 _spawnGrid.SpawnEnemyAtPosition -= SpawnEnemyAtPosition;
+            
+            if (_gameStateService != null)
+                _gameStateService.GameStarted -= OnGameStarted;
         }
 
         protected override void Initialize()
@@ -73,7 +111,8 @@ namespace Game.Scripts.Spawners
 
         protected override void SpawnObject()
         {
-            TrySpawnObject();
+            if (_isGameReady) 
+                TrySpawnObject();
         }
 
         private bool TrySpawnObject()
@@ -126,6 +165,9 @@ namespace Game.Scripts.Spawners
 
         private bool TrySpawnEnemyAtPosition(Vector3 position)
         {
+            if (_isGameReady == false) 
+                return false;
+            
             if (_objectPool == null)
             {
                 Debug.LogError("[EnemySpawner] ObjectPool is null!");

@@ -25,7 +25,7 @@ namespace Game.Scripts.Levels
         {
             if (TryGetLevelConfig(_currentLevelIndex, out LevelConfig config) == false)
                 return;
-
+ 
             CurrentConfig = config;
             
             Debug.Log($"Start current level index: {_currentLevelIndex}");
@@ -71,6 +71,8 @@ namespace Game.Scripts.Levels
             Debug.Log($"Restart level: {_currentLevelIndex}");
         
             await _sceneLoader.LoadAsync(config.SceneNames);
+            
+            Time.timeScale = 1;
         }
 
         private bool TryGetLevelConfig(int index, out LevelConfig config)

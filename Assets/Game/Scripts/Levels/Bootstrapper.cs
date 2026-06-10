@@ -1,5 +1,6 @@
 using System;
 using Cysharp.Threading.Tasks;
+using UnityEngine;
 using VContainer.Unity;
 
 namespace Game.Scripts.Levels

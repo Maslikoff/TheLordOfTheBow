@@ -10,7 +10,7 @@ namespace Game.Scripts.DI
     {
         [SerializeField] private GameStartupConfig _startupConfig;
         [SerializeField] private LevelCatalog _levelCatalog;
-        
+
         protected override void Configure(IContainerBuilder builder)
         {
             ConfigureSceneManagement(builder);
@@ -22,13 +22,13 @@ namespace Game.Scripts.DI
         {
             builder.Register<ISceneLoader, SceneLoader>(Lifetime.Singleton);
         }
-        
+
         private void ConfigureConfigs(IContainerBuilder builder)
         {
             builder.RegisterInstance(_startupConfig);
             builder.RegisterInstance(_levelCatalog);
         }
-        
+
         private void ConfigureServices(IContainerBuilder builder)
         {
             builder.Register<ILevelService, LevelService>(Lifetime.Singleton);

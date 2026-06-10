@@ -12,6 +12,7 @@ namespace Game.Scripts.Characters.Enemy
     [RequireComponent(typeof(EnemyShoot))]
     [RequireComponent(typeof(EnemyRotation))]
     [RequireComponent(typeof(Health))]
+    [RequireComponent(typeof(HitFeedback))]
     public abstract class Enemy : MonoBehaviour, IPoolable
     {
         [SerializeField] protected Race _race;

@@ -10,6 +10,7 @@ namespace Game.Scripts.Characters.Player
     [RequireComponent(typeof(PlayerMovement))]
     [RequireComponent(typeof(InputHandler))]
     [RequireComponent(typeof(Health))]
+    [RequireComponent(typeof(HitFeedback))]
     public class Player : MonoBehaviour
     {
         [SerializeField] private PlayerMovement movement;

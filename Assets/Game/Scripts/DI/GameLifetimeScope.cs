@@ -4,10 +4,13 @@ using Game.Scripts.Environment.Effect;
 using Game.Scripts.Levels;
 using Game.Scripts.ObjectPool;
 using Game.Scripts.Spawners;
+using Game.Scripts.StateServices;
 using Game.Scripts.UI;
 using Game.Scripts.Wave;
+using TransitionsPlus;
 using UnityEngine;
 using UnityEngine.Audio;
+using UnityEngine.Rendering;
 using VContainer;
 using VContainer.Unity;
 
@@ -23,6 +26,11 @@ namespace Game.Scripts.DI
         [SerializeField] private DynamicJoystick _playerJoystick;
         [SerializeField] private UpgradeChoicePanel _upgradeChoicePanel;
         [SerializeField] private AudioMixer _audioMixer;
+        [SerializeField] private Volume _globalVolume;
+        [SerializeField] private CameraVignetteEffect _cameraVignetteEffect;
+        [SerializeField] private TransitionProfile _transitionProfile;
+        [SerializeField] private TapToStartZone _tapToStartZone;
+        [SerializeField] private EnemySpawner _enemySpawner;
 
         protected override void Configure(IContainerBuilder builder)
         {
@@ -30,7 +38,9 @@ namespace Game.Scripts.DI
             ConfigureLevelFlow(builder);
             ConfigurePlayerFlow(builder);
             ConfigureAudio(builder);
+            ConfigureRendering(builder);
             ConfigureUI(builder);
+            ConfigureGameState(builder);
         }
 
         private void ConfigureEffects(IContainerBuilder builder)
@@ -38,6 +48,8 @@ namespace Game.Scripts.DI
             builder.Register<IEffectService, EffectService>(Lifetime.Singleton);
             builder.RegisterComponent(_effectsPool);
             builder.RegisterComponent(_effectSpawner);
+
+            builder.RegisterComponent(_transitionProfile);
         }
 
         private void ConfigureLevelFlow(IContainerBuilder builder)
@@ -61,9 +73,23 @@ namespace Game.Scripts.DI
             builder.Register<IAudioSettingsService, AudioSettingsService>(Lifetime.Singleton);
         }
         
+        private void ConfigureRendering(IContainerBuilder builder)
+        {
+            builder.RegisterComponent(_globalVolume);
+            builder.RegisterComponent(_cameraVignetteEffect);
+            builder.Register<ICameraVignetteService, CameraVignetteService>(Lifetime.Singleton);
+        }
+        
         private void ConfigureUI(IContainerBuilder builder)
         {
             builder.RegisterComponent(_upgradeChoicePanel);
+        }
+        
+        private void ConfigureGameState(IContainerBuilder builder)
+        {
+            builder.Register<GameStateService>(Lifetime.Singleton).As<IGameStateService>();
+            builder.RegisterComponent(_tapToStartZone);
+            builder.RegisterComponent(_enemySpawner);
         }
     }
 }
