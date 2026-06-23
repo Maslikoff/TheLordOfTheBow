@@ -16,5 +16,5 @@ MonoBehaviour:
   _description: "\u041E\u0442\u043A\u0440\u044B\u0442\u044C \u043D\u043E\u0432\u044B\u0435
     \u044F\u0434\u043E\u0432\u0438\u0442\u044B\u0435 \u0441\u0442\u0440\u0435\u043B\u044B"
   _cardIcon: {fileID: -11569086, guid: f60ed3c17c1cff1458fdd5d5d455ef3f, type: 3}
-  _cardColor: {r: 0.08542953, g: 0.254717, b: 0, a: 1}
+  _cardColor: {r: 0.393388, g: 0.509434, b: 0.3340157, a: 1}
   _bulletTypeToUnlock: 2

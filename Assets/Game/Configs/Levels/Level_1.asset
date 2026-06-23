@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: Level_1
   m_EditorClassIdentifier: 
   _sceneNames: 1
+  _sceneTransitionMode: 0
+  _onGameStarted: 0
   _waveConfig:
     _wavesEnemyCount: 010000000200000003000000
     _timeBetweemWaves: 3
@@ -31,3 +33,4 @@ MonoBehaviour:
     _spawnWeight: 0
   _availableUpgrades:
   - {fileID: 11400000, guid: 6499ce8c34536364c884fbd833bba48e, type: 2}
+  - {fileID: 11400000, guid: 836bf2d4dcf31884aa52e7850d29f737, type: 2}
