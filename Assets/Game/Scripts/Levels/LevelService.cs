@@ -42,6 +42,7 @@ namespace Game.Scripts.Levels
             CurrentConfig = config;
             
             Debug.Log($"Switch level: {_currentLevelIndex - 1} -> {_currentLevelIndex}");
+            Time.timeScale = 1;
             
             await _sceneLoader.LoadAsync(config.SceneNames);
         }
@@ -70,9 +71,21 @@ namespace Game.Scripts.Levels
         
             Debug.Log($"Restart level: {_currentLevelIndex}");
         
-            await _sceneLoader.LoadAsync(config.SceneNames);
-            
             Time.timeScale = 1;
+            
+            await _sceneLoader.LoadAsync(config.SceneNames);
+        }
+        
+        public void SetCurrentLevelIndex(int index)
+        {
+            if (index >= 0 && index < _levelCatalog.Count)
+            {
+                _currentLevelIndex = index;
+                    
+                if (TryGetLevelConfig(index, out LevelConfig config))
+                    CurrentConfig = config;
+                
+            }
         }
 
         private bool TryGetLevelConfig(int index, out LevelConfig config)

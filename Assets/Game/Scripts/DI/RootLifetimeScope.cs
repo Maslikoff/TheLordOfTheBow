@@ -1,5 +1,6 @@
 using Game.Scripts.Audio;
 using Game.Scripts.Levels;
+using Game.Scripts.Save;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
@@ -10,12 +11,14 @@ namespace Game.Scripts.DI
     {
         [SerializeField] private GameStartupConfig _startupConfig;
         [SerializeField] private LevelCatalog _levelCatalog;
+        [SerializeField] private SaveSystem _saveSystemPrefab;
 
         protected override void Configure(IContainerBuilder builder)
         {
             ConfigureSceneManagement(builder);
             ConfigureConfigs(builder);
             ConfigureServices(builder);
+            ConfigureSaveSystem(builder);
         }
 
         private void ConfigureSceneManagement(IContainerBuilder builder)
@@ -33,6 +36,11 @@ namespace Game.Scripts.DI
         {
             builder.Register<ILevelService, LevelService>(Lifetime.Singleton);
             builder.Register<IAudioService, AudioService>(Lifetime.Singleton);
+        }
+        
+        private void ConfigureSaveSystem(IContainerBuilder builder)
+        {
+            builder.RegisterComponentInNewPrefab(_saveSystemPrefab, Lifetime.Singleton).As<ISaveSystem>().AsSelf();
         }
     }
 }

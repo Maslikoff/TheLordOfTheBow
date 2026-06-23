@@ -6,6 +6,7 @@ using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 using VContainer;
+using YG;
 
 namespace Game.Scripts.Levels
 {
@@ -116,6 +117,8 @@ namespace Game.Scripts.Levels
 
             await ShowPanelAnimated(_winPanel, _winPanelCanvasGroup);
             Time.timeScale = 0;
+
+            YG2.InterstitialAdvShow();
         }
 
         private async void OnPlayerDeath(Player player)
@@ -125,6 +128,8 @@ namespace Game.Scripts.Levels
             
             await ShowPanelAnimated(_losePanel, _losePanelCanvasGroup);
             Time.timeScale = 0;
+            
+            YG2.InterstitialAdvShow();
         }
 
         private async UniTask ShowPanelAnimated(GameObject panel, CanvasGroup canvasGroup)

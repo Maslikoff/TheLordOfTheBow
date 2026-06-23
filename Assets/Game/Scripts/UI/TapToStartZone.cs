@@ -1,5 +1,4 @@
 using DG.Tweening;
-using Game.Scripts.Spawners;
 using Game.Scripts.StateServices;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -13,6 +12,7 @@ namespace Game.Scripts.UI
         [Header("Visual Elements")] 
         [SerializeField] private RectTransform _textContainer;
         [SerializeField] private TMPro.TextMeshProUGUI _tapText;
+        [SerializeField] private GameObject _prefabAnimationTutorialImage;
         [SerializeField] private Image _tapZoneBackground;
 
         [Header("Animation Settings")] 
@@ -27,9 +27,7 @@ namespace Game.Scripts.UI
         [SerializeField] private MonoBehaviour[] _gameScriptsToEnable;
 
         private bool _isGameStarted = false;
-        private Sequence _idleAnimation;
         private Tween _textScaleTween;
-
         
         private IGameStateService _gameStateService;
         
@@ -64,6 +62,7 @@ namespace Game.Scripts.UI
             image.raycastTarget = true;
         
             Canvas canvas = GetComponent<Canvas>();
+            
             if (canvas == null)
                 canvas = gameObject.AddComponent<Canvas>();
         
@@ -71,6 +70,7 @@ namespace Game.Scripts.UI
             canvas.sortingOrder = 999;
         
             GraphicRaycaster raycaster = GetComponent<GraphicRaycaster>();
+            
             if (raycaster == null)
                 raycaster = gameObject.AddComponent<GraphicRaycaster>();
         
@@ -123,18 +123,13 @@ namespace Game.Scripts.UI
             _isGameStarted = true;
         
             _textScaleTween?.Kill();
-            _idleAnimation?.Kill();
         
             Sequence fadeSequence = DOTween.Sequence();
         
-            if (_textContainer != null)
-                fadeSequence.Join(_textContainer.DOScale(0f, _fadeDuration).SetEase(Ease.InBack));
-        
-            if (_tapText != null)
-                fadeSequence.Join(_tapText.DOFade(0f, _fadeDuration));
-        
-            if (_tapZoneBackground != null)
-                fadeSequence.Join(_tapZoneBackground.DOFade(0f, _fadeDuration));
+            fadeSequence.Join(_textContainer.DOScale(0f, _fadeDuration).SetEase(Ease.InBack));
+            fadeSequence.Join(_tapText.DOFade(0f, _fadeDuration));
+            fadeSequence.Join(_tapZoneBackground.DOFade(0f, _fadeDuration));
+            _prefabAnimationTutorialImage.SetActive(false);
         
             fadeSequence.OnComplete(() =>
             {

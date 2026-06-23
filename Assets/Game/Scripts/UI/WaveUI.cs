@@ -11,8 +11,8 @@ namespace Game.Scripts.UI
         [SerializeField] private WaveSystem _waveSystem;
 
         [Header("Format Strings")] 
-        [SerializeField] private string _waveFormat = "Wave: {0}/{1}";
-        [SerializeField] private string _enemiesFormat = "Enemies: {0}/{1} (Alive: {2})";
+        [SerializeField] private string _waveFormat = "{0}/{1}";
+        [SerializeField] private string _enemiesFormat = "Врагов: {0}/{1} (Осталось: {2})";
 
         private void Start()
         {

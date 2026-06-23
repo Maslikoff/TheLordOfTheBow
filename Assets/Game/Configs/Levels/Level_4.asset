@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: Level_4
   m_EditorClassIdentifier: 
   _sceneNames: 1
+  _sceneTransitionMode: 0
+  _onGameStarted: 0
   _waveConfig:
     _wavesEnemyCount: 030000000500000005000000
     _timeBetweemWaves: 3

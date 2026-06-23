@@ -8,14 +8,14 @@ namespace Game.Scripts.UI
     {
         [SerializeField] private Experience.Experience _playerExperience;
 
-        [Header("UI References")] [SerializeField]
-        private Slider _experienceSlider;
-
+        [Header("UI References")] 
+        [SerializeField] private Slider _experienceSlider;
         [SerializeField] private TextMeshProUGUI _levelText;
         [SerializeField] private TextMeshProUGUI _experienceText;
         [SerializeField] private TextMeshProUGUI _nextLevelText;
 
-        [Header("Animation")] [SerializeField] private float _sliderAnimationSpeed = 5f;
+        [Header("Animation")] 
+        [SerializeField] private float _sliderAnimationSpeed = 5f;
 
         private float _targetSliderValue;
 
@@ -86,7 +86,7 @@ namespace Game.Scripts.UI
             float requiredExp = _playerExperience.ExperienceForNextLevel;
 
             _experienceText.text = $"{Mathf.FloorToInt(currentExp)} / {Mathf.FloorToInt(requiredExp)} XP";
-            _nextLevelText.text = $"Next: {Mathf.FloorToInt(requiredExp)} XP";
+            //_nextLevelText.text = $"Next: {Mathf.FloorToInt(requiredExp)} XP";
         }
         
         private System.Collections.IEnumerator AnimateLevelText()
