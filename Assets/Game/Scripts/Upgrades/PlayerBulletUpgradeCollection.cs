@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using Game.Scripts.Characters.Bullets;
+using Game.Scripts.Save;
+using UniRx;
 using UnityEngine;
 
 namespace Game.Scripts.Upgrades
@@ -36,25 +38,34 @@ namespace Game.Scripts.Upgrades
         {
             PlayerBulletUpgradeEntry entry = Get(bulletType);
             entry.Unlock();
+            
             BulletUnlocked?.Invoke(bulletType);
+            
+            MessageBroker.Default.Publish(new M_SaveRequested());
         }
 
         public void AddDamage(BulletType bulletType, float damage)
         {
             PlayerBulletUpgradeEntry entry = Get(bulletType);
             entry.AddDamage(damage);
+            
+            MessageBroker.Default.Publish(new M_SaveRequested());
         }
         
         public void AddLifeTime(BulletType bulletType, float lifeTime)
         {
             PlayerBulletUpgradeEntry entry = Get(bulletType);
             entry.AddLifeTime(lifeTime);
+            
+            MessageBroker.Default.Publish(new M_SaveRequested());
         }
         
         public void AddCount(BulletType bulletType, int value)
         {
             PlayerBulletUpgradeEntry entry = Get(bulletType);
             entry.AddCount(value);
+            
+            MessageBroker.Default.Publish(new M_SaveRequested());
         }
     }
 }

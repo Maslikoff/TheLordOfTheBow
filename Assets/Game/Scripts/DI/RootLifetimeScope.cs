@@ -40,7 +40,10 @@ namespace Game.Scripts.DI
         
         private void ConfigureSaveSystem(IContainerBuilder builder)
         {
-            builder.RegisterComponentInNewPrefab(_saveSystemPrefab, Lifetime.Singleton).As<ISaveSystem>().AsSelf();
+            builder.RegisterComponentInNewPrefab(_saveSystemPrefab, Lifetime.Singleton)
+                .As<ISaveSystem>()
+                .As<ISaveLoadGate>()
+                .AsSelf();
         }
     }
 }

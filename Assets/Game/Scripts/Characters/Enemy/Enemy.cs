@@ -1,5 +1,6 @@
 using System;
 using Game.Scripts.Audio;
+using Game.Scripts.Characters.Bullets;
 using UnityEngine;
 using Game.Scripts.ObjectPool;
 using Game.Scripts.Spawners;
@@ -37,17 +38,13 @@ namespace Game.Scripts.Characters.Enemy
         
         public Race RaceEnemy => _race;
         public Transform PlayerTarget { get; protected set; }
-        public BulletSpawner Bullets { get; protected set; }
 
         public event Action<IPoolable> Released;
 
         protected virtual void OnEnable()
         {
-            if (_enemyShoot != null)
-                _enemyShoot.ResetShootState();
-            
-            if (_damagePopup != null)
-                _damagePopup.ResetPopup();
+            _enemyShoot?.ResetShootState();
+            _damagePopup?.ResetPopup();
             
             if (_health != null)
             {
@@ -71,26 +68,28 @@ namespace Game.Scripts.Characters.Enemy
                 _health.Death -= OnDeath;
             }
             
-            if (_damagePopup != null)
-                _damagePopup.ResetPopup();
+            _damagePopup?.ResetPopup();
         }
 
-        public void Initialize(Transform playerTarget)
+        public void Initialize(Transform playerTarget, BulletSpawner bulletSpawner)
         {
             _audioService?.PlayOneShot(_spawnSound);
             PlayerTarget = playerTarget;
             _enemyRotation.SetTarget(playerTarget);
+            
+            if (_enemyShoot != null && bulletSpawner != null)
+                _enemyShoot.Initialize(bulletSpawner);
         }
         
         public void Release()
         {
+            EnemyBulletTracker.ReleaseAllForOwner(transform);
             Released?.Invoke(this);
         }
         
         private void OnDamageTaken(float damage)
         {
-            if (_damagePopup != null)
-                _damagePopup.ShowDamage(damage);
+            _damagePopup?.ShowDamage(damage);
         }
 
         private void OnDeath()

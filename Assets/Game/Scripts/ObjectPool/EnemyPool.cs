@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using Game.Scripts.Characters;
+using Game.Scripts.Characters.Bullets;
 using Game.Scripts.Characters.Enemy;
 using Game.Scripts.Levels;
-using Game.Scripts.Spawners;
 using UnityEngine;
 using VContainer;
 
@@ -11,7 +11,6 @@ namespace Game.Scripts.ObjectPool
     public class EnemyPool : ObjectPool<Enemy>
     {
         [SerializeField] private List<EnemyRaceConfig> _defaultEnemyConfigs  = new();
-        [SerializeField] private BulletSpawner _bulletSpawner;
 
         private Dictionary<Race, Queue<Enemy>> _racePools = new();
         private Dictionary<Race, Transform> _raceParents = new();
@@ -193,6 +192,8 @@ namespace Game.Scripts.ObjectPool
             if (enemy == null)
                 return;
 
+            EnemyBulletTracker.ReleaseAllForOwner(transform);
+            
             var rb = enemy.GetComponent<Rigidbody>();
 
             if (rb != null)

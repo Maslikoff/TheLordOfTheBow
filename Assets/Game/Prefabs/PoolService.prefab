@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 5427966749699303339}
   - component: {fileID: 8326561931983357704}
   - component: {fileID: 4682698554497937145}
+  - component: {fileID: -5362370934022385353}
   m_Layer: 0
   m_Name: PoolService
   m_TagString: Untagged
@@ -108,6 +109,28 @@ MonoBehaviour:
   _spawnInterval: 3
   _maxObjects: 3
   _spawnArea: {x: 0, y: 0, z: 0}
+--- !u!114 &-5362370934022385353
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 675336176799941651}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 82f401204a404bda8e9daebb047eb434, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _bulletConfigs:
+  - _type: 5
+    _prefab: {fileID: 946251025819167630, guid: 84ad99515f1be5840a70348eea73390a, type: 3}
+    _poolSize: 50
+  - _type: 3
+    _prefab: {fileID: 946251025819167630, guid: c83dc8e0cad9ecd4ea5d5718b248fe5b, type: 3}
+    _poolSize: 30
+  - _type: 4
+    _prefab: {fileID: 946251025819167630, guid: 60ef32920345bd44ab33f62da36b5e76, type: 3}
+    _poolSize: 30
 --- !u!1 &3986049398304335167
 GameObject:
   m_ObjectHideFlags: 0

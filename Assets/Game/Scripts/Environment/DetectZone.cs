@@ -10,8 +10,11 @@ namespace Game.Scripts.Environment
             if (other.gameObject.TryGetComponent(out Ground ground))
                 ground.Release();
             
-            if (other.gameObject.TryGetComponent(out Bullet bullet))
+            if (other.gameObject.TryGetComponent(out Bullet bullet) && 
+                other.gameObject.TryGetComponent(out EnemyBullet _) == false)
+            {
                 bullet.Release();
+            }
         }
     }
 }

@@ -6,6 +6,7 @@ namespace Game.Scripts.Characters.Bullets
         FireArrow,
         PoisonArrow,
         SteelArrow,
-        Cobblestone
+        Cobblestone,
+        GoblinBolt 
     }
 }

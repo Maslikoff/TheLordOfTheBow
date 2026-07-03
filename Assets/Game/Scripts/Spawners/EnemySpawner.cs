@@ -17,6 +17,7 @@ namespace Game.Scripts.Spawners
         [SerializeField] private bool _spawnInOrder;
 
         [Header("Enemy Race Settings")] 
+        [SerializeField] private BulletSpawner _enemyBulletSpawner;
         [SerializeField] private Race _singleRace = Race.Goblin;
         [SerializeField] private Race[] _multipleRaces;
         [SerializeField] private bool _useMultipleRaces;
@@ -232,7 +233,7 @@ namespace Game.Scripts.Spawners
             if (_playerProvider.CurrentPlayer == null)
                 return false;
 
-            enemy.Initialize(_playerProvider.CurrentPlayer.transform);
+            enemy.Initialize(_playerProvider.CurrentPlayer.transform, _enemyBulletSpawner);
 
             if (enemy.TryGetComponent(out ExperienceReward experienceReward))
                 experienceReward.Initialize(_playerProvider.CurrentPlayer.Experience);

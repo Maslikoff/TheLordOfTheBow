@@ -4,6 +4,14 @@ namespace Game.Scripts.Characters.Bullets
 {
     public class EnemyBullet : Bullet
     {
+        public override void Initialize(BulletData bulletData)
+        {
+            base.Initialize(bulletData);
+            
+            if (_owner != null)
+                EnemyBulletTracker.Register(_owner, this);
+        }
+        
         protected override void MoveBullet()
         {
             if (_rigidbody != null && _direction != Vector3.zero)
@@ -19,7 +27,14 @@ namespace Game.Scripts.Characters.Bullets
         }
 
         protected override bool CanCollide(Collision other) => 
-            other.gameObject.TryGetComponent(out Enemy.Enemy _) == false &&
-            base.CanCollide(other);
+            other.gameObject.TryGetComponent(out Enemy.Enemy _) == false && base.CanCollide(other);
+        
+        public override void Release()
+        {
+            if (_owner != null)
+                EnemyBulletTracker.Unregister(_owner, this);
+            
+            base.Release();
+        }
     }
 }

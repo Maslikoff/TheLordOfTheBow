@@ -7,6 +7,7 @@ namespace Game.Scripts.ObjectPool
     public class BulletPool : ObjectPool<Bullet>
     {
         [SerializeField] private List<BulletTypeConfig> _bulletConfigs = new();
+        [SerializeField] private Transform _activeBulletsRoot;
 
         private Dictionary<BulletType, Queue<Bullet>> _typePools = new();
         private Dictionary<BulletType, Transform> _typeParents = new();
@@ -14,6 +15,13 @@ namespace Game.Scripts.ObjectPool
 
         protected override void Awake()
         {
+            if (_activeBulletsRoot == null)
+            {
+                var root = new GameObject("ActiveBullets");
+                root.transform.SetParent(transform);
+                _activeBulletsRoot = root.transform;
+            }
+            
             if (_isInitialized == false)
                 InitializePools();
         }
@@ -38,43 +46,31 @@ namespace Game.Scripts.ObjectPool
         
         public void ReturnBullet(Bullet bullet)
         {
-            if (bullet == null) return;
-
-            foreach (var pair in _typePrefabs)
-            {
-                if (bullet.GetType() == pair.Value.GetType())
-                {
-                    ReturnBulletToTypePool(bullet, pair.Key);
-                    break;
-                }
-            }
+            if (bullet == null)
+                return;
+            
+            ReturnBulletToTypePool(bullet, bullet.PoolType);
         }
 
         public Bullet GetBullet(BulletType type)
         {
             if (_isInitialized == false)
                 InitializePools();
-
+            
             if (_typePools.ContainsKey(type) == false)
             {
                 Debug.LogError($"No pool for bullet type {type}!");
                 return null;
             }
-
-            Bullet bullet;
             
-            if (_typePools[type].Count > 0)
-                bullet = _typePools[type].Dequeue();
-            else
-                bullet = CreateBulletForType(type);
-
-            if (bullet != null)
-            {
-                bullet.gameObject.SetActive(true);
-                
-                OnObjectGet(bullet);
-            }
-
+            Bullet bullet = _typePools[type].Count > 0 ? _typePools[type].Dequeue() : CreateBulletForType(type);
+                        
+            if (bullet == null)
+                return null;
+            
+            bullet.transform.SetParent(_activeBulletsRoot);
+            OnObjectGet(bullet);
+                        
             return bullet;
         }
         
@@ -116,6 +112,7 @@ namespace Game.Scripts.ObjectPool
             }
 
             Bullet bullet = Instantiate(_typePrefabs[type], _typeParents[type]);
+            bullet.SetPoolType(type);
             bullet.gameObject.SetActive(false);
             
             bullet.Released += OnHandleBulletReleased;
@@ -125,12 +122,13 @@ namespace Game.Scripts.ObjectPool
         
         private void ReturnBulletToTypePool(Bullet bullet, BulletType type)
         {
-            if (bullet == null) 
+            if (bullet == null || _typeParents.ContainsKey(type) == false)
                 return;
-
+            
             bullet.gameObject.SetActive(false);
             bullet.transform.SetParent(_typeParents[type]);
             bullet.transform.localPosition = Vector3.zero;
+            bullet.transform.localRotation = Quaternion.identity;
             
             _typePools[type].Enqueue(bullet);
         }

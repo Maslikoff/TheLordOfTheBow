@@ -22,7 +22,8 @@ namespace Game.Scripts.DI
         [SerializeField] private EffectSpawner _effectSpawner;
         [SerializeField] private WaveSystem _waveSystem;
         [SerializeField] private PlayerSpawner _playerSpawner;
-        [SerializeField] private BulletSpawner _bulletSpawner;
+        [SerializeField] private BulletSpawner _playerBulletSpawner;
+        [SerializeField] private BulletSpawner _enemyBulletSpawner;
         [SerializeField] private DynamicJoystick _playerJoystick;
         [SerializeField] private UpgradeChoicePanel _upgradeChoicePanel;
         [SerializeField] private AudioMixer _audioMixer;
@@ -63,7 +64,7 @@ namespace Game.Scripts.DI
         {
             builder.RegisterComponent(_playerSpawner);
             builder.Register<IPlayerProvider, PlayerProvider>(Lifetime.Scoped);
-            builder.RegisterComponent(_bulletSpawner);
+            builder.RegisterComponent(_playerBulletSpawner);
             builder.RegisterComponent(_playerJoystick);
         }
         

@@ -7,6 +7,10 @@ namespace Game.Scripts.Upgrades
     [Serializable]
     public class PlayerBulletUpgradeEntry
     {
+        private const float BaseDamage = 1f;
+        private const float BaseLifeTime = 10f;
+        private const int BaseCount = 1;
+        
         [SerializeField] private BulletType _bulletType;
         [SerializeField] private bool _isUnlocked;
         [SerializeField] private float _damage = 1f;
@@ -19,6 +23,10 @@ namespace Game.Scripts.Upgrades
         public float Damage => _damage;
         public float LifeTime => _lifeTime;
         public int Count => _count;
+        
+        public float DamageBonus => _damage - BaseDamage;
+        public float LifeTimeBonus => _lifeTime - BaseLifeTime;
+        public int CountBonus => _count - BaseCount;
 
         public void Unlock()
         {
@@ -39,6 +47,14 @@ namespace Game.Scripts.Upgrades
         public void AddCount(int count)
         {
             _count = Mathf.Clamp(_count + count, 1, _maxCount);
+        }
+        
+        public void ApplySaveState(BulletUpgradeState state)
+        {
+            _isUnlocked = state.IsUnlocked;
+            _damage = BaseDamage + state.DamageBonus;
+            _lifeTime = BaseLifeTime + state.LifeTimeBonus;
+            _count = Mathf.Clamp(BaseCount + state.CountBonus, BaseCount, _maxCount);
         }
     }
 }

@@ -1,6 +1,7 @@
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using Game.Scripts.Characters.Player;
+using Game.Scripts.Save;
 using Game.Scripts.Wave;
 using UniRx;
 using UnityEngine;
@@ -40,16 +41,23 @@ namespace Game.Scripts.Levels
         private ILevelService _levelService;
         private WaveSystem _waveSystem;
         private IPlayerProvider _playerProvider;
+        private ISaveSystem _saveSystem;
         private Player _currentPlayer;
         private Sequence _currentAnimation;
 
         [Inject]
-        private void Construct(ILevelService levelService, WaveSystem waveSystem, IPlayerProvider player)
+        private void Construct(
+            ILevelService levelService,
+            WaveSystem waveSystem,
+            IPlayerProvider player,
+            ISaveSystem saveSystem)
         {
             _levelService = levelService;
             _waveSystem = waveSystem;
             _playerProvider = player;
+            _saveSystem = saveSystem;
         }
+
 
         private void Awake()
         {
@@ -84,7 +92,7 @@ namespace Game.Scripts.Levels
 
         private void SubscribeButtons()
         {
-            _buttonNextLevel.onClick.AddListener(() => _levelService.LoadNextLevelAsync());
+            _buttonNextLevel.onClick.AddListener(OnNextLevelClicked);
             _buttonRestartLevel.onClick.AddListener(() => _levelService.RestartCurrentLevelAsync());
             _buttonRestartLevelLose.onClick.AddListener(() => _levelService.RestartCurrentLevelAsync());
 
@@ -93,6 +101,12 @@ namespace Game.Scripts.Levels
             _buttonPauseRestartLevel.onClick.AddListener(() => _levelService.RestartCurrentLevelAsync());
         }
 
+        private void OnNextLevelClicked()
+        {
+            _saveSystem.ManualSave();
+            _levelService.LoadNextLevelAsync().Forget();
+        }
+        
         private void OnPlayerSpawned(Player player)
         {
             _currentPlayer = player;
@@ -118,6 +132,7 @@ namespace Game.Scripts.Levels
             await ShowPanelAnimated(_winPanel, _winPanelCanvasGroup);
             Time.timeScale = 0;
 
+            _saveSystem.ManualSave();
             YG2.InterstitialAdvShow();
         }
 

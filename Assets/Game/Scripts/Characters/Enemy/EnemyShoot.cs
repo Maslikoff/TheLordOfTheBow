@@ -20,5 +20,7 @@ namespace Game.Scripts.Characters.Enemy
             
             return transform.forward;
         }
+        
+        protected override Transform GetShotOwner() => transform;
     }
 }

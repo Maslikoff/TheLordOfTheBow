@@ -34,19 +34,25 @@ namespace Game.Scripts.Characters
 
         protected virtual void PerformShot()
         {
+            if (_bulletSpawner == null || _firePoint == null)
+                return;
+            
             Vector3 direction = GetShootDirection();
+            
             _bulletSpawner.SetFirePoint(_firePoint);
-            _bulletSpawner.SpawnBullet(_bulletType, direction, new BulletData(1,0));
+            _bulletSpawner.SpawnBullet(_bulletType, direction, new BulletData(1, 0), GetShotOwner());
         }
+        
+        protected virtual Transform GetShotOwner() => null;
         
         protected virtual void TryShoot()
         {
-            if (enabled == false || _canShoot == false || _isReloading || _bulletSpawner == null || _firePoint == null) 
+            if (enabled == false || _canShoot == false || _isReloading || _bulletSpawner == null || _firePoint == null)
                 return;
             
             float timeSinceLastShot = Time.time - _lastShotTime;
             float requiredCooldown = _cooldownTime / _maxShotsPerBurst;
-    
+            
             if (timeSinceLastShot < requiredCooldown)
                 return;
             
@@ -55,11 +61,10 @@ namespace Game.Scripts.Characters
             if (_currentShotsInBurst < _maxShotsPerBurst)
             {
                 _currentShotsInBurst++;
-
                 PerformShot();
                 
                 ShotFired?.Invoke();
-    
+                
                 if (_currentShotsInBurst >= _maxShotsPerBurst)
                     StartReload();
             }
@@ -83,6 +88,7 @@ namespace Game.Scripts.Characters
             _lastShotTime = 0;
             _isReloading = false;
             _canShoot = true;
+            
             StopAllCoroutines();
         }
 
@@ -91,6 +97,7 @@ namespace Game.Scripts.Characters
             _isReloading = true;
             _canShoot = false;
             _currentShotsInBurst = 0;
+            
             StartCoroutine(ReloadCoroutine());
         }
 
