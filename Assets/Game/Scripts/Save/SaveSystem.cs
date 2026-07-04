@@ -13,7 +13,6 @@ namespace Game.Scripts.Save
 {
     public class SaveSystem : MonoBehaviour, ISaveSystem, ISaveLoadGate
     {
-        private const float SaveDebounceSeconds = 2f;
         private const float SdkWaitTimeoutSeconds = 5f;
         
         private readonly CompositeDisposable _disposables = new();
@@ -22,7 +21,6 @@ namespace Game.Scripts.Save
         
         private Player _currentPlayer;
         private UniTaskCompletionSource _readyTcs;
-        private float _lastSaveTime;
         
         private bool _metaDataLoaded;
         private bool _isReady;
@@ -39,7 +37,7 @@ namespace Game.Scripts.Save
                 .Subscribe(msg => OnPlayerSpawned(msg.Player))
                 .AddTo(_disposables);
             MessageBroker.Default.Receive<M_SaveRequested>()
-                .Subscribe(_ => SaveGameData())
+                .Subscribe(_ => SavePlayerProgress())
                 .AddTo(_disposables);
         }
 
@@ -90,6 +88,22 @@ namespace Game.Scripts.Save
             SaveGameData();
         }
 
+        public void SavePlayerProgress()
+        {
+            if (YG2.isSDKEnabled == false)
+                return;
+
+            try
+            {
+                WritePlayerProgressToSaves(YG2.saves);
+                YG2.SaveProgress();
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"[SaveSystem] Ошибка сохранения прогресса игрока: {e.Message}");
+            }
+        }
+
         public void SaveGameData()
         {
             if (YG2.isSDKEnabled == false)
@@ -104,40 +118,14 @@ namespace Game.Scripts.Save
             {
                 var saves = YG2.saves;
                 
+                WritePlayerProgressToSaves(saves);
+                
                 if (_levelService != null)
                 {
                     saves.WriteCurrentLevelIndex(_levelService.CurrentLevelIndex);
-                    Debug.Log($"[SaveSystem] Сохранён индекс уровня: {_levelService.CurrentLevel - 1}");
+                    Debug.Log($"[SaveSystem] Сохранён индекс уровня: {_levelService.CurrentLevelIndex}");
                 }
                 
-                if (_currentPlayer != null)
-                {
-                    saves.WritePlayerLevel(_currentPlayer.Experience.CurrentLevel);
-                    saves.WritePlayerExperience(_currentPlayer.Experience.CurrentExperience);
-                    
-                    Debug.Log($"[SaveSystem] Сохранён уровень игрока: {_currentPlayer.Experience.CurrentLevel}, " +
-                              $"опыт: {_currentPlayer.Experience.CurrentExperience}");
-                    
-                    PlayerBulletUpgradeCollection bulletCollection = _currentPlayer.BulletUpgrades;
-                    
-                    foreach (BulletType bulletType in Enum.GetValues(typeof(BulletType)))
-                    {
-                        PlayerBulletUpgradeEntry entry = bulletCollection.Get(bulletType);
-                        
-                        if (entry == null)
-                            continue;
-                        
-                        var state = new BulletUpgradeState(
-                            entry.IsUnlocked,
-                            entry.DamageBonus,
-                            entry.LifeTimeBonus,
-                            entry.CountBonus);
-                        saves.WriteBulletUpgradeState(bulletType, state);
-                        
-                        Debug.Log($"[SaveSystem] Сохранена прокачка пули {bulletType}: разблокирована={state.IsUnlocked}, " +
-                                  $"урон={state.DamageBonus}");
-                    }
-                }
                 YG2.SaveProgress();
                 
                 Debug.Log("[SaveSystem] Данные успешно сохранены в облако!");
@@ -145,6 +133,38 @@ namespace Game.Scripts.Save
             catch (Exception e)
             {
                 Debug.LogError($"[SaveSystem] Ошибка сохранения: {e.Message}");
+            }
+        }
+
+        private void WritePlayerProgressToSaves(SavesYG saves)
+        {
+            if (_currentPlayer == null)
+                return;
+            
+            saves.WritePlayerLevel(_currentPlayer.Experience.CurrentLevel);
+            saves.WritePlayerExperience(_currentPlayer.Experience.CurrentExperience);
+            
+            Debug.Log($"[SaveSystem] Сохранён уровень игрока: {_currentPlayer.Experience.CurrentLevel}, " +
+                      $"опыт: {_currentPlayer.Experience.CurrentExperience}");
+            
+            PlayerBulletUpgradeCollection bulletCollection = _currentPlayer.BulletUpgrades;
+            
+            foreach (BulletType bulletType in Enum.GetValues(typeof(BulletType)))
+            {
+                PlayerBulletUpgradeEntry entry = bulletCollection.Get(bulletType);
+                
+                if (entry == null)
+                    continue;
+                
+                var state = new BulletUpgradeState(
+                    entry.IsUnlocked,
+                    entry.DamageBonus,
+                    entry.LifeTimeBonus,
+                    entry.CountBonus);
+                saves.WriteBulletUpgradeState(bulletType, state);
+                
+                Debug.Log($"[SaveSystem] Сохранена прокачка пули {bulletType}: разблокирована={state.IsUnlocked}, " +
+                          $"урон={state.DamageBonus}");
             }
         }
         
@@ -172,7 +192,7 @@ namespace Game.Scripts.Save
         
         private void LoadMetaData()
         {
-            if (_levelService is not LevelService service)
+            if (_levelService == null)
                 return;
             
             int levelIndex = YG2.saves.CurrentLevelIndex;
@@ -214,20 +234,13 @@ namespace Game.Scripts.Save
                 
                 Debug.Log($"[SaveSystem] Загружена прокачка пули {bulletType}: разблокирована={state.IsUnlocked}, урон={state.DamageBonus}");
             }
+            
+            bulletCollection.NotifyLoadedFromSave();
         }
         
         private void OnPlayerLevelUp(int level)
         {
-            RequestSaveDebounced();
-        }
-        
-        private void RequestSaveDebounced()
-        {
-            if (Time.unscaledTime - _lastSaveTime < SaveDebounceSeconds)
-                return;
-            
-            _lastSaveTime = Time.unscaledTime;
-            SaveGameData();
+            SavePlayerProgress();
         }
         
         private void OnHideWindow()
