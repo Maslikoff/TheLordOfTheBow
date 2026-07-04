@@ -6,6 +6,8 @@ namespace Game.Scripts.Levels
     {
         LevelConfig CurrentConfig { get; }
         int CurrentLevel { get; }
+        int CurrentLevelIndex { get; }
+        void SetCurrentLevelIndex(int index);
         UniTask LoadCurrentLevelAsync();
         UniTask LoadLevelAsync(int index);
         UniTask LoadNextLevelAsync();

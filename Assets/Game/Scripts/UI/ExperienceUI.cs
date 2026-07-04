@@ -40,14 +40,20 @@ namespace Game.Scripts.UI
 
         public void Initialize(Experience.Experience playerExperience)
         {
+            if (_playerExperience != null)
+            {
+                _playerExperience.LevelUp -= OnLevelUp;
+                _playerExperience.ExperienceProgressChanged -= OnExperienceProgressChanged;
+                _playerExperience.ExperienceChanged -= OnExperienceChanged;
+            }
+            
             _playerExperience = playerExperience;
             
             _playerExperience.LevelUp += OnLevelUp;
             _playerExperience.ExperienceProgressChanged += OnExperienceProgressChanged;
             _playerExperience.ExperienceChanged += OnExperienceChanged;
             
-            UpdateUI();
-            UpdateProgressUI();
+            RefreshUI();
         }
         
         private void OnLevelUp(int newLevel)
@@ -77,11 +83,27 @@ namespace Game.Scripts.UI
 
         private void UpdateUI()
         {
-            _levelText.text = $"LVL {_playerExperience.CurrentLevel}";
+            if (_levelText != null && _playerExperience != null)
+                _levelText.text = $"LVL {_playerExperience.CurrentLevel}";
+        }
+
+        public void RefreshUI()
+        {
+            if (_playerExperience == null)
+                return;
+            
+            UpdateUI();
+            UpdateProgressUI();
+            
+            if (_experienceSlider != null && _playerExperience.ExperienceForNextLevel > 0)
+                _targetSliderValue = _playerExperience.ExperienceProgress;
         }
 
         private void UpdateProgressUI()
         {
+            if (_playerExperience == null)
+                return;
+            
             float currentExp = _playerExperience.CurrentExperience;
             float requiredExp = _playerExperience.ExperienceForNextLevel;
 

@@ -101,10 +101,11 @@ namespace Game.Scripts.Levels
             _buttonPauseRestartLevel.onClick.AddListener(() => _levelService.RestartCurrentLevelAsync());
         }
 
-        private void OnNextLevelClicked()
+        private async void OnNextLevelClicked()
         {
-            _saveSystem.ManualSave();
-            _levelService.LoadNextLevelAsync().Forget();
+            _saveSystem.SavePlayerProgress();
+            await _levelService.LoadNextLevelAsync();
+            _saveSystem.SaveGameData();
         }
         
         private void OnPlayerSpawned(Player player)
@@ -126,13 +127,13 @@ namespace Game.Scripts.Levels
 
         private async void OnOpenWinPanel()
         {
-            if (_playerProvider.Player != null && _playerProvider.Player.IsDead)
+            if (_currentPlayer != null && _currentPlayer.IsDead)
                 return;
 
             await ShowPanelAnimated(_winPanel, _winPanelCanvasGroup);
             Time.timeScale = 0;
 
-            _saveSystem.ManualSave();
+            _saveSystem.SavePlayerProgress();
             YG2.InterstitialAdvShow();
         }
 
