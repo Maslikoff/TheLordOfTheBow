@@ -7,10 +7,10 @@ namespace YG
 {
     public partial class SavesYG
     {
-        [SerializeField] private int _playerLevel = 1;
-        [SerializeField] private float _playerExperience = 0f;
-        [SerializeField] private int _currentLevelIndex = 0;
-        [SerializeField] private List<BulletUpgradeData> _bulletUpgrades = new List<BulletUpgradeData>();
+        public int _playerLevel = 1;
+        public float _playerExperience;
+        public int _currentLevelIndex;
+        public List<BulletUpgradeData> _bulletUpgrades = new();
 
         public int PlayerLevel 
         { 
@@ -49,7 +49,7 @@ namespace YG
 
         public void WriteBulletUpgradeState(BulletType bulletType, BulletUpgradeState state)
         {
-            var existing = _bulletUpgrades.Find(b => b.BulletType == bulletType);
+            BulletUpgradeData existing = _bulletUpgrades.Find(b => b.BulletType == bulletType);
             
             if (existing != null)
             {
@@ -73,7 +73,7 @@ namespace YG
 
         public BulletUpgradeState GetBulletUpgradeState(BulletType bulletType)
         {
-            var existing = _bulletUpgrades.Find(b => b.BulletType == bulletType);
+            BulletUpgradeData existing = _bulletUpgrades.Find(b => b.BulletType == bulletType);
             
             if (existing != null)
             {

@@ -18,6 +18,7 @@ namespace Game.Scripts.Save
         private readonly CompositeDisposable _disposables = new();
         
         [Inject] private ILevelService _levelService;
+        [Inject] private IPlayerProgressService _playerProgressService;
         
         private Player _currentPlayer;
         private UniTaskCompletionSource _readyTcs;
@@ -90,13 +91,19 @@ namespace Game.Scripts.Save
 
         public void SavePlayerProgress()
         {
-            if (YG2.isSDKEnabled == false)
-                return;
-
             try
             {
+                if (_currentPlayer != null)
+                    _playerProgressService.CaptureFrom(_currentPlayer);
+                else if (_playerProgressService.HasSessionProgress)
+                    _playerProgressService.SyncToSaves(YG2.saves);
+                else
+                    return;
+
                 WritePlayerProgressToSaves(YG2.saves);
-                YG2.SaveProgress();
+
+                if (YG2.isSDKEnabled)
+                    YG2.SaveProgress();
             }
             catch (Exception e)
             {
@@ -106,9 +113,11 @@ namespace Game.Scripts.Save
 
         public void SaveGameData()
         {
+            SavePlayerProgress();
+            
             if (YG2.isSDKEnabled == false)
             {
-                Debug.LogWarning("[SaveSystem] SDK не готов — сохранение пропущено");
+                Debug.LogWarning("[SaveSystem] SDK не готов — индекс уровня сохранён только в памяти");
                 return;
             }
             
@@ -116,13 +125,9 @@ namespace Game.Scripts.Save
             
             try
             {
-                var saves = YG2.saves;
-                
-                WritePlayerProgressToSaves(saves);
-                
                 if (_levelService != null)
                 {
-                    saves.WriteCurrentLevelIndex(_levelService.CurrentLevelIndex);
+                    YG2.saves.WriteCurrentLevelIndex(_levelService.CurrentLevelIndex);
                     Debug.Log($"[SaveSystem] Сохранён индекс уровня: {_levelService.CurrentLevelIndex}");
                 }
                 
@@ -138,6 +143,12 @@ namespace Game.Scripts.Save
 
         private void WritePlayerProgressToSaves(SavesYG saves)
         {
+            if (_playerProgressService.HasSessionProgress)
+            {
+                _playerProgressService.SyncToSaves(saves);
+                return;
+            }
+
             if (_currentPlayer == null)
                 return;
             
@@ -174,11 +185,9 @@ namespace Game.Scripts.Save
             
             try
             {
+                _playerProgressService.LoadFromSaves(YG2.saves);
                 LoadMetaData();
                 _metaDataLoaded = true;
-                
-                if (_currentPlayer != null)
-                    LoadPlayerData(_currentPlayer);
             }
             catch (Exception e)
             {
@@ -207,14 +216,28 @@ namespace Game.Scripts.Save
             _currentPlayer = player;
             _currentPlayer.Experience.LevelUp += OnPlayerLevelUp;
             
-            if (_metaDataLoaded || YG2.isSDKEnabled)
-                LoadPlayerData(player);
+            LoadPlayerData(player);
         }
         
         private void LoadPlayerData(Player player)
         {
             Debug.Log("[SaveSystem] Загрузка данных игрока...");
             
+            if (_playerProgressService.HasSessionProgress)
+            {
+                _playerProgressService.ApplyTo(player);
+                _playerProgressService.SyncToSaves(YG2.saves);
+                
+                Debug.Log("[SaveSystem] Применён сессионный прогресс игрока");
+                return;
+            }
+
+            if (_metaDataLoaded || YG2.isSDKEnabled)
+                ApplyCloudSavesToPlayer(player);
+        }
+
+        private void ApplyCloudSavesToPlayer(Player player)
+        {
             var saves = YG2.saves;
             player.Experience.LoadSaveData(saves.PlayerLevel, saves.PlayerExperience);
             
@@ -236,6 +259,7 @@ namespace Game.Scripts.Save
             }
             
             bulletCollection.NotifyLoadedFromSave();
+            _playerProgressService.CaptureFrom(player);
         }
         
         private void OnPlayerLevelUp(int level)
@@ -281,7 +305,10 @@ namespace Game.Scripts.Save
             if (YG2.isSDKEnabled)
                 OnSdkDataReady();
             else
+            {
+                _playerProgressService.LoadFromSaves(YG2.saves);
                 MarkReady();
+            }
         }
     }
 }

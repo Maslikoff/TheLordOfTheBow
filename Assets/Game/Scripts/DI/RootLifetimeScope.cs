@@ -36,6 +36,7 @@ namespace Game.Scripts.DI
         {
             builder.Register<ILevelService, LevelService>(Lifetime.Singleton);
             builder.Register<IAudioService, AudioService>(Lifetime.Singleton);
+            builder.Register<IPlayerProgressService, PlayerProgressService>(Lifetime.Singleton);
         }
         
         private void ConfigureSaveSystem(IContainerBuilder builder)

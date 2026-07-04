@@ -36,9 +36,9 @@ namespace Game.Scripts.Spawners
 
             _currentPlayer = _factory.Create(playerPrefab, _spawnPoint.Position, _spawnPoint.Rotation);
             
-            InitializeUI(_currentPlayer);
-            
             MessageBroker.Default.Publish(new M_PlayerSpawned(_currentPlayer));
+            
+            InitializeUI(_currentPlayer);
 
             return _currentPlayer;
         }
