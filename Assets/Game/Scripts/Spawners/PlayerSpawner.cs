@@ -32,13 +32,13 @@ namespace Game.Scripts.Spawners
         {
             Player playerPrefab = _startupConfig.PlayerPrefab;
 
-            DespawnCurrentPlayer();
-
             _currentPlayer = _factory.Create(playerPrefab, _spawnPoint.Position, _spawnPoint.Rotation);
-            
-            InitializeUI(_currentPlayer);
+
+            DespawnCurrentPlayer();
             
             MessageBroker.Default.Publish(new M_PlayerSpawned(_currentPlayer));
+            
+            InitializeUI(_currentPlayer);
 
             return _currentPlayer;
         }
