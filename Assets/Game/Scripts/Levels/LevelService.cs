@@ -9,8 +9,6 @@ namespace Game.Scripts.Levels
         private readonly ISceneLoader _sceneLoader;
 
         private int _currentLevelIndex;
-        
-        public int CurrentLevelIndex => _currentLevelIndex;
 
         public LevelService(LevelCatalog levelCatalog, ISceneLoader sceneLoader)
         {

@@ -7,9 +7,9 @@
         false,
         false
     ],
-    "idSave": 3,
+    "idSave": 1,
     "_playerLevel": 1,
     "_playerExperience": 0.0,
-    "_currentLevelIndex": 1,
+    "_currentLevelIndex": 0,
     "_bulletUpgrades": []
 }
