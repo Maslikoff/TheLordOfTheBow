@@ -88,6 +88,8 @@ namespace Game.Scripts.Levels
             _waveSystem.AllWavesCompleted -= OnOpenWinPanel;
             _disposables.Clear();
             _currentAnimation?.Kill();
+            
+            UnsubscribeButtons();
         }
 
         private void SubscribeButtons()
@@ -99,6 +101,16 @@ namespace Game.Scripts.Levels
             _buttonPause.onClick.AddListener(OnOpenPausePanel);
             _buttonPauseResumeLevel.onClick.AddListener(OnResumeButtonClick);
             _buttonPauseRestartLevel.onClick.AddListener(() => _levelService.RestartCurrentLevelAsync());
+        }
+
+        private void UnsubscribeButtons()
+        {
+            _buttonNextLevel.onClick.RemoveListener(OnNextLevelClicked);
+            _buttonRestartLevel.onClick.RemoveAllListeners();
+            _buttonRestartLevelLose.onClick.RemoveAllListeners();
+            _buttonPause.onClick.RemoveListener(OnOpenPausePanel);
+            _buttonPauseResumeLevel.onClick.RemoveListener(OnResumeButtonClick);
+            _buttonPauseRestartLevel.onClick.RemoveAllListeners();
         }
 
         private async void OnNextLevelClicked()

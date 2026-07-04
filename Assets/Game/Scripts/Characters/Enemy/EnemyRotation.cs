@@ -28,6 +28,9 @@ namespace Game.Scripts.Characters.Enemy
         
         private void RotateTowardsTarget()
         {
+            if (_target == null || _visualRoot == null)
+                return;
+            
             Vector3 direction = (_target.position - transform.position).normalized;
             
             if (direction == Vector3.zero) 

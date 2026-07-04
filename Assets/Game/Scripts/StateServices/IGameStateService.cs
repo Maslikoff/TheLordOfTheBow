@@ -7,5 +7,6 @@ namespace Game.Scripts.StateServices
         bool IsGameStarted { get; }
         event Action GameStarted;
         void StartGame();
+        void Reset();
     }
 }

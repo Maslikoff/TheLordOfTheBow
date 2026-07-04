@@ -50,7 +50,6 @@ namespace Game.Scripts.Spawners
             if (poolable is HealthKit healthKit)
             {
                 healthKit.Released -= OnHealthKitReleased;
-                _healthKitPool.ReturnToPool(healthKit);
                 
                 DecreaseObjectCount();
             }

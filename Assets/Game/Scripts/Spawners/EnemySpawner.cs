@@ -180,18 +180,6 @@ namespace Game.Scripts.Spawners
             if (enemy == null)
                 return false;
 
-            if (enemy.gameObject.activeSelf)
-            {
-                enemy.Release();
-                enemy = GetEnemyFromPool();
-
-                if (enemy == null)
-                {
-                    Debug.LogError("[EnemySpawner] Failed to get enemy after release!");
-                    return false;
-                }
-            }
-
             enemy.transform.position = position;
 
             if (InitializeEnemy(enemy) == false)

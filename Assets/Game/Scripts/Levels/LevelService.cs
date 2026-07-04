@@ -9,6 +9,8 @@ namespace Game.Scripts.Levels
         private readonly ISceneLoader _sceneLoader;
 
         private int _currentLevelIndex;
+        
+        public int CurrentLevelIndex => _currentLevelIndex;
 
         public LevelService(LevelCatalog levelCatalog, ISceneLoader sceneLoader)
         {
@@ -82,6 +84,13 @@ namespace Game.Scripts.Levels
                     CurrentConfig = config;
                 
             }
+        }
+        
+        public void AdvanceToNextLevelIndex()
+        {
+            int count = _levelCatalog.Count;
+            if (count <= 0) return;
+            _currentLevelIndex = (_currentLevelIndex + 1) % count;
         }
 
         private bool TryGetLevelConfig(int index, out LevelConfig config)
