@@ -14,6 +14,7 @@ namespace Game.Scripts.Upgrades
         [SerializeField] private List<PlayerBulletUpgradeEntry> _entries = new();
 
         public event Action<BulletType> BulletUnlocked;
+        public event Action UpgradesLoaded;
         
         private void Awake()
         {
@@ -34,11 +35,21 @@ namespace Game.Scripts.Upgrades
         public bool IsUnlocked(BulletType bulletType) =>
             Get(bulletType)?.IsUnlocked ?? false;
 
+        public void NotifyLoadedFromSave()
+        {
+            foreach (PlayerBulletUpgradeEntry entry in _entries)
+            {
+                if (entry != null && entry.IsUnlocked)
+                    BulletUnlocked?.Invoke(entry.BulletType);
+            }
+            
+            UpgradesLoaded?.Invoke();
+        }
+
         public void Unlock(BulletType bulletType)
         {
             PlayerBulletUpgradeEntry entry = Get(bulletType);
-            
-            if (entry == null) 
+            if (entry == null)
                 return;
             
             entry.Unlock();
@@ -51,6 +62,9 @@ namespace Game.Scripts.Upgrades
         public void AddDamage(BulletType bulletType, float damage)
         {
             PlayerBulletUpgradeEntry entry = Get(bulletType);
+            if (entry == null)
+                return;
+            
             entry.AddDamage(damage);
             
             MessageBroker.Default.Publish(new M_SaveRequested());
@@ -59,6 +73,9 @@ namespace Game.Scripts.Upgrades
         public void AddLifeTime(BulletType bulletType, float lifeTime)
         {
             PlayerBulletUpgradeEntry entry = Get(bulletType);
+            if (entry == null)
+                return;
+            
             entry.AddLifeTime(lifeTime);
             
             MessageBroker.Default.Publish(new M_SaveRequested());
@@ -67,6 +84,9 @@ namespace Game.Scripts.Upgrades
         public void AddCount(BulletType bulletType, int value)
         {
             PlayerBulletUpgradeEntry entry = Get(bulletType);
+            if (entry == null)
+                return;
+            
             entry.AddCount(value);
             
             MessageBroker.Default.Publish(new M_SaveRequested());

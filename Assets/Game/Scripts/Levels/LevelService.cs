@@ -22,6 +22,7 @@ namespace Game.Scripts.Levels
         
         public LevelConfig CurrentConfig { get; private set; }
         public int CurrentLevel => _currentLevelIndex + 1;
+        public int CurrentLevelIndex => _currentLevelIndex;
 
         public async UniTask LoadCurrentLevelAsync()
         {

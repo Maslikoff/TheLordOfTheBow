@@ -18,8 +18,6 @@ namespace Game.Scripts.UI
         [SerializeField] private bool _clockwise = true;
         
         private Dictionary<BulletType, BulletUIConfig> _configs = new();
-        private Dictionary<BulletType, System.Action> _shotEvents = new();
-        private Dictionary<BulletType, System.Action<float>> _reloadEvents = new();
         
         private Action _onShotArrow;
         private Action _onShotFireArrow;
@@ -28,8 +26,15 @@ namespace Game.Scripts.UI
         private Action<float> _onFireArrowReload;
         private Action<float> _onPoisonArrowReload;
 
-        private void Start()
+        private void Awake()
         {
+            _onShotArrow = () => OnShotFired(BulletType.Arrow);
+            _onShotFireArrow = () => OnShotFired(BulletType.FireArrow);
+            _onShotPoisonArrow = () => OnShotFired(BulletType.PoisonArrow);
+            _onArrowReload = progress => OnReloadProgress(BulletType.Arrow, progress);
+            _onFireArrowReload = progress => OnReloadProgress(BulletType.FireArrow, progress);
+            _onPoisonArrowReload = progress => OnReloadProgress(BulletType.PoisonArrow, progress);
+            
             InitializeDictionaries();
         }
 
@@ -45,30 +50,27 @@ namespace Game.Scripts.UI
             _shootController = shootController;
             _upgradeCollection = upgradeCollection;
 
-            UpdateCellsVisibility();
             SubscribeToEvents();
+            RefreshFromCollection();
+        }
+        
+        public void RefreshFromCollection()
+        {
+            UpdateCellsVisibility();
             ResetAllViews();
         }
         
         private void InitializeDictionaries()
         {
             foreach (BulletUIConfig config in _bulletUIConfigs)
-            {
                 _configs[config.BulletType] = config;
-                _shotEvents[config.BulletType] = () => OnShotFired(config.BulletType);
-                _reloadEvents[config.BulletType] = (progress) => OnReloadProgress(config.BulletType, progress);
-            }
-            
-            _onShotArrow = () => OnShotFired(BulletType.Arrow);
-            _onShotFireArrow = () => OnShotFired(BulletType.FireArrow);
-            _onShotPoisonArrow = () => OnShotFired(BulletType.PoisonArrow);
-            _onArrowReload = p => OnReloadProgress(BulletType.Arrow, p);
-            _onFireArrowReload = p => OnReloadProgress(BulletType.FireArrow, p);
-            _onPoisonArrowReload = p => OnReloadProgress(BulletType.PoisonArrow, p);
         }
         
         private void UpdateCellsVisibility()
         {
+            if (_upgradeCollection == null)
+                return;
+            
             foreach (BulletUIConfig config in _bulletUIConfigs)
             {
                 if (config.BulletType == BulletType.Arrow) 
@@ -120,15 +122,8 @@ namespace Game.Scripts.UI
         
         private void SubscribeToEvents()
         {
-            /*_shootController.ShotArrow += () => OnShotFired(BulletType.Arrow);
-            _shootController.ShotFireArrow += () => OnShotFired(BulletType.FireArrow);
-            _shootController.ShotPoisonArrow += () => OnShotFired(BulletType.PoisonArrow);
-            
-            _shootController.ArrowReloadProgress += (p) => OnReloadProgress(BulletType.Arrow, p);
-            _shootController.FireArrowReloadProgress += (p) => OnReloadProgress(BulletType.FireArrow, p);
-            _shootController.PoisonArrowReloadProgress += (p) => OnReloadProgress(BulletType.PoisonArrow, p);
-            
-            _upgradeCollection.BulletUnlocked += OnBulletUnlocked;*/
+            if (_shootController == null || _upgradeCollection == null)
+                return;
             
             _shootController.ShotArrow += _onShotArrow;
             _shootController.ShotFireArrow += _onShotFireArrow;
@@ -137,22 +132,13 @@ namespace Game.Scripts.UI
             _shootController.FireArrowReloadProgress += _onFireArrowReload;
             _shootController.PoisonArrowReloadProgress += _onPoisonArrowReload;
             _upgradeCollection.BulletUnlocked += OnBulletUnlocked;
+            _upgradeCollection.UpgradesLoaded += RefreshFromCollection;
         }
         
         private void UnsubscribeFromEvents()
         {
             if (_shootController == null || _upgradeCollection == null) 
                 return;
-            
-            /*_shootController.ShotArrow -= () => OnShotFired(BulletType.Arrow);
-            _shootController.ShotFireArrow -= () => OnShotFired(BulletType.FireArrow);
-            _shootController.ShotPoisonArrow -= () => OnShotFired(BulletType.PoisonArrow);
-                
-            _shootController.ArrowReloadProgress -= (p) => OnReloadProgress(BulletType.Arrow, p);
-            _shootController.FireArrowReloadProgress -= (p) => OnReloadProgress(BulletType.FireArrow, p);
-            _shootController.PoisonArrowReloadProgress -= (p) => OnReloadProgress(BulletType.PoisonArrow, p);
-            
-            _upgradeCollection.BulletUnlocked -= OnBulletUnlocked;*/
             
             _shootController.ShotArrow -= _onShotArrow;
             _shootController.ShotFireArrow -= _onShotFireArrow;
@@ -161,6 +147,7 @@ namespace Game.Scripts.UI
             _shootController.FireArrowReloadProgress -= _onFireArrowReload;
             _shootController.PoisonArrowReloadProgress -= _onPoisonArrowReload;
             _upgradeCollection.BulletUnlocked -= OnBulletUnlocked;
+            _upgradeCollection.UpgradesLoaded -= RefreshFromCollection;
         }
         
         private bool IsBulletVisible(BulletType bulletType)
