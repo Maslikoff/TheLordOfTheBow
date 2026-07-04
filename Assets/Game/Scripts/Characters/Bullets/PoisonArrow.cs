@@ -41,13 +41,13 @@ namespace Game.Scripts.Characters.Bullets
             
             _maxLifeTime = bulletData.LifeTime > 0 ? bulletData.LifeTime : _defaultLifeTime;
             
-            Vector3 startDirection = new Vector3(-1f, 0f, 1f).normalized;
+            Vector3 startDirection = _direction != Vector3.zero ? _direction : transform.forward;
             
             float randomAngle = Random.Range(-_bounceAngleVariation * 0.3f, _bounceAngleVariation * 0.3f);
             Quaternion randomRotation = Quaternion.Euler(randomAngle, 0, 0);
-            startDirection = randomRotation * startDirection;
+            startDirection = (randomRotation * startDirection).normalized ;
             
-            _currentVelocity = startDirection * _speed;
+            _currentVelocity = startDirection* _speed;
             _isInitialized = true;
             
             if (_currentVelocity != Vector3.zero)
@@ -58,7 +58,8 @@ namespace Game.Scripts.Characters.Bullets
         {
             if (_isInitialized == false || _currentVelocity == Vector3.zero)
             {
-                _currentVelocity = new Vector3(-1f, 0f, 1f).normalized * _speed;
+                Vector3 fallback = _direction != Vector3.zero ? _direction : transform.forward;
+                _currentVelocity = fallback.normalized * _speed;
                 _isInitialized = true;
             }
 
@@ -77,13 +78,13 @@ namespace Game.Scripts.Characters.Bullets
             BounceLikePinball(other);
         }
 
-        private void OnCollisionEnter(Collision collision)
+        /*private void OnCollisionEnter(Collision collision)
         {
             if (CanCollide(collision) == false)
                 return;
 
             HandleCollision(collision);
-        }
+        }*/
 
         protected override bool CanCollide(Collision other)
         {

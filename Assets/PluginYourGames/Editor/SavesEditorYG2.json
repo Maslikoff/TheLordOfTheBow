@@ -1,0 +1,15 @@
+{
+    "intExample": 5,
+    "strExample": "Hello!",
+    "boolExample": [
+        false,
+        false,
+        false,
+        false
+    ],
+    "idSave": 2,
+    "_playerLevel": 1,
+    "_playerExperience": 0.0,
+    "_currentLevelIndex": 1,
+    "_bulletUpgrades": []
+}

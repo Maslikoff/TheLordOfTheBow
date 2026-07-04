@@ -74,12 +74,8 @@ namespace Game.Scripts.ObjectPool
             else
                 enemy = CreateEnemyForRace(race);
 
-            if (enemy != null)
-            {
-                enemy.gameObject.SetActive(true);
-
+            if (enemy != null) 
                 OnObjectGet(enemy);
-            }
 
             return enemy;
         }
@@ -192,7 +188,7 @@ namespace Game.Scripts.ObjectPool
             if (enemy == null)
                 return;
 
-            EnemyBulletTracker.ReleaseAllForOwner(transform);
+            EnemyBulletTracker.ReleaseAllForOwner(enemy.transform);
             
             var rb = enemy.GetComponent<Rigidbody>();
 

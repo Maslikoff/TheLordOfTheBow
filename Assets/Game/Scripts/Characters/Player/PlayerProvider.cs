@@ -12,6 +12,5 @@ namespace Game.Scripts.Characters.Player
         }
 
         public Player CurrentPlayer => _playerSpawner.CurrentPlayer;
-        public Player Player { get; private set; }
     }
 }

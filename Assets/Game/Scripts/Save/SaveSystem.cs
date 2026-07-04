@@ -106,7 +106,7 @@ namespace Game.Scripts.Save
                 
                 if (_levelService != null)
                 {
-                    saves.WriteCurrentLevelIndex(_levelService.CurrentLevel - 1);
+                    saves.WriteCurrentLevelIndex(_levelService.CurrentLevelIndex);
                     Debug.Log($"[SaveSystem] Сохранён индекс уровня: {_levelService.CurrentLevel - 1}");
                 }
                 
@@ -176,7 +176,7 @@ namespace Game.Scripts.Save
                 return;
             
             int levelIndex = YG2.saves.CurrentLevelIndex;
-            service.SetCurrentLevelIndex(levelIndex);
+            _levelService.SetCurrentLevelIndex(levelIndex);
             
             Debug.Log($"[SaveSystem] Загружен индекс уровня: {levelIndex}");
         }

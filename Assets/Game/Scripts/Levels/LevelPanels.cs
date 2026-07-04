@@ -88,6 +88,8 @@ namespace Game.Scripts.Levels
             _waveSystem.AllWavesCompleted -= OnOpenWinPanel;
             _disposables.Clear();
             _currentAnimation?.Kill();
+            
+            UnsubscribeButtons();
         }
 
         private void SubscribeButtons()
@@ -101,10 +103,22 @@ namespace Game.Scripts.Levels
             _buttonPauseRestartLevel.onClick.AddListener(() => _levelService.RestartCurrentLevelAsync());
         }
 
-        private void OnNextLevelClicked()
+        private void UnsubscribeButtons()
         {
+            _buttonNextLevel.onClick.RemoveListener(OnNextLevelClicked);
+            _buttonRestartLevel.onClick.RemoveAllListeners();
+            _buttonRestartLevelLose.onClick.RemoveAllListeners();
+            _buttonPause.onClick.RemoveListener(OnOpenPausePanel);
+            _buttonPauseResumeLevel.onClick.RemoveListener(OnResumeButtonClick);
+            _buttonPauseRestartLevel.onClick.RemoveAllListeners();
+        }
+        
+        private void OnRestartLevelClicked() => _levelService.RestartCurrentLevelAsync().Forget();
+        
+        private async void OnNextLevelClicked()
+        {
+            await _levelService.LoadNextLevelAsync();
             _saveSystem.ManualSave();
-            _levelService.LoadNextLevelAsync().Forget();
         }
         
         private void OnPlayerSpawned(Player player)
@@ -126,7 +140,7 @@ namespace Game.Scripts.Levels
 
         private async void OnOpenWinPanel()
         {
-            if (_playerProvider.Player != null && _playerProvider.Player.IsDead)
+            if (_currentPlayer != null && _currentPlayer.IsDead)
                 return;
 
             await ShowPanelAnimated(_winPanel, _winPanelCanvasGroup);

@@ -48,6 +48,9 @@ namespace Game.Scripts.UI
         
         public void Initialize(Experience.Experience playerExperience, UpgradeApplier upgradeApplier)
         {
+            if (_playerExperience != null)
+                _playerExperience.LevelUp -= OnPlayerLevelUp;
+            
             _playerExperience = playerExperience ?? throw new ArgumentNullException(nameof(playerExperience));
             _upgradeApplier = upgradeApplier ?? throw new ArgumentNullException(nameof(upgradeApplier));
 

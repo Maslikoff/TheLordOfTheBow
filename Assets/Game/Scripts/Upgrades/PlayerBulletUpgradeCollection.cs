@@ -32,11 +32,15 @@ namespace Game.Scripts.Upgrades
             _entriesByType.GetValueOrDefault(bulletType);
 
         public bool IsUnlocked(BulletType bulletType) =>
-            Get(bulletType).IsUnlocked;
+            Get(bulletType)?.IsUnlocked ?? false;
 
         public void Unlock(BulletType bulletType)
         {
             PlayerBulletUpgradeEntry entry = Get(bulletType);
+            
+            if (entry == null) 
+                return;
+            
             entry.Unlock();
             
             BulletUnlocked?.Invoke(bulletType);

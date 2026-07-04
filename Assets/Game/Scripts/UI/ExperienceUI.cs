@@ -42,6 +42,10 @@ namespace Game.Scripts.UI
         {
             _playerExperience = playerExperience;
             
+            _playerExperience.LevelUp -= OnLevelUp;
+            _playerExperience.ExperienceProgressChanged -= OnExperienceProgressChanged;
+            _playerExperience.ExperienceChanged -= OnExperienceChanged;
+            
             _playerExperience.LevelUp += OnLevelUp;
             _playerExperience.ExperienceProgressChanged += OnExperienceProgressChanged;
             _playerExperience.ExperienceChanged += OnExperienceChanged;

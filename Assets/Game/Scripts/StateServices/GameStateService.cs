@@ -16,5 +16,10 @@ namespace Game.Scripts.StateServices
             GameStarted?.Invoke();
             Debug.Log("Game Started!");
         }
+        
+        public void Reset()
+        {
+            IsGameStarted = false;
+        }
     }
 }

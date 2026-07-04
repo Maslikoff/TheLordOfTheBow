@@ -15,6 +15,8 @@ namespace Game.Scripts.Experience
 
         private void OnEnable()
         {
+            _rewardGiven = false;
+            
             if (_health != null && _rewardOnDeath)
                 _health.Death += OnEnemyDeath;
         }
