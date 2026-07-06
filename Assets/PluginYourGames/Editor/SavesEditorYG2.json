@@ -7,9 +7,31 @@
         false,
         false
     ],
-    "idSave": 1,
-    "_playerLevel": 1,
+    "idSave": 26,
+    "_playerLevel": 5,
     "_playerExperience": 0.0,
-    "_currentLevelIndex": 0,
-    "_bulletUpgrades": []
+    "_currentLevelIndex": 1,
+    "_bulletUpgrades": [
+        {
+            "BulletType": 0,
+            "IsUnlocked": true,
+            "DamageBonus": 0.0,
+            "LifeTimeBonus": 0.0,
+            "CountBonus": 0
+        },
+        {
+            "BulletType": 1,
+            "IsUnlocked": true,
+            "DamageBonus": 0.0,
+            "LifeTimeBonus": 0.0,
+            "CountBonus": 0
+        },
+        {
+            "BulletType": 2,
+            "IsUnlocked": true,
+            "DamageBonus": 0.0,
+            "LifeTimeBonus": 0.0,
+            "CountBonus": 0
+        }
+    ]
 }

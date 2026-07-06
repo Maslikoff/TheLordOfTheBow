@@ -87,5 +87,23 @@ namespace YG
             
             return new BulletUpgradeState(false, 0, 0, 0);
         }
+        
+        public bool TryGetBulletUpgradeState(BulletType bulletType, out BulletUpgradeState state)
+        {
+            var existing = _bulletUpgrades.Find(b => b.BulletType == bulletType);
+
+            if (existing != null)
+            {
+                state = new BulletUpgradeState(
+                    existing.IsUnlocked,
+                    existing.DamageBonus,
+                    existing.LifeTimeBonus,
+                    existing.CountBonus);
+                return true;
+            }
+
+            state = default;
+            return false;
+        }
     }
 }

@@ -28,27 +28,10 @@ namespace Game.Scripts.Save
         public bool IsMetaDataLoaded => _metaDataLoaded;
         public bool IsReady => _isReady;
 
-        private void OnEnable()
+        private void Awake()
         {
-            YG2.onGetSDKData += OnSdkDataReady;
-            YG2.onHideWindowGame += OnHideWindow;
-            
-            MessageBroker.Default.Receive<M_PlayerSpawned>()
-                .Subscribe(msg => OnPlayerSpawned(msg.Player))
-                .AddTo(_disposables);
-            MessageBroker.Default.Receive<M_SaveRequested>()
-                .Subscribe(_ => SavePlayerProgress())
-                .AddTo(_disposables);
-        }
-
-        private void OnDisable()
-        {
-            YG2.onGetSDKData -= OnSdkDataReady;
-            YG2.onHideWindowGame -= OnHideWindow;
-            
-            UnsubscribeFromPlayer();
-            
-            _disposables.Clear();
+            DontDestroyOnLoad(gameObject);
+            Subscribe();
         }
 
         private void Start()
@@ -59,6 +42,35 @@ namespace Game.Scripts.Save
                 WaitForSdkWithTimeout().Forget();
         }
 
+        private void OnDestroy()
+        {
+            Unsubscribe();
+        }
+
+        private void Subscribe()
+        {
+            YG2.onGetSDKData += OnSdkDataReady;
+            YG2.onHideWindowGame += OnHideWindow;
+
+            MessageBroker.Default.Receive<M_PlayerSpawned>()
+                .Subscribe(msg => OnPlayerSpawned(msg.Player))
+                .AddTo(_disposables);
+            
+            MessageBroker.Default.Receive<M_SaveRequested>()
+                .Subscribe(_ => SavePlayerProgress())
+                .AddTo(_disposables);
+        }
+        
+        private void Unsubscribe()
+        {
+            YG2.onGetSDKData -= OnSdkDataReady;
+            YG2.onHideWindowGame -= OnHideWindow;
+
+            UnsubscribeFromPlayer();
+            
+            _disposables.Clear();
+        } 
+        
         private void OnApplicationPause(bool pauseStatus)
         {
             if (pauseStatus)
@@ -224,15 +236,21 @@ namespace Game.Scripts.Save
             
             foreach (BulletType bulletType in Enum.GetValues(typeof(BulletType)))
             {
-                BulletUpgradeState state = saves.GetBulletUpgradeState(bulletType);
                 PlayerBulletUpgradeEntry entry = bulletCollection.Get(bulletType);
-                
+
                 if (entry == null)
                     continue;
-                
+
+                if (saves.TryGetBulletUpgradeState(bulletType, out BulletUpgradeState state) == false)
+                {
+                    Debug.Log($"[SaveSystem] Для {bulletType} нет данных в сейве — оставляем дефолт префаба");
+                    continue;
+                }
+
                 entry.ApplySaveState(state);
-                
-                Debug.Log($"[SaveSystem] Загружена прокачка пули {bulletType}: разблокирована={state.IsUnlocked}, урон={state.DamageBonus}");
+
+                Debug.Log($"[SaveSystem] Загружена прокачка пули {bulletType}: " +
+                          $"разблокирована={state.IsUnlocked}, урон={state.DamageBonus}");
             }
             
             bulletCollection.NotifyLoadedFromSave();

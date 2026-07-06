@@ -3763,6 +3763,7 @@ MonoBehaviour:
   - {fileID: 1947468251}
   - {fileID: 2471357533884714546}
   - {fileID: 1461158449}
+  - {fileID: 4111393103418849924}
   _effectsPool: {fileID: 988614239}
   _effectSpawner: {fileID: 988614238}
   _waveSystem: {fileID: 710367626}
@@ -12329,6 +12330,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 0}
+    - {fileID: -5362370934022385353, guid: aa0abdfbc95e4a74a80961bf33af6edc, type: 3}
     m_RemovedGameObjects:
     - {fileID: 4097762412388489229, guid: aa0abdfbc95e4a74a80961bf33af6edc, type: 3}
     - {fileID: 3986049398304335167, guid: aa0abdfbc95e4a74a80961bf33af6edc, type: 3}
@@ -12504,12 +12506,17 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6129108320764715404, guid: 77a581515aa081143a27a529ffd1197b, type: 3}
   m_PrefabInstance: {fileID: 4111393103418849922}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 4111393103418849924}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 00d9d60bc9b0426fa657fbd25b20847e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &4111393103418849924 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3801623586229312554, guid: 77a581515aa081143a27a529ffd1197b, type: 3}
+  m_PrefabInstance: {fileID: 4111393103418849922}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

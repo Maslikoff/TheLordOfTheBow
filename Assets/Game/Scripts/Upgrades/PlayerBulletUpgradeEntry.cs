@@ -7,16 +7,17 @@ namespace Game.Scripts.Upgrades
     [Serializable]
     public class PlayerBulletUpgradeEntry
     {
-        private const float BaseDamage = 1f;
-        private const float BaseLifeTime = 10f;
-        private const int BaseCount = 1;
-        
         [SerializeField] private BulletType _bulletType;
         [SerializeField] private bool _isUnlocked;
         [SerializeField] private float _damage = 1f;
         [SerializeField] private float _lifeTime = 10f;
         [SerializeField] private int _count = 1;
         [SerializeField] private int _maxCount = 3;
+        
+        private float _defaultDamage;
+        private float _defaultLifeTime;
+        private int _defaultCount;
+        private bool _defaultsCaptured;
 
         public BulletType BulletType => _bulletType;
         public bool IsUnlocked => _isUnlocked;
@@ -24,9 +25,9 @@ namespace Game.Scripts.Upgrades
         public float LifeTime => _lifeTime;
         public int Count => _count;
         
-        public float DamageBonus => _damage - BaseDamage;
-        public float LifeTimeBonus => _lifeTime - BaseLifeTime;
-        public int CountBonus => _count - BaseCount;
+        public float DamageBonus => _damage - _defaultDamage;
+        public float LifeTimeBonus => _lifeTime - _defaultLifeTime;
+        public int CountBonus => _count - _defaultCount;
 
         public void Unlock()
         {
@@ -52,9 +53,20 @@ namespace Game.Scripts.Upgrades
         public void ApplySaveState(BulletUpgradeState state)
         {
             _isUnlocked = state.IsUnlocked;
-            _damage = BaseDamage + state.DamageBonus;
-            _lifeTime = BaseLifeTime + state.LifeTimeBonus;
-            _count = Mathf.Clamp(BaseCount + state.CountBonus, BaseCount, _maxCount);
+            _damage = _defaultDamage + state.DamageBonus;
+            _lifeTime = _defaultLifeTime + state.LifeTimeBonus;
+            _count = Mathf.Clamp(_defaultCount + state.CountBonus, 1, _maxCount);
+        }
+        
+        public void CaptureDefaults()
+        {
+            if (_defaultsCaptured)
+                return;
+            
+            _defaultDamage = _damage;
+            _defaultLifeTime = _lifeTime;
+            _defaultCount = _count;
+            _defaultsCaptured = true;
         }
     }
 }

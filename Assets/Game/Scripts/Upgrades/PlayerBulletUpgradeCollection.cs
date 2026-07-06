@@ -25,6 +25,7 @@ namespace Game.Scripts.Upgrades
                 if (_entriesByType.ContainsKey(entry.BulletType))
                     continue;
 
+                entry.CaptureDefaults();
                 _entriesByType.Add(entry.BulletType, entry);
             }
         }
