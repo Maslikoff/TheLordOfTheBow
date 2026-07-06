@@ -79,6 +79,8 @@ namespace Game.Scripts.UI
 
         private void OnExperienceChanged(float newExperience)
         {
+            UpdateUI();
+            UpdateProgressUI();
         }
 
         private void UpdateUI()
@@ -108,7 +110,6 @@ namespace Game.Scripts.UI
             float requiredExp = _playerExperience.ExperienceForNextLevel;
 
             _experienceText.text = $"{Mathf.FloorToInt(currentExp)} / {Mathf.FloorToInt(requiredExp)} XP";
-            //_nextLevelText.text = $"Next: {Mathf.FloorToInt(requiredExp)} XP";
         }
         
         private System.Collections.IEnumerator AnimateLevelText()

@@ -7,10 +7,10 @@
         false,
         false
     ],
-    "idSave": 26,
-    "_playerLevel": 5,
+    "idSave": 41,
+    "_playerLevel": 1,
     "_playerExperience": 0.0,
-    "_currentLevelIndex": 1,
+    "_currentLevelIndex": 0,
     "_bulletUpgrades": [
         {
             "BulletType": 0,
@@ -21,14 +21,14 @@
         },
         {
             "BulletType": 1,
-            "IsUnlocked": true,
+            "IsUnlocked": false,
             "DamageBonus": 0.0,
             "LifeTimeBonus": 0.0,
             "CountBonus": 0
         },
         {
             "BulletType": 2,
-            "IsUnlocked": true,
+            "IsUnlocked": false,
             "DamageBonus": 0.0,
             "LifeTimeBonus": 0.0,
             "CountBonus": 0

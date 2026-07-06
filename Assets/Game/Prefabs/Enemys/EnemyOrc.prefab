@@ -1580,7 +1580,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e789bfa2bde48e8baec744379c0569a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _experienceReward: 15
+  _experienceReward: 40
   _rewardOnDeath: 1
 --- !u!114 &2109008812353215831
 MonoBehaviour:

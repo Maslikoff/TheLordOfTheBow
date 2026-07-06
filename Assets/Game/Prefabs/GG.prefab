@@ -132,6 +132,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cbcc19fe2f1844549950c6cc961178c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _levelXpConfig: {fileID: 11400000, guid: a58e1d0f06d14564386d457c1021a733, type: 2}
   _startExperience: 0
   _startLevel: 1
   _experienceCurve:

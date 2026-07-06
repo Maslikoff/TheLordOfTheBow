@@ -6,13 +6,10 @@ namespace Game.Scripts.Experience
     public class Experience : MonoBehaviour
     {
         [Header("Experience Settings")]
+        [SerializeField] private PlayerLevelXpConfig _levelXpConfig;
         [SerializeField] private float _startExperience = 0f;
         [SerializeField] private int _startLevel = 1;
         [SerializeField] private AnimationCurve _experienceCurve;
-        
-        [Header("Level Up Settings")]
-        //[SerializeField] private GameObject _levelUpEffectPrefab;
-        //[SerializeField] private AudioClip _levelUpSound;
         
         private float _currentExperience;
         private int _currentLevel;
@@ -87,12 +84,6 @@ namespace Game.Scripts.Experience
                 
                 LevelUp?.Invoke(_currentLevel);
                 
-                //if (_levelUpEffectPrefab != null)
-                //    Instantiate(_levelUpEffectPrefab, transform.position, Quaternion.identity);
-                    
-                //if (_levelUpSound != null)
-                //    AudioSource.PlayClipAtPoint(_levelUpSound, Camera.main.transform.position);
-                
                 ExperienceProgressChanged?.Invoke(_currentExperience, _experienceForNextLevel);
             }
             
@@ -102,10 +93,19 @@ namespace Game.Scripts.Experience
 
         private void UpdateExperienceForNextLevel()
         {
+            if (_levelXpConfig != null)
+            {
+                _experienceForNextLevel = _levelXpConfig.GetXpRequiredForLevel(_currentLevel);
+                return;
+            }
+            
             if (_experienceCurve != null && _experienceCurve.keys.Length > 0)
+            {
                 _experienceForNextLevel = _experienceCurve.Evaluate(_currentLevel);
-            else
-                _experienceForNextLevel = 100f * _currentLevel;
+                return;
+            }
+            
+            _experienceForNextLevel = 100f * _currentLevel;
         }
     }
 }
