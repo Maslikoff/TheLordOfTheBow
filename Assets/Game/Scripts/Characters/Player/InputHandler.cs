@@ -15,11 +15,15 @@ namespace Game.Scripts.Characters.Player
         private DynamicJoystick _joystick;
         private IPauseService _pauseService;
         private IGameStateService _gameStateService;
+        private IGameplayControlService _gameplayControl;
 
         public event Action<Vector2> MoveInput;
 
         private void Update()
         {
+            if (_gameplayControl != null && _gameplayControl.IsBlocked)
+                return;
+            
             if (_gameStateService != null && !_gameStateService.IsGameStarted)
                 return;
             
@@ -51,6 +55,11 @@ namespace Game.Scripts.Characters.Player
         public void SetGameStateService(IGameStateService gameStateService)
         {
             _gameStateService = gameStateService;
+        }
+        
+        public void SetGameplayControl(IGameplayControlService gameplayControl)
+        {
+            _gameplayControl = gameplayControl;
         }
 
         private void HandleKeyboardInput()

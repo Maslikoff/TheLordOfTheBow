@@ -50,6 +50,9 @@ namespace Game.Scripts.DI
         {
             builder.Register<PauseService>(Lifetime.Singleton).As<IPauseService>();
             builder.Register<ModalCoordinator>(Lifetime.Singleton).As<IModalCoordinator>();
+            
+            builder.Register<GameplayControlService>(Lifetime.Singleton)
+                .As<IGameplayControlService>();
         }
 
         private void ConfigureEffects(IContainerBuilder builder)

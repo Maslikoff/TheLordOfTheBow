@@ -18,6 +18,7 @@ namespace Game.Scripts.Characters.Player
         [SerializeField] private bool _autoFire = false;
         
         private IGameStateService _gameStateService;
+        private IGameplayControlService _gameplayControl;
 
         public event Action ShotArrow;
         public event Action ShotFireArrow;
@@ -37,6 +38,9 @@ namespace Game.Scripts.Characters.Player
             if (_gameStateService != null && !_gameStateService.IsGameStarted)
                 return;
             
+            if (_gameplayControl != null && _gameplayControl.IsBlocked)
+                return;
+            
             if (Time.timeScale <= 0f)
                 return;
             
@@ -49,6 +53,11 @@ namespace Game.Scripts.Characters.Player
         public void SetGameStateService(IGameStateService gameStateService)
         {
             _gameStateService = gameStateService;
+        }
+        
+        public void SetGameplayControl(IGameplayControlService gameplayControl)
+        {
+            _gameplayControl = gameplayControl;
         }
         
         protected override Vector3 GetShootDirection() => _firePoint.forward;
@@ -81,6 +90,9 @@ namespace Game.Scripts.Characters.Player
         
         protected override void PerformShot()
         {
+            if (_gameplayControl != null && _gameplayControl.IsBlocked)
+                return;
+            
             if (_bulletUpgrades == null)
                 return;
             

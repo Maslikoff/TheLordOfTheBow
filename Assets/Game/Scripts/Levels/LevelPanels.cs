@@ -153,7 +153,9 @@ namespace Game.Scripts.Levels
         private async void OnNextLevelClicked()
         {
             _saveSystem.SavePlayerProgress();
+            
             await _levelService.LoadNextLevelAsync();
+            
             _saveSystem.SaveGameData();
         }
         
@@ -177,6 +179,7 @@ namespace Game.Scripts.Levels
         {
             _pauseService.Pause(this);
             _pausePanel.transform.SetAsLastSibling();
+            
             await ShowPanelAnimated(_pausePanel, _pausePanelCanvasGroup, false);
         }
 

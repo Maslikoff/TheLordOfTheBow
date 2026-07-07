@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using Game.Scripts.Characters.Bullets;
 using Game.Scripts.Spawners;
+using Game.Scripts.StateServices;
 using UnityEngine;
 
 namespace Game.Scripts.Characters
@@ -30,6 +31,10 @@ namespace Game.Scripts.Characters
         public virtual void Update()
         {
             if (Time.timeScale <= 0f)
+                return;
+            
+            if (GameplayControlAccess.Instance != null
+                && GameplayControlAccess.Instance.IsBlocked)
                 return;
             
             TryShoot();
