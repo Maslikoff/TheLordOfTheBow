@@ -42,6 +42,7 @@ namespace Game.Scripts.DI
             ConfigureRendering(builder);
             ConfigureUI(builder);
             ConfigureGameState(builder);
+            ConfigureModalServices(builder);
         }
 
         private void ConfigureEffects(IContainerBuilder builder)
@@ -91,6 +92,12 @@ namespace Game.Scripts.DI
             builder.Register<GameStateService>(Lifetime.Singleton).As<IGameStateService>();
             builder.RegisterComponent(_tapToStartZone);
             builder.RegisterComponent(_enemySpawner);
+        }
+
+        private void ConfigureModalServices(IContainerBuilder builder)
+        {
+            builder.Register<PauseService>(Lifetime.Singleton).As<IPauseService>();
+            builder.Register<ModalCoordinator>(Lifetime.Singleton).As<IModalCoordinator>();
         }
     }
 }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Game.Scripts.Levels;
+using Game.Scripts.StateServices;
 using Game.Scripts.Upgrades;
 using UnityEngine;
 using UnityEngine.UI;
@@ -19,17 +20,25 @@ namespace Game.Scripts.UI
         [SerializeField] private UpgradeCardUI _cardPrefab;
         [SerializeField] private Button _skipButton;
         
-        private List<Upgrades.UpgradeCard> _allUpgrades = new();
-        private List<UpgradeCardUI> _currentCards = new List<UpgradeCardUI>();
+        private readonly List<Upgrades.UpgradeCard> _allUpgrades = new();
+        private readonly List<UpgradeCardUI> _currentCards = new();
+        
         private UpgradeApplier _upgradeApplier;
         private Experience.Experience _playerExperience;
-        
         private IObjectFactory _objectFactory;
+        private IPauseService _pauseService;
+        private IModalCoordinator _modalCoordinator;
+        private int _pendingLevelUps;
 
         [Inject]
-        public void Construct(IObjectFactory objectFactory)
+        public void Construct(
+            IObjectFactory objectFactory,
+            IPauseService pauseService,
+            IModalCoordinator modalCoordinator)
         {
             _objectFactory = objectFactory ?? throw new ArgumentNullException(nameof(objectFactory));
+            _pauseService = pauseService ?? throw new ArgumentNullException(nameof(pauseService));
+            _modalCoordinator = modalCoordinator ?? throw new ArgumentNullException(nameof(modalCoordinator));
         }
         
         private void Awake()
@@ -37,13 +46,15 @@ namespace Game.Scripts.UI
             _panelRoot.SetActive(false);
             
             if (_skipButton != null)
-                _skipButton.onClick.AddListener(HidePanel);
+                _skipButton.onClick.AddListener(OnSkipClicked);
         }
         
         private void OnDestroy()
         {
             if (_playerExperience != null)
                 _playerExperience.LevelUp -= OnPlayerLevelUp;
+
+            _pauseService?.Resume(this);
         }
         
         public void Initialize(Experience.Experience playerExperience, UpgradeApplier upgradeApplier)
@@ -59,6 +70,12 @@ namespace Game.Scripts.UI
         
         private void OnPlayerLevelUp(int newLevel)
         {
+            if (_modalCoordinator.CurrentModal == ModalType.Upgrade)
+            {
+                _pendingLevelUps++;
+                return;
+            }
+
             ShowUpgradeChoice();
         }
         
@@ -74,17 +91,26 @@ namespace Game.Scripts.UI
         {
             if (_upgradeApplier == null)
                 return;
-            
-            Time.timeScale = 0f;
+
+            _modalCoordinator.RequestShow(
+                ModalType.Upgrade,
+                ModalPriority.Upgrade,
+                OpenPanelInternal);
+        }
+
+        private void OpenPanelInternal()
+        {
+            _pauseService.Pause(this);
+
             _panelRoot.SetActive(true);
-            
-            foreach (var card in _currentCards)
-            {
-                if (card != null)
-                    Destroy(card.gameObject);
-            }
-            _currentCards.Clear();
-            
+            _panelRoot.transform.SetAsLastSibling();
+
+            ClearCards();
+            SpawnCards();
+        }
+        
+        private void SpawnCards()
+        {
             var selectedCards = GetRandomUpgradeCards(CountCards);
             
             foreach (Upgrades.UpgradeCard upgrade in selectedCards)
@@ -94,10 +120,19 @@ namespace Game.Scripts.UI
                 _currentCards.Add(cardGO);
             }
         }
+
+        private void ClearCards()
+        {
+            foreach (var card in _currentCards)
+            {
+                if (card != null)
+                    Destroy(card.gameObject);
+            }
+            _currentCards.Clear();
+        }
         
         private List<Upgrades.UpgradeCard> GetRandomUpgradeCards(int count)
         {
-            
             var availableUpgrades = new List<Upgrades.UpgradeCard>(_allUpgrades);
             var selected = new List<Upgrades.UpgradeCard>();
             
@@ -114,14 +149,27 @@ namespace Game.Scripts.UI
         private void OnUpgradeSelected(Upgrades.UpgradeCard selectedUpgrade)
         {
             _upgradeApplier.ApplyUpgrade(selectedUpgrade);
-            
+            HidePanel();
+        }
+
+        private void OnSkipClicked()
+        {
             HidePanel();
         }
         
         private void HidePanel()
         {
             _panelRoot.SetActive(false);
-            Time.timeScale = 1f;
+            _pauseService.Resume(this);
+
+            if (_pendingLevelUps > 0)
+            {
+                _pendingLevelUps--;
+                OpenPanelInternal();
+                return;
+            }
+
+            _modalCoordinator.NotifyClosed(ModalType.Upgrade);
         }
     }
 }
