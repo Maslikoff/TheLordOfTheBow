@@ -89,12 +89,7 @@ namespace Game.Scripts.UI
             if (_upgradeApplier == null)
                 return;
             
-            //Time.timeScale = 0f;
-            //_panelRoot.SetActive(true);
-            
-            if (_upgradeApplier == null)
-                return;
-            var result = _modalCoordinator.RequestShow(
+            _modalCoordinator.RequestShow(
                 ModalType.Upgrade,
                 ModalPriority.Upgrade,
                 OpenPanelInternal);
@@ -105,26 +100,15 @@ namespace Game.Scripts.UI
             _pauseService.Pause(this);
             _panelRoot.SetActive(true);
             _panelRoot.transform.SetAsLastSibling();
-            ClearCards();
-            SpawnCards();
-        }
-
-        private void SpawnCards()
-        {
+            
             foreach (var card in _currentCards)
-            {
-                if (card != null)
-                    Destroy(card.gameObject);
-            }
+                if (card != null) Destroy(card.gameObject);
             
             _currentCards.Clear();
-        }
-
-        private void ClearCards()
-        {
+            
             var selectedCards = GetRandomUpgradeCards(CountCards);
             
-            foreach (Upgrades.UpgradeCard upgrade in selectedCards)
+            foreach (var upgrade in selectedCards)
             {
                 var cardGO = _objectFactory.Create(_cardPrefab, _cardsContainer);
                 cardGO.Initialize(upgrade, OnUpgradeSelected);
@@ -156,18 +140,17 @@ namespace Game.Scripts.UI
         
         private void HidePanel()
         {
-            //_panelRoot.SetActive(false);
-            //Time.timeScale = 1f;
-            
             _panelRoot.SetActive(false);
             _pauseService.Resume(this);
-            _modalCoordinator.NotifyClosed(ModalType.Upgrade);
             
             if (_pendingLevelUps > 0)
             {
                 _pendingLevelUps--;
-                ShowUpgradeChoice();
+                OpenPanelInternal();
+                
+                return;
             }
+            _modalCoordinator.NotifyClosed(ModalType.Upgrade);
         }
     }
 }

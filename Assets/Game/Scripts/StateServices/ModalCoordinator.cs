@@ -14,6 +14,9 @@ namespace Game.Scripts.StateServices
         public ModalType CurrentModal => _currentModal;
         public bool HasPendingOrActive => _currentModal != ModalType.None || _queue.Count > 0;
         
+        public event Action<ModalType> ModalOpened;
+        public event Action<ModalType> ModalClosed;
+        
         public ModalShowResult RequestShow(ModalType type, ModalPriority priority, Action showAction)
         {
             if (type == ModalType.None || showAction == null)
@@ -27,31 +30,44 @@ namespace Game.Scripts.StateServices
             
             if (_currentModal != ModalType.None)
             {
-                _queue.Add(new PendingModalRequest
-                {
-                    Type = type,
-                    Priority = priority,
-                    ShowAction = showAction,
-                });
-                
-                Debug.Log($"[ModalCoordinator] {type} queued (current: {_currentModal})");
+                _queue.Add(new PendingModalRequest { Type = type, Priority = priority, ShowAction = showAction });
                 return ModalShowResult.Queued;
             }
             
-            ShowImmediate(type, showAction);
+            _currentModal = type;
+            
+            ModalOpened?.Invoke(type);
+            
+            showAction.Invoke();
+            
             return ModalShowResult.Shown;
         }
 
         public void NotifyClosed(ModalType type)
         {
-            if (_currentModal != type)
-            {
-                Debug.LogWarning($"[ModalCoordinator] NotifyClosed({type}) but current is {_currentModal}");
+            if (_currentModal != type) 
                 return;
-            }
             
             _currentModal = ModalType.None;
-            ProcessQueue();
+            
+            ModalClosed?.Invoke(type);
+                        
+            if (_queue.Count == 0) 
+                return;
+                        
+            int best = 0;
+                        
+            for (int i = 1; i < _queue.Count; i++)
+                if (_queue[i].Priority > _queue[best].Priority)
+                    best = i;
+                        
+            var next = _queue[best];
+            _queue.RemoveAt(best);
+            _currentModal = next.Type;
+                        
+            ModalOpened?.Invoke(next.Type);
+                        
+            next.ShowAction.Invoke();
         }
 
         public void Reset()

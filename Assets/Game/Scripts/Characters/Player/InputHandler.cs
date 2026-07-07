@@ -1,4 +1,5 @@
 using System;
+using Game.Scripts.StateServices;
 using UnityEngine;
 
 namespace Game.Scripts.Characters.Player
@@ -11,6 +12,7 @@ namespace Game.Scripts.Characters.Player
 
         private DynamicJoystick _joystick;
         private Vector2 _moveInput;
+        private IPauseService _pauseService;
 
         public event Action<Vector2> MoveInput;
         
@@ -18,9 +20,17 @@ namespace Game.Scripts.Characters.Player
         {
             _joystick = joystick;
         }
+        
+        public void SetPauseService(IPauseService pauseService)
+        {
+            _pauseService = pauseService;
+        }
 
         private void Update()
         {
+            if (_pauseService != null && _pauseService.IsPaused)
+                return;
+            
             Vector2 keyboardInput = new Vector2(Input.GetAxis(AxisHorizontal), Input.GetAxis(AxisVertical));
             keyboardInput = keyboardInput.magnitude > 1f ? keyboardInput.normalized : keyboardInput;
 

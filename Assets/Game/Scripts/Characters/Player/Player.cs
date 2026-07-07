@@ -1,5 +1,6 @@
 using Game.Scripts.Levels;
 using Game.Scripts.Spawners;
+using Game.Scripts.StateServices;
 using Game.Scripts.Upgrades;
 using UnityEngine;
 using VContainer;
@@ -29,9 +30,10 @@ namespace Game.Scripts.Characters.Player
         public bool IsDead { get; private set; }
         
         [Inject]
-        private void Construct(DynamicJoystick joystick, BulletSpawner bulletSpawner)
+        private void Construct(DynamicJoystick joystick, BulletSpawner bulletSpawner, IPauseService pauseService)
         {
             _inputHandler.SetJoystick(joystick);
+            _inputHandler.SetPauseService(pauseService);
             _playerShoot.Initialize(bulletSpawner);
         }
 

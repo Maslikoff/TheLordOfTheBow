@@ -75,12 +75,12 @@ namespace Game.Scripts.Levels
 
         private void OnEnable()
         {
-            //Time.timeScale = 1;
-            
             _pauseService?.Reset();
             _modalCoordinator?.Reset();
             
+            SubscribeModalEvents();
             SubscribeButtons();
+            UpdatePauseButtonState();
 
             _waveSystem.AllWavesCompleted += OnOpenWinPanel;
             
@@ -107,8 +107,10 @@ namespace Game.Scripts.Levels
             if (_modalCoordinator.CurrentModal == ModalType.Lose)
                 _pauseService.Resume(this);
             
-            _modalCoordinator.Reset();
+            UnsubscribeModalEvents();
+            
             _pauseService.Reset();
+            _modalCoordinator.Reset();
         }
 
         private void SubscribeButtons()
@@ -131,6 +133,22 @@ namespace Game.Scripts.Levels
             _buttonPauseResumeLevel.onClick.RemoveListener(OnResumeButtonClick);
             _buttonPauseRestartLevel.onClick.RemoveAllListeners();
         }
+        
+        private void SubscribeModalEvents()
+        {
+            _modalCoordinator.ModalOpened += _ => UpdatePauseButtonState();
+            _modalCoordinator.ModalClosed += _ => UpdatePauseButtonState();
+        }
+        private void UnsubscribeModalEvents()
+        {
+            _modalCoordinator.ModalOpened -= _ => UpdatePauseButtonState();
+            _modalCoordinator.ModalClosed -= _ => UpdatePauseButtonState();
+        }
+        private void UpdatePauseButtonState()
+        {
+            if (_buttonPause != null)
+                _buttonPause.interactable = _modalCoordinator.CurrentModal != ModalType.Upgrade;
+        }
 
         private async void OnNextLevelClicked()
         {
@@ -146,6 +164,9 @@ namespace Game.Scripts.Levels
 
         private void OnOpenPausePanel()
         {
+            if (_modalCoordinator.CurrentModal == ModalType.Upgrade) 
+                return;
+            
             _modalCoordinator.RequestShow(
                 ModalType.Pause,
                 ModalPriority.Pause,
@@ -155,7 +176,8 @@ namespace Game.Scripts.Levels
         private async UniTaskVoid ShowPausePanelAsync()
         {
             _pauseService.Pause(this);
-            await ShowPanelAnimated(_pausePanel, _pausePanelCanvasGroup);
+            _pausePanel.transform.SetAsLastSibling();
+            await ShowPanelAnimated(_pausePanel, _pausePanelCanvasGroup, false);
         }
 
         private void OnResumeButtonClick()
@@ -179,7 +201,10 @@ namespace Game.Scripts.Levels
         private async UniTaskVoid ShowWinPanelAsync()
         {
             _pauseService.Pause(this);
-            await ShowPanelAnimated(_winPanel, _winPanelCanvasGroup);
+            _winPanel.transform.SetAsLastSibling();
+            
+            await ShowPanelAnimated(_winPanel, _winPanelCanvasGroup, true);
+            
             _saveSystem.SavePlayerProgress();
             YG2.InterstitialAdvShow();
         }
@@ -198,24 +223,28 @@ namespace Game.Scripts.Levels
         private async UniTaskVoid ShowLosePanelAsync()
         {
             _pauseService.Pause(this);
-            await ShowPanelAnimated(_losePanel, _losePanelCanvasGroup);
+            _losePanel.transform.SetAsLastSibling();
+            
+            await ShowPanelAnimated(_losePanel, _losePanelCanvasGroup, true);
+            
             YG2.InterstitialAdvShow();
         }
 
-        private async UniTask ShowPanelAnimated(GameObject panel, CanvasGroup canvasGroup)
+        private async UniTask ShowPanelAnimated(GameObject panel, CanvasGroup canvasGroup, bool disableRaycastsUntilVisible)
         {
-            if (panel == null || canvasGroup == null) return;
-        
-            _currentAnimation?.Kill();
-        
             panel.SetActive(true);
             canvasGroup.alpha = 0f;
+            canvasGroup.interactable = !disableRaycastsUntilVisible;
+            canvasGroup.blocksRaycasts = !disableRaycastsUntilVisible;
             panel.transform.localScale = Vector3.one * 0.8f;
-        
+            
             await DOTween.Sequence()
                 .Join(canvasGroup.DOFade(1f, _fadeDuration).SetUpdate(true))
                 .Join(panel.transform.DOScale(1f, _scaleDuration).SetEase(_ease).SetUpdate(true))
                 .AsyncWaitForCompletion();
+            
+            canvasGroup.interactable = true;
+            canvasGroup.blocksRaycasts = true;
         }
 
         private void HidePanelAnimated(GameObject panel, CanvasGroup canvasGroup)
