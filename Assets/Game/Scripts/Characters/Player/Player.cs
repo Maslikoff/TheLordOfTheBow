@@ -30,11 +30,18 @@ namespace Game.Scripts.Characters.Player
         public bool IsDead { get; private set; }
         
         [Inject]
-        private void Construct(DynamicJoystick joystick, BulletSpawner bulletSpawner, IPauseService pauseService)
+        private void Construct(
+            DynamicJoystick joystick, 
+            BulletSpawner bulletSpawner, 
+            IPauseService pauseService,
+            IGameStateService gameStateService)
         {
             _inputHandler.SetJoystick(joystick);
             _inputHandler.SetPauseService(pauseService);
+            _inputHandler.SetGameStateService(gameStateService);
+            
             _playerShoot.Initialize(bulletSpawner);
+            _playerShoot.SetGameStateService(gameStateService);
         }
 
         private void OnValidate()

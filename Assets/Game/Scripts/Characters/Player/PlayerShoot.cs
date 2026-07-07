@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Game.Scripts.Characters.Bullets;
+using Game.Scripts.StateServices;
 using Game.Scripts.Upgrades;
 using UnityEngine;
 
@@ -15,6 +16,8 @@ namespace Game.Scripts.Characters.Player
         [SerializeField] private List<BulletShootSettings> _bulletShootSettings;
         [SerializeField] private float _arrowSpreadAngle = 45f;
         [SerializeField] private bool _autoFire = false;
+        
+        private IGameStateService _gameStateService;
 
         public event Action ShotArrow;
         public event Action ShotFireArrow;
@@ -31,12 +34,23 @@ namespace Game.Scripts.Characters.Player
         
         public override void Update()
         {
+            if (_gameStateService != null && !_gameStateService.IsGameStarted)
+                return;
+            
+            if (Time.timeScale <= 0f)
+                return;
+            
             UpdateAllReloadProgress();
             
             if (_autoFire)
                 TryShoot();
         }
 
+        public void SetGameStateService(IGameStateService gameStateService)
+        {
+            _gameStateService = gameStateService;
+        }
+        
         protected override Vector3 GetShootDirection() => _firePoint.forward;
 
         private void InitializeDictionaries()
@@ -53,6 +67,12 @@ namespace Game.Scripts.Characters.Player
 
         protected override void TryShoot()
         {
+            if (_gameStateService != null && !_gameStateService.IsGameStarted) 
+                return;
+            
+            if (Time.timeScale <= 0f)
+                return;
+            
             if (enabled == false || _canShoot == false || _isReloading || _bulletSpawner == null || _firePoint == null)
                 return;
             

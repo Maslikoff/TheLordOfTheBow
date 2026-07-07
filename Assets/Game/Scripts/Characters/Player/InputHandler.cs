@@ -10,24 +10,19 @@ namespace Game.Scripts.Characters.Player
         private const string AxisVertical = "Vertical";
         private const float JoystickDeadZone = 0.01f;
 
-        private DynamicJoystick _joystick;
         private Vector2 _moveInput;
+        
+        private DynamicJoystick _joystick;
         private IPauseService _pauseService;
+        private IGameStateService _gameStateService;
 
         public event Action<Vector2> MoveInput;
-        
-        public void SetJoystick(DynamicJoystick joystick)
-        {
-            _joystick = joystick;
-        }
-        
-        public void SetPauseService(IPauseService pauseService)
-        {
-            _pauseService = pauseService;
-        }
 
         private void Update()
         {
+            if (_gameStateService != null && !_gameStateService.IsGameStarted)
+                return;
+            
             if (_pauseService != null && _pauseService.IsPaused)
                 return;
             
@@ -41,6 +36,21 @@ namespace Game.Scripts.Characters.Player
                 : keyboardInput;
 
             MoveInput?.Invoke(_moveInput);
+        }
+
+        public void SetJoystick(DynamicJoystick joystick)
+        {
+            _joystick = joystick;
+        }
+        
+        public void SetPauseService(IPauseService pauseService)
+        {
+            _pauseService = pauseService;
+        }
+
+        public void SetGameStateService(IGameStateService gameStateService)
+        {
+            _gameStateService = gameStateService;
         }
 
         private void HandleKeyboardInput()
