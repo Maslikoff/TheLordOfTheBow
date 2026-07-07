@@ -3778,6 +3778,7 @@ MonoBehaviour:
   _transitionProfile: {fileID: 11400000, guid: 54f6fd00f98de0a46a995467d5f67508, type: 2}
   _tapToStartZone: {fileID: 1372723020}
   _enemySpawner: {fileID: 1241177552}
+  _levelPanels: {fileID: 725247247}
 --- !u!4 &750940617
 Transform:
   m_ObjectHideFlags: 0
@@ -4931,7 +4932,7 @@ Camera:
   m_GameObject: {fileID: 963194225}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 2
+  m_ClearFlags: 1
   m_BackGroundColor: {r: 0.21938412, g: 0.34685633, b: 0.5471698, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
@@ -7452,6 +7453,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cbcc19fe2f1844549950c6cc961178c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _levelXpConfig: {fileID: 0}
   _startExperience: 0
   _startLevel: 1
   _experienceCurve:

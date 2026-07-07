@@ -32,9 +32,11 @@ namespace Game.Scripts.DI
         [SerializeField] private TransitionProfile _transitionProfile;
         [SerializeField] private TapToStartZone _tapToStartZone;
         [SerializeField] private EnemySpawner _enemySpawner;
+        [SerializeField] private LevelPanels _levelPanels;
 
         protected override void Configure(IContainerBuilder builder)
         {
+            ConfigureModalServices(builder); 
             ConfigureEffects(builder);
             ConfigureLevelFlow(builder);
             ConfigurePlayerFlow(builder);
@@ -42,6 +44,12 @@ namespace Game.Scripts.DI
             ConfigureRendering(builder);
             ConfigureUI(builder);
             ConfigureGameState(builder);
+        }
+        
+        private void ConfigureModalServices(IContainerBuilder builder)
+        {
+            builder.Register<PauseService>(Lifetime.Singleton).As<IPauseService>();
+            builder.Register<ModalCoordinator>(Lifetime.Singleton).As<IModalCoordinator>();
         }
 
         private void ConfigureEffects(IContainerBuilder builder)
@@ -84,6 +92,7 @@ namespace Game.Scripts.DI
         private void ConfigureUI(IContainerBuilder builder)
         {
             builder.RegisterComponent(_upgradeChoicePanel);
+            builder.RegisterComponent(_levelPanels);
         }
         
         private void ConfigureGameState(IContainerBuilder builder)

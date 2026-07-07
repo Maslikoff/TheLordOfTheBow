@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Game.Scripts.Levels;
+using Game.Scripts.StateServices;
 using Game.Scripts.Upgrades;
 using UnityEngine;
 using UnityEngine.UI;
@@ -23,13 +24,18 @@ namespace Game.Scripts.UI
         private List<UpgradeCardUI> _currentCards = new List<UpgradeCardUI>();
         private UpgradeApplier _upgradeApplier;
         private Experience.Experience _playerExperience;
+        private int _pendingLevelUps;
         
         private IObjectFactory _objectFactory;
+        private IPauseService _pauseService;
+        private IModalCoordinator _modalCoordinator;
 
         [Inject]
-        public void Construct(IObjectFactory objectFactory)
+        public void Construct(IObjectFactory objectFactory, IPauseService pauseService, IModalCoordinator modalCoordinator)
         {
             _objectFactory = objectFactory ?? throw new ArgumentNullException(nameof(objectFactory));
+            _pauseService = pauseService ?? throw new ArgumentNullException(nameof(pauseService));
+            _modalCoordinator = modalCoordinator ?? throw new ArgumentNullException(nameof(modalCoordinator));
         }
         
         private void Awake()
@@ -44,6 +50,8 @@ namespace Game.Scripts.UI
         {
             if (_playerExperience != null)
                 _playerExperience.LevelUp -= OnPlayerLevelUp;
+            
+            _pauseService?.Resume(this);
         }
         
         public void Initialize(Experience.Experience playerExperience, UpgradeApplier upgradeApplier)
@@ -59,6 +67,12 @@ namespace Game.Scripts.UI
         
         private void OnPlayerLevelUp(int newLevel)
         {
+            if (_modalCoordinator.CurrentModal == ModalType.Upgrade)
+            {
+                _pendingLevelUps++;
+                return;
+            }
+            
             ShowUpgradeChoice();
         }
         
@@ -75,16 +89,39 @@ namespace Game.Scripts.UI
             if (_upgradeApplier == null)
                 return;
             
-            Time.timeScale = 0f;
-            _panelRoot.SetActive(true);
+            //Time.timeScale = 0f;
+            //_panelRoot.SetActive(true);
             
+            if (_upgradeApplier == null)
+                return;
+            var result = _modalCoordinator.RequestShow(
+                ModalType.Upgrade,
+                ModalPriority.Upgrade,
+                OpenPanelInternal);
+        }
+        
+        private void OpenPanelInternal()
+        {
+            _pauseService.Pause(this);
+            _panelRoot.SetActive(true);
+            _panelRoot.transform.SetAsLastSibling();
+            ClearCards();
+            SpawnCards();
+        }
+
+        private void SpawnCards()
+        {
             foreach (var card in _currentCards)
             {
                 if (card != null)
                     Destroy(card.gameObject);
             }
-            _currentCards.Clear();
             
+            _currentCards.Clear();
+        }
+
+        private void ClearCards()
+        {
             var selectedCards = GetRandomUpgradeCards(CountCards);
             
             foreach (Upgrades.UpgradeCard upgrade in selectedCards)
@@ -94,10 +131,9 @@ namespace Game.Scripts.UI
                 _currentCards.Add(cardGO);
             }
         }
-        
+
         private List<Upgrades.UpgradeCard> GetRandomUpgradeCards(int count)
         {
-            
             var availableUpgrades = new List<Upgrades.UpgradeCard>(_allUpgrades);
             var selected = new List<Upgrades.UpgradeCard>();
             
@@ -120,8 +156,18 @@ namespace Game.Scripts.UI
         
         private void HidePanel()
         {
+            //_panelRoot.SetActive(false);
+            //Time.timeScale = 1f;
+            
             _panelRoot.SetActive(false);
-            Time.timeScale = 1f;
+            _pauseService.Resume(this);
+            _modalCoordinator.NotifyClosed(ModalType.Upgrade);
+            
+            if (_pendingLevelUps > 0)
+            {
+                _pendingLevelUps--;
+                ShowUpgradeChoice();
+            }
         }
     }
 }

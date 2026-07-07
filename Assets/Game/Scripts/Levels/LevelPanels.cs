@@ -2,6 +2,7 @@ using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using Game.Scripts.Characters.Player;
 using Game.Scripts.Save;
+using Game.Scripts.StateServices;
 using Game.Scripts.Wave;
 using UniRx;
 using UnityEngine;
@@ -44,18 +45,24 @@ namespace Game.Scripts.Levels
         private ISaveSystem _saveSystem;
         private Player _currentPlayer;
         private Sequence _currentAnimation;
+        private IPauseService _pauseService;
+        private IModalCoordinator _modalCoordinator;
 
         [Inject]
         private void Construct(
             ILevelService levelService,
             WaveSystem waveSystem,
             IPlayerProvider player,
-            ISaveSystem saveSystem)
+            ISaveSystem saveSystem,
+            IPauseService pauseService,
+            IModalCoordinator modalCoordinator)
         {
             _levelService = levelService;
             _waveSystem = waveSystem;
             _playerProvider = player;
             _saveSystem = saveSystem;
+            _pauseService = pauseService;
+            _modalCoordinator = modalCoordinator;
         }
 
 
@@ -68,7 +75,10 @@ namespace Game.Scripts.Levels
 
         private void OnEnable()
         {
-            Time.timeScale = 1;
+            //Time.timeScale = 1;
+            
+            _pauseService?.Reset();
+            _modalCoordinator?.Reset();
             
             SubscribeButtons();
 
@@ -90,6 +100,15 @@ namespace Game.Scripts.Levels
             _currentAnimation?.Kill();
             
             UnsubscribeButtons();
+            
+            if (_modalCoordinator.CurrentModal == ModalType.Win)
+                _pauseService.Resume(this);
+            
+            if (_modalCoordinator.CurrentModal == ModalType.Lose)
+                _pauseService.Resume(this);
+            
+            _modalCoordinator.Reset();
+            _pauseService.Reset();
         }
 
         private void SubscribeButtons()
@@ -125,38 +144,61 @@ namespace Game.Scripts.Levels
             _currentPlayer = player;
         }
 
-        private async void OnOpenPausePanel()
+        private void OnOpenPausePanel()
         {
+            _modalCoordinator.RequestShow(
+                ModalType.Pause,
+                ModalPriority.Pause,
+                () => ShowPausePanelAsync().Forget());
+        }
+        
+        private async UniTaskVoid ShowPausePanelAsync()
+        {
+            _pauseService.Pause(this);
             await ShowPanelAnimated(_pausePanel, _pausePanelCanvasGroup);
-            Time.timeScale = 0;
         }
 
         private void OnResumeButtonClick()
         {
-            Time.timeScale = 1;
             HidePanelAnimated(_pausePanel, _pausePanelCanvasGroup);
+            _pauseService.Resume(this);
+            _modalCoordinator.NotifyClosed(ModalType.Pause);
         }
 
-        private async void OnOpenWinPanel()
+        private void OnOpenWinPanel()
         {
             if (_currentPlayer != null && _currentPlayer.IsDead)
                 return;
 
+            _modalCoordinator.RequestShow(
+                ModalType.Win,
+                ModalPriority.GameOver,
+                () => ShowWinPanelAsync().Forget());
+        }
+        
+        private async UniTaskVoid ShowWinPanelAsync()
+        {
+            _pauseService.Pause(this);
             await ShowPanelAnimated(_winPanel, _winPanelCanvasGroup);
-            Time.timeScale = 0;
-
             _saveSystem.SavePlayerProgress();
             YG2.InterstitialAdvShow();
         }
 
-        private async void OnPlayerDeath(Player player)
+        private void OnPlayerDeath(Player player)
         {
             if (_currentPlayer == null || _currentPlayer != player) 
                 return;
             
+            _modalCoordinator.RequestShow(
+                ModalType.Lose,
+                ModalPriority.GameOver,
+                () => ShowLosePanelAsync().Forget());
+        }
+        
+        private async UniTaskVoid ShowLosePanelAsync()
+        {
+            _pauseService.Pause(this);
             await ShowPanelAnimated(_losePanel, _losePanelCanvasGroup);
-            Time.timeScale = 0;
-            
             YG2.InterstitialAdvShow();
         }
 

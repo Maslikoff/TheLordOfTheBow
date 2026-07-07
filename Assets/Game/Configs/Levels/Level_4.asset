@@ -21,11 +21,11 @@ MonoBehaviour:
   _enemyRaceConfigs:
   - _race: 0
     _prefab: {fileID: 7080309792819254836, guid: d5bd6346056e6a647b4f66f149d5864b, type: 3}
-    _poolSize: 5
+    _poolSize: 7
     _spawnWeight: 75
   - _race: 1
     _prefab: {fileID: 7371531689036714625, guid: 0987bbdc63c89a54d9eaeb7bbb073472, type: 3}
-    _poolSize: 5
+    _poolSize: 7
     _spawnWeight: 25
   _availableUpgrades:
   - {fileID: 11400000, guid: 5b9c00400cfca264cb87af7e14e8b8a1, type: 2}

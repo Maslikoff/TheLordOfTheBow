@@ -1,0 +1,3 @@
+﻿Build path: D:/GitHub/BildLOB
+Build number: 1
+PluginYG version: 2.0092

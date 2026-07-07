@@ -10,26 +10,28 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6961dbc4ceae4f7b878ff99a643422b5, type: 3}
-  m_Name: Level_1
+  m_Name: Level_6
   m_EditorClassIdentifier: 
   _sceneNames: 1
   _sceneTransitionMode: 0
   _onGameStarted: 0
   _waveConfig:
-    _wavesEnemyCount: 010000000200000003000000
+    _wavesEnemyCount: 050000000700000007000000
     _timeBetweemWaves: 3
   _enemyRaceConfigs:
   - _race: 0
     _prefab: {fileID: 7080309792819254836, guid: d5bd6346056e6a647b4f66f149d5864b, type: 3}
-    _poolSize: 5
-    _spawnWeight: 100
+    _poolSize: 7
+    _spawnWeight: 50
   - _race: 1
     _prefab: {fileID: 7371531689036714625, guid: 0987bbdc63c89a54d9eaeb7bbb073472, type: 3}
-    _poolSize: 5
-    _spawnWeight: 0
-  - _race: 2
-    _prefab: {fileID: 4670338830001340343, guid: a2cd61c0cec42c34ebaf42f831b78e52, type: 3}
-    _poolSize: 5
-    _spawnWeight: 0
+    _poolSize: 7
+    _spawnWeight: 50
   _availableUpgrades:
-  - {fileID: 11400000, guid: 6499ce8c34536364c884fbd833bba48e, type: 2}
+  - {fileID: 11400000, guid: 5b9c00400cfca264cb87af7e14e8b8a1, type: 2}
+  - {fileID: 11400000, guid: 83680799321d7404cbaaa3f3b22e0ebf, type: 2}
+  - {fileID: 11400000, guid: aef6ff2ad5fa6f5418cef3510ffa93fc, type: 2}
+  - {fileID: 11400000, guid: d715889cfb6fce842916b37f38a1ebfd, type: 2}
+  - {fileID: 11400000, guid: b44434e6d64dd7348a30df1c23fac640, type: 2}
+  - {fileID: 11400000, guid: 6e26e6baf5b21ce4283b0345f10f801e, type: 2}
+  - {fileID: 11400000, guid: 3d359ec4584f08f4ba24495e23c0d6c1, type: 2}
