@@ -7,5 +7,8 @@ namespace Game.Scripts.Save
         void SavePlayerProgress();
         void LoadGameData();
         void ManualSave();
+        void SaveWaveCheckpoint(int levelIndex, int waveIndex);
+        int GetWaveCheckpointOrDefault(int levelIndex);
+        void ClearWaveCheckpoint(int levelIndex);
     }
 }

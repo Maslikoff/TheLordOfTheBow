@@ -100,6 +100,30 @@ namespace Game.Scripts.Save
             SaveGameData();
         }
 
+        public void SaveWaveCheckpoint(int levelIndex, int waveIndex)
+        {
+            YG2.saves.WriteWaveCheckpoint(levelIndex, waveIndex);
+
+            if (YG2.isSDKEnabled)
+                YG2.SaveProgress();
+        }
+
+        public int GetWaveCheckpointOrDefault(int levelIndex)
+        {
+            if (YG2.saves.TryGetWaveCheckpoint(levelIndex, out int waveIndex))
+                return waveIndex;
+
+            return 0;
+        }
+
+        public void ClearWaveCheckpoint(int levelIndex)
+        {
+            YG2.saves.ClearWaveCheckpoint(levelIndex);
+
+            if (YG2.isSDKEnabled)
+                YG2.SaveProgress();
+        }
+
         public void SavePlayerProgress()
         {
             if (YG2.isSDKEnabled == false)

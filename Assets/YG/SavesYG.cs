@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Game.Scripts.Characters.Bullets;
+using Game.Scripts.Save;
 using Game.Scripts.Upgrades;
 using UnityEngine;
 
@@ -10,7 +11,8 @@ namespace YG
         [SerializeField] private int _playerLevel = 1;
         [SerializeField] private float _playerExperience = 0f;
         [SerializeField] private int _currentLevelIndex = 0;
-        [SerializeField] private List<BulletUpgradeData> _bulletUpgrades = new List<BulletUpgradeData>();
+        [SerializeField] private List<BulletUpgradeData> _bulletUpgrades = new();
+        [SerializeField] private List<LevelWaveCheckpoint> _waveCheckpoints = new();
 
         public int PlayerLevel 
         { 
@@ -104,6 +106,46 @@ namespace YG
 
             state = default;
             return false;
+        }
+        
+        public void WriteWaveCheckpoint(int levelIndex, int waveIndex)
+        {
+            levelIndex = Mathf.Max(0, levelIndex);
+            waveIndex = Mathf.Max(0, waveIndex);
+
+            LevelWaveCheckpoint existing = _waveCheckpoints.Find(x => x.LevelIndex == levelIndex);
+            if (existing != null)
+            {
+                existing.WaveIndex = waveIndex;
+                return;
+            }
+
+            _waveCheckpoints.Add(new LevelWaveCheckpoint
+            {
+                LevelIndex = levelIndex,
+                WaveIndex = waveIndex
+            });
+        }
+
+        public bool TryGetWaveCheckpoint(int levelIndex, out int waveIndex)
+        {
+            levelIndex = Mathf.Max(0, levelIndex);
+
+            LevelWaveCheckpoint existing = _waveCheckpoints.Find(x => x.LevelIndex == levelIndex);
+            if (existing != null)
+            {
+                waveIndex = Mathf.Max(0, existing.WaveIndex);
+                return true;
+            }
+
+            waveIndex = 0;
+            return false;
+        }
+
+        public void ClearWaveCheckpoint(int levelIndex)
+        {
+            levelIndex = Mathf.Max(0, levelIndex);
+            _waveCheckpoints.RemoveAll(x => x.LevelIndex == levelIndex);
         }
     }
 }

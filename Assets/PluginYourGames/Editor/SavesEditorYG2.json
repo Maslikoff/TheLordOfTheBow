@@ -7,7 +7,7 @@
         false,
         false
     ],
-    "idSave": 27,
+    "idSave": 30,
     "_playerLevel": 1,
     "_playerExperience": 105.0,
     "_currentLevelIndex": 0,
@@ -32,6 +32,12 @@
             "DamageBonus": 0.0,
             "LifeTimeBonus": 0.0,
             "CountBonus": 0
+        }
+    ],
+    "_waveCheckpoints": [
+        {
+            "LevelIndex": 0,
+            "WaveIndex": 0
         }
     ]
 }

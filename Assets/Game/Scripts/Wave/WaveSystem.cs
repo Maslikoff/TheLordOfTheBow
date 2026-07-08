@@ -20,6 +20,7 @@ namespace Game.Scripts.Wave
         private int _enemiesSpawnedInWave;
         private int _enemiesKilledInWave;
         private int _totalEnemiesInWave;
+        private int _startWaveIndex;
         
         private bool _isWaveInProgress;
 
@@ -69,15 +70,16 @@ namespace Game.Scripts.Wave
                 _enemySpawner.EnemyReleased -= OnEnemyReleased;
         }
 
-        public void StartWaves()
+        public void StartWaves(int startWaveIndex = 0)
         {
             if (IsConfigValid(_config) == false)
                 return;
-            
             if (_waveRoutine != null)
                 StopCoroutine(_waveRoutine);
-
-            _currentWaveIndex = -1;
+            _startWaveIndex = (startWaveIndex >= 0 && startWaveIndex < _config.WavesEnemyCount.Count)
+                ? startWaveIndex
+                : 0;
+            _currentWaveIndex = _startWaveIndex - 1;
             _waveRoutine = StartCoroutine(WaveRoutine());
         }
 
@@ -113,7 +115,7 @@ namespace Game.Scripts.Wave
         {
             WaitForSeconds wait = new WaitForSeconds(_config.TimeBetweenWaves);
             
-            for (int i = 0; i < _config.WavesEnemyCount.Count; i++)
+            for (int i = _startWaveIndex; i < _config.WavesEnemyCount.Count; i++)
             {
                 _currentWaveIndex = i;
                 _totalEnemiesInWave = _config.WavesEnemyCount[i];
