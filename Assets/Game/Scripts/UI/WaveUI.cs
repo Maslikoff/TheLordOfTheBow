@@ -1,6 +1,6 @@
 using Game.Scripts.Wave;
-using UnityEngine;
 using TMPro;
+using UnityEngine;
 
 namespace Game.Scripts.UI
 {
@@ -14,7 +14,7 @@ namespace Game.Scripts.UI
         [SerializeField] private string _waveFormat = "{0}/{1}";
         [SerializeField] private string _enemiesFormat = "Врагов: {0}/{1} (Осталось: {2})";
 
-        private void Start()
+        private void OnEnable()
         {
             if (_waveSystem != null)
             {
@@ -22,17 +22,12 @@ namespace Game.Scripts.UI
                 _waveSystem.WaveCompleted += OnWaveCompleted;
                 _waveSystem.EnemiesCountChanged += OnEnemiesCountChanged;
                 _waveSystem.AllWavesCompleted += OnAllWavesCompleted;
-
-                UpdateWaveText(_waveSystem.CurrentWaveIndex, _waveSystem.TotalWaves);
-                 UpdateEnemiesText(
-                     _waveSystem.TotalEnemiesInWave - _waveSystem.EnemiesRemaining,
-                     _waveSystem.TotalEnemiesInWave, 
-                     _waveSystem.EnemiesRemaining
-                     );
             }
+
+            RefreshFromWaveState();
         }
 
-        private void OnDestroy()
+        private void OnDisable()
         {
             if (_waveSystem != null)
             {
@@ -55,7 +50,7 @@ namespace Game.Scripts.UI
 
         private void OnEnemiesCountChanged(int current, int total, int remaining)
         {
-            UpdateEnemiesText(current, total, remaining);
+            UpdateEnemiesText(remaining, total, remaining);
         }
 
         private void OnAllWavesCompleted()
@@ -76,6 +71,20 @@ namespace Game.Scripts.UI
         {
             if (_enemiesCountText != null)
                 _enemiesCountText.text = string.Format(_enemiesFormat, current, total, remaining);
+        }
+
+        private void RefreshFromWaveState()
+        {
+            if (_waveSystem == null)
+                return;
+
+            int totalWaves = Mathf.Max(0, _waveSystem.TotalWaves);
+            int currentWave = totalWaves > 0
+                ? Mathf.Clamp(_waveSystem.CurrentWaveIndex, 1, totalWaves)
+                : 0;
+
+            UpdateWaveText(currentWave, totalWaves);
+            UpdateEnemiesText(_waveSystem.EnemiesRemaining, _waveSystem.TotalEnemiesInWave, _waveSystem.EnemiesRemaining);
         }
     }
 }

@@ -12,6 +12,7 @@ namespace Game.Scripts.Wave
     {
         [SerializeField] private EnemySpawner _enemySpawner;
         [SerializeField] private WaveConfig _config;
+        [SerializeField, Min(1)] private int _maxSpawnWaitFrames = 120;
 
         private Coroutine _waveRoutine;
         private int _currentWaveIndex = -1;
@@ -22,7 +23,7 @@ namespace Game.Scripts.Wave
         private bool _isWaveInProgress;
 
         public int CurrentWaveIndex => _currentWaveIndex + 1;
-        public int TotalWaves => _config.WavesEnemyCount.Count;
+        public int TotalWaves => _config != null && _config.WavesEnemyCount != null ? _config.WavesEnemyCount.Count : 0;
         public int EnemiesRemaining => _enemiesSpawnedInWave - _enemiesKilledInWave;
         public int TotalEnemiesInWave => _totalEnemiesInWave;
 
@@ -59,6 +60,10 @@ namespace Game.Scripts.Wave
                 StopCoroutine(_waveRoutine);
 
             _currentWaveIndex = -1;
+            _totalEnemiesInWave = 0;
+            _enemiesSpawnedInWave = 0;
+            _enemiesKilledInWave = 0;
+            _isWaveInProgress = false;
             _waveRoutine = StartCoroutine(WaveRoutine());
         }
 
@@ -138,21 +143,28 @@ namespace Game.Scripts.Wave
 
         public IEnumerator SpawnWaveEnemies(int enemyCount)
         {
-            WaitForSeconds spawnDelay = new WaitForSeconds(_enemySpawner.GetSpawnInterval());
-    
+            int stalledFrames = 0;
+
             while (_enemiesSpawnedInWave < enemyCount)
             {
                 bool spawnResult = _enemySpawner.ForceSpawn();
                 
                 if (spawnResult)
                 {
+                    stalledFrames = 0;
                     _enemiesSpawnedInWave++;
                     int remaining = _enemiesSpawnedInWave - _enemiesKilledInWave;
             
                     EnemiesCountChanged?.Invoke(_enemiesSpawnedInWave, enemyCount, remaining);
+                    continue;
                 }
 
-                yield return spawnDelay;
+                stalledFrames++;
+
+                if (stalledFrames == _maxSpawnWaitFrames)
+                    Debug.LogWarning($"[WaveSystem] Spawning is stalled: {_enemiesSpawnedInWave}/{enemyCount}");
+
+                yield return null;
             }
     
             _enemySpawner.enabled = false;

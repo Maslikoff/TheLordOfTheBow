@@ -83,8 +83,6 @@ namespace Game.Scripts.Spawners
         {
             Debug.Log("[EnemySpawner] Game started event received! Enemies can now spawn.");
             _isGameReady = true;
-            
-            StartSpawning(); 
         }
         
         protected override void OnDisable()
@@ -93,7 +91,10 @@ namespace Game.Scripts.Spawners
             
             if (_spawnGrid != null)
                 _spawnGrid.SpawnEnemyAtPosition -= SpawnEnemyAtPosition;
-            
+        }
+
+        private void OnDestroy()
+        {
             if (_gameStateService != null)
                 _gameStateService.GameStarted -= OnGameStarted;
         }
