@@ -12,6 +12,8 @@ namespace Game.Scripts.Wave
     {
         [SerializeField] private EnemySpawner _enemySpawner;
         [SerializeField] private WaveConfig _config;
+        
+        [SerializeField, Min(1)] private int _maxSpawnRetryFrames = 120;
 
         private Coroutine _waveRoutine;
         private int _currentWaveIndex = -1;
@@ -22,7 +24,7 @@ namespace Game.Scripts.Wave
         private bool _isWaveInProgress;
 
         public int CurrentWaveIndex => _currentWaveIndex + 1;
-        public int TotalWaves => _config.WavesEnemyCount.Count;
+        public int TotalWaves => _config != null && _config.WavesEnemyCount != null ? _config.WavesEnemyCount.Count : 0;
         public int EnemiesRemaining => _enemiesSpawnedInWave - _enemiesKilledInWave;
         public int TotalEnemiesInWave => _totalEnemiesInWave;
 
@@ -138,23 +140,40 @@ namespace Game.Scripts.Wave
 
         public IEnumerator SpawnWaveEnemies(int enemyCount)
         {
-            WaitForSeconds spawnDelay = new WaitForSeconds(_enemySpawner.GetSpawnInterval());
+            int retryFramesLeft = _maxSpawnRetryFrames;
     
             while (_enemiesSpawnedInWave < enemyCount)
             {
-                bool spawnResult = _enemySpawner.ForceSpawn();
+                int spawnedBeforePass = _enemiesSpawnedInWave;
                 
-                if (spawnResult)
+                while (_enemiesSpawnedInWave < enemyCount)
                 {
+                    bool spawnResult = _enemySpawner.ForceSpawn();
+                    
+                    if (spawnResult == false)
+                        break;
+                    
                     _enemiesSpawnedInWave++;
                     int remaining = _enemiesSpawnedInWave - _enemiesKilledInWave;
-            
+                    
                     EnemiesCountChanged?.Invoke(_enemiesSpawnedInWave, enemyCount, remaining);
                 }
-
-                yield return spawnDelay;
+                
+                if (_enemiesSpawnedInWave >= enemyCount)
+                    break;
+                
+                if (_enemiesSpawnedInWave == spawnedBeforePass)
+                {
+                    retryFramesLeft--;
+                    
+                    if (retryFramesLeft <= 0)
+                    {
+                        Debug.LogWarning($"[WaveSystem] Could not spawn full wave. Spawned: {_enemiesSpawnedInWave}/{enemyCount}");
+                        break;
+                    }
+                }
+                yield return null;
             }
-    
             _enemySpawner.enabled = false;
         }
 

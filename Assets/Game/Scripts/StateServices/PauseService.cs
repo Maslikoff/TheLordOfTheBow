@@ -7,7 +7,7 @@ namespace Game.Scripts.StateServices
     {
         private readonly HashSet<object> _owners = new();
         
-        public bool IsPaused { get; }
+        public bool IsPaused => _owners.Count > 0;
         
         public void Pause(object owner)
         {
@@ -30,7 +30,7 @@ namespace Game.Scripts.StateServices
         public void Reset()
         {
             _owners.Clear();
-            Time.timeScale = 1f;
+            ApplyTimeScale();
         }
         
         private void ApplyTimeScale()

@@ -136,14 +136,27 @@ namespace Game.Scripts.Levels
         
         private void SubscribeModalEvents()
         {
-            _modalCoordinator.ModalOpened += _ => UpdatePauseButtonState();
-            _modalCoordinator.ModalClosed += _ => UpdatePauseButtonState();
+            if (_modalCoordinator == null)
+                return;
+            
+            _modalCoordinator.ModalOpened += OnModalStateChanged;
+            _modalCoordinator.ModalClosed += OnModalStateChanged;
         }
+        
         private void UnsubscribeModalEvents()
         {
-            _modalCoordinator.ModalOpened -= _ => UpdatePauseButtonState();
-            _modalCoordinator.ModalClosed -= _ => UpdatePauseButtonState();
+            if (_modalCoordinator == null)
+                return;
+            
+            _modalCoordinator.ModalOpened -= OnModalStateChanged;
+            _modalCoordinator.ModalClosed -= OnModalStateChanged;
         }
+        
+        private void OnModalStateChanged(ModalType _)
+        {
+            UpdatePauseButtonState();
+        }
+        
         private void UpdatePauseButtonState()
         {
             if (_buttonPause != null)

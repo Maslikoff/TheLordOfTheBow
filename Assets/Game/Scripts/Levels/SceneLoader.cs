@@ -3,6 +3,7 @@ using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using TransitionsPlus;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 
 namespace Game.Scripts.Levels
@@ -15,60 +16,75 @@ namespace Game.Scripts.Levels
         {
             const string Path = "Animator/TransitionProfile";
             
-            _transitionProfile = Resources.Load<TransitionProfile>(Path) ?? throw new ArgumentNullException();
+            _transitionProfile = Resources.Load<TransitionProfile>(Path)
+                                 ?? throw new ArgumentNullException(nameof(_transitionProfile),
+                                     $"TransitionProfile not found at Resources/{Path}");
         }
-        
-        /*public async UniTask LoadAsync(SceneNames sceneName)
-        {
-            await SceneManager.LoadSceneAsync(sceneName.ToString());
-        }*/
 
-        public async UniTask LoadAsync(SceneNames sceneName, SceneTransitionMode transitionMode = SceneTransitionMode.CloseAndOpen,
+        public async UniTask LoadAsync(
+            SceneNames sceneName,
+            SceneTransitionMode transitionMode = SceneTransitionMode.CloseAndOpen,
             Action onComplete = null)
         {
             switch (transitionMode)
             {
                 case SceneTransitionMode.CloseAndOpen:
-                    CreateTransition(invertTransition:false, autoDestroy:false, 
-                        onComplete:() => LoadAndOpenScene(sceneName, onComplete).Forget());
+                    await PlayTransitionAsync(invertTransition: false, autoDestroy: false);
+                    await LoadSceneAsync(sceneName, onComplete);
+                    await PlayTransitionAsync(invertTransition: true);
                     break;
                 
                 case SceneTransitionMode.OpenOnly:
-                    LoadAndOpenScene(sceneName, onComplete).Forget();
+                    await LoadSceneAsync(sceneName, onComplete);
+                    await PlayTransitionAsync(invertTransition: true);
+                    break;
+                
+                case SceneTransitionMode.None:
+                    await LoadSceneAsync(sceneName, onComplete);
                     break;
                 
                 default:
-                    throw new ArgumentOutOfRangeException(nameof(transitionMode));
+                    throw new ArgumentOutOfRangeException(nameof(transitionMode), transitionMode, null);
             }
         }
-
-        private async UniTask LoadAndOpenScene(SceneNames sceneName, Action onComplete = null)
-        {
-            await LoadSceneAsync(sceneName, onComplete);
-
-            CreateTransition(invertTransition: true);
-        }
-
+        
         private async UniTask LoadSceneAsync(SceneNames sceneName, Action onComplete = null)
         {
             DOTween.KillAll();
-
+            
             await SceneManager.LoadSceneAsync(sceneName.ToString(), LoadSceneMode.Single).ToUniTask();
-
+            
             onComplete?.Invoke();
         }
         
-        private void CreateTransition(bool invertTransition, bool autoDestroy = true, Action onComplete = null)
+        private async UniTask PlayTransitionAsync(bool invertTransition, bool autoDestroy = true)
         {
             TransitionProfile transitionProfileInstance = UnityEngine.Object.Instantiate(_transitionProfile);
             transitionProfileInstance.invert = invertTransition;
-
             TransitionAnimator transitionAnimator = TransitionAnimator.Start(transitionProfileInstance, autoDestroy);
-
-            transitionAnimator.onTransitionEnd.AddListener(() => UnityEngine.Object.Destroy(transitionProfileInstance));
-
-            if (onComplete != null)
-                transitionAnimator.onTransitionEnd.AddListener(() => onComplete());
+            
+            await WaitTransitionEndAsync(transitionAnimator);
+            
+            UnityEngine.Object.Destroy(transitionProfileInstance);
+        }
+        
+        private static UniTask WaitTransitionEndAsync(TransitionAnimator transitionAnimator)
+        {
+            if (transitionAnimator == null)
+                return UniTask.CompletedTask;
+            
+            var tcs = new UniTaskCompletionSource();
+            
+            UnityAction onEnd = null;
+            onEnd = () =>
+            {
+                transitionAnimator.onTransitionEnd.RemoveListener(onEnd);
+                tcs.TrySetResult();
+            };
+            
+            transitionAnimator.onTransitionEnd.AddListener(onEnd);
+            
+            return tcs.Task;
         }
     }
 }

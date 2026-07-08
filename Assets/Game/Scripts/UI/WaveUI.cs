@@ -1,3 +1,4 @@
+using System;
 using Game.Scripts.Wave;
 using UnityEngine;
 using TMPro;
@@ -14,7 +15,7 @@ namespace Game.Scripts.UI
         [SerializeField] private string _waveFormat = "{0}/{1}";
         [SerializeField] private string _enemiesFormat = "Врагов: {0}/{1} (Осталось: {2})";
 
-        private void Start()
+        private void OnEnable()
         {
             if (_waveSystem != null)
             {
@@ -32,7 +33,7 @@ namespace Game.Scripts.UI
             }
         }
 
-        private void OnDestroy()
+        private void OnDisable()
         {
             if (_waveSystem != null)
             {
@@ -60,9 +61,6 @@ namespace Game.Scripts.UI
 
         private void OnAllWavesCompleted()
         {
-            if (_waveNumberText != null)
-                _waveNumberText.text = "All waves completed!";
-
             UpdateEnemiesText(0, 0, 0);
         }
 

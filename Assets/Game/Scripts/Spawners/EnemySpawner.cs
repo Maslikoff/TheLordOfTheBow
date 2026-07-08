@@ -84,7 +84,7 @@ namespace Game.Scripts.Spawners
             Debug.Log("[EnemySpawner] Game started event received! Enemies can now spawn.");
             _isGameReady = true;
             
-            StartSpawning(); 
+            //StartSpawning(); 
         }
         
         protected override void OnDisable()
