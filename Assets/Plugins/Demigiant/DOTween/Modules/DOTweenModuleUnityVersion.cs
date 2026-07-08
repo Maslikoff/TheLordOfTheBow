@@ -2,6 +2,7 @@
 // Created: 2018/07/13
 
 using System;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using DG.Tweening.Core;
 using DG.Tweening.Plugins.Options;
@@ -213,7 +214,7 @@ namespace DG.Tweening
         /// It can be used inside an async operation.
         /// <para>Example usage:</para><code>await myTween.WaitForCompletion();</code>
         /// </summary>
-        public static async System.Threading.Tasks.Task AsyncWaitForCompletion(this Tween t)
+        public static async UniTask AsyncWaitForCompletion(this Tween t)
         {
             if (!t.active) {
                 if (Debugger.logPriority > 0) Debugger.LogInvalidTween(t);

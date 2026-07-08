@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,6 +9,8 @@ namespace Game.Scripts.StateServices
         private readonly HashSet<object> _owners = new();
         
         public bool IsPaused => _owners.Count > 0;
+        
+        public event Action<bool> PauseChanged;
         
         public void Pause(object owner)
         {
@@ -35,7 +38,10 @@ namespace Game.Scripts.StateServices
         
         private void ApplyTimeScale()
         {
-            Time.timeScale = IsPaused ? 0f : 1f;
+            bool paused = IsPaused;
+            Time.timeScale = paused ? 0f : 1f;
+            
+            PauseChanged?.Invoke(paused);
         }
     }
 }

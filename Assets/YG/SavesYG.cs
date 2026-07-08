@@ -114,6 +114,7 @@ namespace YG
             waveIndex = Mathf.Max(0, waveIndex);
 
             LevelWaveCheckpoint existing = _waveCheckpoints.Find(x => x.LevelIndex == levelIndex);
+            
             if (existing != null)
             {
                 existing.WaveIndex = waveIndex;
@@ -132,6 +133,7 @@ namespace YG
             levelIndex = Mathf.Max(0, levelIndex);
 
             LevelWaveCheckpoint existing = _waveCheckpoints.Find(x => x.LevelIndex == levelIndex);
+            
             if (existing != null)
             {
                 waveIndex = Mathf.Max(0, existing.WaveIndex);
@@ -144,8 +146,7 @@ namespace YG
 
         public void ClearWaveCheckpoint(int levelIndex)
         {
-            levelIndex = Mathf.Max(0, levelIndex);
-            _waveCheckpoints.RemoveAll(x => x.LevelIndex == levelIndex);
+            _waveCheckpoints.RemoveAll(x => x.LevelIndex == Mathf.Max(0, levelIndex));
         }
     }
 }

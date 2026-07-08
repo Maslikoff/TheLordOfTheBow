@@ -52,6 +52,14 @@ namespace Game.Scripts.Characters
             if (_currentCount <= 0)
                 Die();
         }
+        
+        public void ReviveWithPercent(float hpPercent)
+        {
+            hpPercent = Mathf.Clamp01(hpPercent);
+            _currentCount = Mathf.Max(1f, _maxCount * hpPercent);
+            
+            Changed?.Invoke(_currentCount);
+        }
 
         public void SetMaxHealth(int newMaxHealth)
         {

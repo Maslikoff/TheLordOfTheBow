@@ -63,6 +63,15 @@ namespace Game.Scripts.Characters.Player
             _playerHealth.Death -= OnDeath;
         }
 
+        public bool TryRevive(float hpPercent)
+        {
+            if (!IsDead) return false;
+
+            IsDead = false;
+            _playerHealth.ReviveWithPercent(hpPercent);
+            return true;
+        }
+        
         private void OnDeath()
         {
             IsDead = true;

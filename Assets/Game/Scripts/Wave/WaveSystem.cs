@@ -74,11 +74,11 @@ namespace Game.Scripts.Wave
         {
             if (IsConfigValid(_config) == false)
                 return;
+            
             if (_waveRoutine != null)
                 StopCoroutine(_waveRoutine);
-            _startWaveIndex = (startWaveIndex >= 0 && startWaveIndex < _config.WavesEnemyCount.Count)
-                ? startWaveIndex
-                : 0;
+            
+            _startWaveIndex = Mathf.Clamp(startWaveIndex, 0, _config.WavesEnemyCount.Count - 1);
             _currentWaveIndex = _startWaveIndex - 1;
             _waveRoutine = StartCoroutine(WaveRoutine());
         }

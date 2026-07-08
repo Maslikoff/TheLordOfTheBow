@@ -75,14 +75,12 @@ namespace Game.Scripts.Spawners
         
         private void OnWaveStarted(int waveIndex)
         {
-            int levelIndex = _levelService.CurrentLevelIndex;
-            _saveSystem.SaveWaveCheckpoint(levelIndex, waveIndex);
+            _saveSystem.SaveWaveCheckpoint(_levelService.CurrentLevelIndex, waveIndex);
         }
 
         private void OnAllWavesCompleted()
         {
-            int levelIndex = _levelService.CurrentLevelIndex;
-            _saveSystem.ClearWaveCheckpoint(levelIndex);
+            _saveSystem.ClearWaveCheckpoint(_levelService.CurrentLevelIndex);
         }
     }
 }

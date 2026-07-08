@@ -110,10 +110,9 @@ namespace Game.Scripts.Save
 
         public int GetWaveCheckpointOrDefault(int levelIndex)
         {
-            if (YG2.saves.TryGetWaveCheckpoint(levelIndex, out int waveIndex))
-                return waveIndex;
-
-            return 0;
+            return YG2.saves.TryGetWaveCheckpoint(levelIndex, out int waveIndex)
+                ? waveIndex
+                : 0;
         }
 
         public void ClearWaveCheckpoint(int levelIndex)
