@@ -24,12 +24,13 @@ namespace Game.Scripts.UI
                 _waveSystem.EnemiesCountChanged += OnEnemiesCountChanged;
                 _waveSystem.AllWavesCompleted += OnAllWavesCompleted;
 
-                UpdateWaveText(_waveSystem.CurrentWaveIndex, _waveSystem.TotalWaves);
+                RefreshFromWaveState();
+                /*UpdateWaveText(_waveSystem.CurrentWaveIndex, _waveSystem.TotalWaves);
                  UpdateEnemiesText(
                      _waveSystem.TotalEnemiesInWave - _waveSystem.EnemiesRemaining,
                      _waveSystem.TotalEnemiesInWave, 
                      _waveSystem.EnemiesRemaining
-                     );
+                     );*/
             }
         }
 
@@ -42,6 +43,23 @@ namespace Game.Scripts.UI
                 _waveSystem.EnemiesCountChanged -= OnEnemiesCountChanged;
                 _waveSystem.AllWavesCompleted -= OnAllWavesCompleted;
             }
+        }
+        
+        private void RefreshFromWaveState()
+        {
+            if (_waveSystem == null)
+                return;
+            
+            UpdateWaveText(_waveSystem.UiWaveIndex, _waveSystem.TotalWaves);
+            
+            if (_waveSystem.IsWaveInProgress == false)
+            {
+                UpdateEnemiesText(0, _waveSystem.UiWaveEnemyTotal, 0);
+                return;
+            }
+            
+            int remaining = _waveSystem.EnemiesRemaining;
+            UpdateEnemiesText(remaining, _waveSystem.TotalEnemiesInWave, remaining);
         }
 
         private void OnWaveStarted(int waveIndex)

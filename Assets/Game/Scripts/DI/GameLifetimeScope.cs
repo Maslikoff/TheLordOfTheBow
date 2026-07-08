@@ -3,6 +3,7 @@ using Game.Scripts.Characters.Player;
 using Game.Scripts.Environment.Effect;
 using Game.Scripts.Levels;
 using Game.Scripts.ObjectPool;
+using Game.Scripts.Save;
 using Game.Scripts.Spawners;
 using Game.Scripts.StateServices;
 using Game.Scripts.UI;
@@ -33,6 +34,7 @@ namespace Game.Scripts.DI
         [SerializeField] private TapToStartZone _tapToStartZone;
         [SerializeField] private EnemySpawner _enemySpawner;
         [SerializeField] private LevelPanels _levelPanels;
+        [SerializeField] private LeaderboardService _leaderboardService;
 
         protected override void Configure(IContainerBuilder builder)
         {
@@ -69,6 +71,7 @@ namespace Game.Scripts.DI
             builder.Register<IObjectFactory, ObjectFactory>(Lifetime.Scoped);
             
             builder.RegisterComponent(_waveSystem);
+            builder.RegisterComponent(_leaderboardService);
         }
 
         private void ConfigurePlayerFlow(IContainerBuilder builder)

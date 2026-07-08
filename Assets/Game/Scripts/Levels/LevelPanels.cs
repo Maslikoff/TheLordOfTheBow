@@ -38,7 +38,8 @@ namespace Game.Scripts.Levels
         [SerializeField] private float _fadeDuration = 0.5f;
         [SerializeField] private float _scaleDuration = 0.3f;
         [SerializeField] private Ease _ease = Ease.OutBack;
-
+        
+        private LeaderboardService _leaderboardService;
         private ILevelService _levelService;
         private WaveSystem _waveSystem;
         private IPlayerProvider _playerProvider;
@@ -49,13 +50,13 @@ namespace Game.Scripts.Levels
         private IModalCoordinator _modalCoordinator;
 
         [Inject]
-        private void Construct(
-            ILevelService levelService,
+        private void Construct(ILevelService levelService,
             WaveSystem waveSystem,
             IPlayerProvider player,
             ISaveSystem saveSystem,
             IPauseService pauseService,
-            IModalCoordinator modalCoordinator)
+            IModalCoordinator modalCoordinator, 
+            LeaderboardService leaderboardService)
         {
             _levelService = levelService;
             _waveSystem = waveSystem;
@@ -63,6 +64,7 @@ namespace Game.Scripts.Levels
             _saveSystem = saveSystem;
             _pauseService = pauseService;
             _modalCoordinator = modalCoordinator;
+            _leaderboardService = leaderboardService;
         }
 
 
@@ -208,6 +210,8 @@ namespace Game.Scripts.Levels
             if (_currentPlayer != null && _currentPlayer.IsDead)
                 return;
 
+            WriteOnLeaderboardFinished();
+
             _modalCoordinator.RequestShow(
                 ModalType.Win,
                 ModalPriority.GameOver,
@@ -229,6 +233,8 @@ namespace Game.Scripts.Levels
         {
             if (_currentPlayer == null || _currentPlayer != player) 
                 return;
+
+            WriteOnLeaderboardFinished();
             
             _modalCoordinator.RequestShow(
                 ModalType.Lose,
@@ -282,6 +288,12 @@ namespace Game.Scripts.Levels
             panel.SetActive(false);
             canvasGroup.alpha = 0f;
             panel.transform.localScale = Vector3.one;
+        }
+        
+        private void WriteOnLeaderboardFinished()
+        {
+            int score = _waveSystem.CurrentWaveIndex;
+            _leaderboardService.TrySubmitIfBest(score);
         }
     }
 }

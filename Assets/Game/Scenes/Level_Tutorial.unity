@@ -3461,6 +3461,7 @@ MonoBehaviour:
   _config:
     _wavesEnemyCount: 
     _timeBetweemWaves: 3
+  _maxSpawnRetryFrames: 120
 --- !u!4 &710367627
 Transform:
   m_ObjectHideFlags: 0
@@ -3486,6 +3487,7 @@ GameObject:
   m_Component:
   - component: {fileID: 725247248}
   - component: {fileID: 725247247}
+  - component: {fileID: 725247249}
   m_Layer: 0
   m_Name: Level
   m_TagString: Untagged
@@ -3535,6 +3537,22 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &725247249
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 725247246}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c87a4cf8e504d8bb1f8e5b9f1149a3f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _technoName: BestWave
+  _minSendIntervalSeconds: 1.1
+  _requestAuthIfNeeded: 1
+  _useLocalBestCache: 1
 --- !u!1 &727169899
 GameObject:
   m_ObjectHideFlags: 0
@@ -3779,6 +3797,7 @@ MonoBehaviour:
   _tapToStartZone: {fileID: 1372723020}
   _enemySpawner: {fileID: 1241177552}
   _levelPanels: {fileID: 725247247}
+  _leaderboardService: {fileID: 725247249}
 --- !u!4 &750940617
 Transform:
   m_ObjectHideFlags: 0
@@ -12019,7 +12038,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: -329.5}
   m_SizeDelta: {x: 610, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2125909065

@@ -24,9 +24,26 @@ namespace Game.Scripts.Wave
         private bool _isWaveInProgress;
 
         public int CurrentWaveIndex => _currentWaveIndex + 1;
-        public int TotalWaves => _config != null && _config.WavesEnemyCount != null ? _config.WavesEnemyCount.Count : 0;
+        public int TotalWaves => _config?.WavesEnemyCount?.Count ?? 0;
+        public bool IsWaveInProgress => _isWaveInProgress;
         public int EnemiesRemaining => _enemiesSpawnedInWave - _enemiesKilledInWave;
         public int TotalEnemiesInWave => _totalEnemiesInWave;
+        public int UiWaveIndex => TotalWaves == 0 ? 0 : Mathf.Clamp(_currentWaveIndex + 1, 1, TotalWaves);
+        public int UiWaveEnemyTotal
+        {
+            get
+            {
+                if (TotalWaves == 0)
+                    return 0;
+                
+                if (_isWaveInProgress)
+                    return _totalEnemiesInWave;
+                
+                int nextWaveIndex = Mathf.Clamp(_currentWaveIndex + 1, 0, TotalWaves - 1);
+                
+                return _config.WavesEnemyCount[nextWaveIndex];
+            }
+        }
 
         public event Action<int> WaveStarted;
         public event Action<int> WaveCompleted;
@@ -200,6 +217,17 @@ namespace Game.Scripts.Wave
                 
                 EnemiesCountChanged?.Invoke(_enemiesSpawnedInWave, _totalEnemiesInWave, remaining);
             }
+        }
+        
+        public void ResetToPreStartState()
+        {
+            _currentWaveIndex = -1;
+            _isWaveInProgress = false;
+            _enemiesSpawnedInWave = 0;
+            _enemiesKilledInWave = 0;
+            _totalEnemiesInWave = UiWaveEnemyTotal;
+            
+            EnemiesCountChanged?.Invoke(0, _totalEnemiesInWave, 0);
         }
     }
 }
