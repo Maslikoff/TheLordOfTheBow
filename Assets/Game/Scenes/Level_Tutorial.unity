@@ -3801,6 +3801,7 @@ MonoBehaviour:
   _enemySpawner: {fileID: 1241177552}
   _levelPanels: {fileID: 725247247}
   _leaderboardService: {fileID: 725247249}
+  _rewardConfig: {fileID: 11400000, guid: 82a49227210a2d94887d476220bf82de, type: 2}
 --- !u!4 &750940617
 Transform:
   m_ObjectHideFlags: 0

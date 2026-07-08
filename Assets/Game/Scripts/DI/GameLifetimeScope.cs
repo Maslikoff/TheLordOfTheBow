@@ -3,6 +3,7 @@ using Game.Scripts.Characters.Player;
 using Game.Scripts.Environment.Effect;
 using Game.Scripts.Levels;
 using Game.Scripts.ObjectPool;
+using Game.Scripts.Reward;
 using Game.Scripts.Save;
 using Game.Scripts.Spawners;
 using Game.Scripts.StateServices;
@@ -35,10 +36,12 @@ namespace Game.Scripts.DI
         [SerializeField] private EnemySpawner _enemySpawner;
         [SerializeField] private LevelPanels _levelPanels;
         [SerializeField] private LeaderboardService _leaderboardService;
+        [SerializeField] private RewardConfig _rewardConfig;
 
         protected override void Configure(IContainerBuilder builder)
         {
-            ConfigureModalServices(builder); 
+            ConfigureModalServices(builder);
+            ConfigureRewardServices(builder);
             ConfigureEffects(builder);
             ConfigureLevelFlow(builder);
             ConfigurePlayerFlow(builder);
@@ -46,6 +49,18 @@ namespace Game.Scripts.DI
             ConfigureRendering(builder);
             ConfigureUI(builder);
             ConfigureGameState(builder);
+        }
+
+        private void ConfigureRewardServices(IContainerBuilder builder)
+        {
+            RewardConfig rewardConfig = _rewardConfig != null
+                ? _rewardConfig
+                : ScriptableObject.CreateInstance<RewardConfig>();
+
+            builder.RegisterInstance(rewardConfig);
+            builder.Register<YgRewardedAdsService>(Lifetime.Singleton).As<IRewardedAdsService>();
+            builder.Register<RunRewardStateService>(Lifetime.Singleton);
+            builder.Register<RewardFacade>(Lifetime.Singleton);
         }
         
         private void ConfigureModalServices(IContainerBuilder builder)
