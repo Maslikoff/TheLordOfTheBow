@@ -1,6 +1,7 @@
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using Game.Scripts.Characters.Player;
+using Game.Scripts.Reward;
 using Game.Scripts.Save;
 using Game.Scripts.StateServices;
 using Game.Scripts.UI;
@@ -9,17 +10,12 @@ using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 using VContainer;
-using YG;
 
 namespace Game.Scripts.Levels
 {
     public class LevelPanels : MonoBehaviour
     {
         private readonly CompositeDisposable _disposables = new();
-
-        private const string ReviveRewardId = "revive";
-        private const string WinBonusRewardId = "win_bonus_xp_next";
-        private const int WinBonusXp = 25;
 
         [Header("Win Panel")]
         [SerializeField] private CanvasGroup _winPanelCanvasGroup;
@@ -49,34 +45,32 @@ namespace Game.Scripts.Levels
         private LeaderboardService _leaderboardService;
         private ILevelService _levelService;
         private WaveSystem _waveSystem;
-        private IPlayerProvider _playerProvider;
         private ISaveSystem _saveSystem;
         private Player _currentPlayer;
         private Sequence _currentAnimation;
         private IPauseService _pauseService;
         private IModalCoordinator _modalCoordinator;
+        private RewardFacade _rewardFacade;
 
         private bool _isWinRewardFlowRunning;
-        private bool _winRewardGranted;
-        private string _pendingRewardId;
 
         [Inject]
         private void Construct(
             ILevelService levelService,
             WaveSystem waveSystem,
-            IPlayerProvider player,
             ISaveSystem saveSystem,
             IPauseService pauseService,
             IModalCoordinator modalCoordinator,
-            LeaderboardService leaderboardService)
+            LeaderboardService leaderboardService,
+            RewardFacade rewardFacade)
         {
             _levelService = levelService;
             _waveSystem = waveSystem;
-            _playerProvider = player;
             _saveSystem = saveSystem;
             _pauseService = pauseService;
             _modalCoordinator = modalCoordinator;
             _leaderboardService = leaderboardService;
+            _rewardFacade = rewardFacade;
         }
 
         private void Awake()
@@ -95,10 +89,8 @@ namespace Game.Scripts.Levels
             SubscribeButtons();
             UpdatePauseButtonState();
 
-            _waveSystem.AllWavesCompleted += OnOpenWinPanel;
-
-            YG2.onCloseRewardedAdv += OnCloseRewardedAdv;
-            YG2.onErrorRewardedAdv += OnErrorRewardedAdv;
+            if (_waveSystem != null)
+                _waveSystem.AllWavesCompleted += OnOpenWinPanel;
 
             MessageBroker.Default.Receive<M_PlayerSpawned>()
                 .Subscribe(msg => OnPlayerSpawned(msg.Player))
@@ -111,65 +103,89 @@ namespace Game.Scripts.Levels
 
         private void OnDisable()
         {
-            _waveSystem.AllWavesCompleted -= OnOpenWinPanel;
+            if (_waveSystem != null)
+                _waveSystem.AllWavesCompleted -= OnOpenWinPanel;
+
             _disposables.Clear();
             _currentAnimation?.Kill();
 
             UnsubscribeButtons();
 
-            if (_modalCoordinator.CurrentModal == ModalType.Win)
-                _pauseService.Resume(this);
+            if (_modalCoordinator != null)
+            {
+                if (_modalCoordinator.CurrentModal == ModalType.Win)
+                    _pauseService?.Resume(this);
 
-            if (_modalCoordinator.CurrentModal == ModalType.Lose)
-                _pauseService.Resume(this);
+                if (_modalCoordinator.CurrentModal == ModalType.Lose)
+                    _pauseService?.Resume(this);
+            }
 
             UnsubscribeModalEvents();
 
-            YG2.onCloseRewardedAdv -= OnCloseRewardedAdv;
-            YG2.onErrorRewardedAdv -= OnErrorRewardedAdv;
-
-            _pauseService.Reset();
-            _modalCoordinator.Reset();
+            _pauseService?.Reset();
+            _modalCoordinator?.Reset();
 
             _isWinRewardFlowRunning = false;
-            _winRewardGranted = false;
-            _pendingRewardId = null;
 
             if (_rewardButtonRestartLevel != null)
                 _rewardButtonRestartLevel.interactable = true;
-            
+
             if (_rewardButtonRestartLevelLose != null)
                 _rewardButtonRestartLevelLose.interactable = true;
         }
 
         private void SubscribeButtons()
         {
-            _buttonNextLevel.onClick.AddListener(OnNextLevelClicked);
+            if (_buttonNextLevel != null)
+                _buttonNextLevel.onClick.AddListener(OnNextLevelClicked);
 
-            _buttonPause.onClick.AddListener(OnOpenPausePanel);
-            _buttonPauseResumeLevel.onClick.AddListener(OnResumeButtonClick);
+            if (_buttonPause != null)
+                _buttonPause.onClick.AddListener(OnOpenPausePanel);
 
-            _buttonRestartLevel.onClick.AddListener(RestartFromFirstWave);
-            _buttonRestartLevelLose.onClick.AddListener(RestartFromFirstWave);
-            _buttonPauseRestartLevel.onClick.AddListener(RestartFromFirstWave);
+            if (_buttonPauseResumeLevel != null)
+                _buttonPauseResumeLevel.onClick.AddListener(OnResumeButtonClick);
 
-            _rewardButtonRestartLevel.onClick.AddListener(OnWinBonusRewardClicked);
-            _rewardButtonRestartLevelLose.onClick.AddListener(OnReviveRewardClicked);
+            if (_buttonRestartLevel != null)
+                _buttonRestartLevel.onClick.AddListener(RestartFromFirstWave);
+
+            if (_buttonRestartLevelLose != null)
+                _buttonRestartLevelLose.onClick.AddListener(RestartFromFirstWave);
+
+            if (_buttonPauseRestartLevel != null)
+                _buttonPauseRestartLevel.onClick.AddListener(RestartFromFirstWave);
+
+            if (_rewardButtonRestartLevel != null)
+                _rewardButtonRestartLevel.onClick.AddListener(OnWinBonusRewardClicked);
+
+            if (_rewardButtonRestartLevelLose != null)
+                _rewardButtonRestartLevelLose.onClick.AddListener(OnReviveRewardClicked);
         }
 
         private void UnsubscribeButtons()
         {
-            _buttonNextLevel.onClick.RemoveListener(OnNextLevelClicked);
+            if (_buttonNextLevel != null)
+                _buttonNextLevel.onClick.RemoveListener(OnNextLevelClicked);
 
-            _buttonPause.onClick.RemoveListener(OnOpenPausePanel);
-            _buttonPauseResumeLevel.onClick.RemoveListener(OnResumeButtonClick);
+            if (_buttonPause != null)
+                _buttonPause.onClick.RemoveListener(OnOpenPausePanel);
 
-            _buttonRestartLevel.onClick.RemoveListener(RestartFromFirstWave);
-            _buttonRestartLevelLose.onClick.RemoveListener(RestartFromFirstWave);
-            _buttonPauseRestartLevel.onClick.RemoveListener(RestartFromFirstWave);
+            if (_buttonPauseResumeLevel != null)
+                _buttonPauseResumeLevel.onClick.RemoveListener(OnResumeButtonClick);
 
-            _rewardButtonRestartLevel.onClick.RemoveListener(OnWinBonusRewardClicked);
-            _rewardButtonRestartLevelLose.onClick.RemoveListener(OnReviveRewardClicked);
+            if (_buttonRestartLevel != null)
+                _buttonRestartLevel.onClick.RemoveListener(RestartFromFirstWave);
+
+            if (_buttonRestartLevelLose != null)
+                _buttonRestartLevelLose.onClick.RemoveListener(RestartFromFirstWave);
+
+            if (_buttonPauseRestartLevel != null)
+                _buttonPauseRestartLevel.onClick.RemoveListener(RestartFromFirstWave);
+
+            if (_rewardButtonRestartLevel != null)
+                _rewardButtonRestartLevel.onClick.RemoveListener(OnWinBonusRewardClicked);
+
+            if (_rewardButtonRestartLevelLose != null)
+                _rewardButtonRestartLevelLose.onClick.RemoveListener(OnReviveRewardClicked);
         }
 
         private void SubscribeModalEvents()
@@ -197,7 +213,7 @@ namespace Game.Scripts.Levels
 
         private void UpdatePauseButtonState()
         {
-            if (_buttonPause != null)
+            if (_buttonPause != null && _modalCoordinator != null)
                 _buttonPause.interactable = _modalCoordinator.CurrentModal != ModalType.Upgrade;
         }
 
@@ -218,7 +234,7 @@ namespace Game.Scripts.Levels
 
         private void OnOpenPausePanel()
         {
-            if (_modalCoordinator.CurrentModal == ModalType.Upgrade)
+            if (_modalCoordinator == null || _modalCoordinator.CurrentModal == ModalType.Upgrade)
                 return;
 
             _modalCoordinator.RequestShow(
@@ -250,8 +266,7 @@ namespace Game.Scripts.Levels
             WriteOnLeaderboardFinished();
 
             _isWinRewardFlowRunning = false;
-            _winRewardGranted = false;
-            _pendingRewardId = null;
+
             if (_rewardButtonRestartLevel != null)
                 _rewardButtonRestartLevel.interactable = true;
 
@@ -280,7 +295,6 @@ namespace Game.Scripts.Levels
 
             if (_rewardButtonRestartLevelLose != null)
                 _rewardButtonRestartLevelLose.interactable = true;
-            _pendingRewardId = null;
 
             _modalCoordinator.RequestShow(
                 ModalType.Lose,
@@ -298,33 +312,54 @@ namespace Game.Scripts.Levels
 
         private void OnReviveRewardClicked()
         {
+            TryProcessReviveRewardAsync().Forget();
+        }
+
+        private async UniTaskVoid TryProcessReviveRewardAsync()
+        {
+            if (_rewardFacade == null)
+            {
+                Debug.LogError("[LevelPanels] RewardFacade is not injected.");
+                return;
+            }
+
             if (_currentPlayer == null || !_currentPlayer.IsDead)
                 return;
-
-            _pendingRewardId = ReviveRewardId;
 
             if (_rewardButtonRestartLevelLose != null)
                 _rewardButtonRestartLevelLose.interactable = false;
 
-            YG2.RewardedAdvShow(ReviveRewardId, OnReviveRewardGranted);
-        }
+            try
+            {
+                bool revived = await _rewardFacade.TryReviveAsync(_currentPlayer);
 
-        private void OnReviveRewardGranted()
-        {
-            _pendingRewardId = null;
+                if (!revived)
+                    return;
 
-            if (_rewardButtonRestartLevelLose != null)
-                _rewardButtonRestartLevelLose.interactable = true;
-
-            _currentPlayer.TryRevive(0.4f);
-
-            HidePanelAnimated(_losePanel, _losePanelCanvasGroup);
-            _pauseService.Resume(this);
-            _modalCoordinator.NotifyClosed(ModalType.Lose);
+                HidePanelAnimated(_losePanel, _losePanelCanvasGroup);
+                _modalCoordinator.NotifyClosed(ModalType.Lose);
+                _pauseService.Resume(this);
+            }
+            finally
+            {
+                if (_rewardButtonRestartLevelLose != null)
+                    _rewardButtonRestartLevelLose.interactable = true;
+            }
         }
 
         private void OnWinBonusRewardClicked()
         {
+            TryProcessWinRewardAsync().Forget();
+        }
+
+        private async UniTaskVoid TryProcessWinRewardAsync()
+        {
+            if (_rewardFacade == null)
+            {
+                Debug.LogError("[LevelPanels] RewardFacade is not injected.");
+                return;
+            }
+
             if (_currentPlayer == null || _currentPlayer.IsDead)
                 return;
 
@@ -332,38 +367,25 @@ namespace Game.Scripts.Levels
                 return;
 
             _isWinRewardFlowRunning = true;
-            _winRewardGranted = false;
-            _pendingRewardId = WinBonusRewardId;
 
             if (_rewardButtonRestartLevel != null)
                 _rewardButtonRestartLevel.interactable = false;
 
-            YG2.RewardedAdvShow(WinBonusRewardId, OnWinBonusRewardGranted);
-        }
-
-        private void OnWinBonusRewardGranted()
-        {
-            _winRewardGranted = true;
-            _pendingRewardId = null;
-            ProcessWinRewardAndGoNextAsync().Forget();
-        }
-
-        private async UniTaskVoid ProcessWinRewardAndGoNextAsync()
-        {
             try
             {
-                if (_currentPlayer == null || _currentPlayer.IsDead)
+                bool granted = await _rewardFacade.TryWinBonusAsync(_currentPlayer.Experience);
+
+                if (!granted)
                     return;
 
-                _currentPlayer.Experience.AddExperience(WinBonusXp);
                 _saveSystem.SavePlayerProgress();
 
                 int currentLevelIndex = _levelService.CurrentLevelIndex;
                 _saveSystem.ClearWaveCheckpoint(currentLevelIndex);
 
                 HidePanelAnimated(_winPanel, _winPanelCanvasGroup);
-                _pauseService.Resume(this);
                 _modalCoordinator.NotifyClosed(ModalType.Win);
+                _pauseService.Resume(this);
 
                 await _levelService.LoadNextLevelAsync();
                 _saveSystem.SaveGameData();
@@ -371,46 +393,9 @@ namespace Game.Scripts.Levels
             finally
             {
                 _isWinRewardFlowRunning = false;
-            }
-        }
-
-        private void OnCloseRewardedAdv()
-        {
-            if (_pendingRewardId == WinBonusRewardId && !_winRewardGranted)
-            {
-                _pendingRewardId = null;
-                _isWinRewardFlowRunning = false;
 
                 if (_rewardButtonRestartLevel != null)
                     _rewardButtonRestartLevel.interactable = true;
-            }
-
-            if (_pendingRewardId == ReviveRewardId)
-            {
-                _pendingRewardId = null;
-
-                if (_rewardButtonRestartLevelLose != null)
-                    _rewardButtonRestartLevelLose.interactable = true;
-            }
-        }
-
-        private void OnErrorRewardedAdv()
-        {
-            if (_pendingRewardId == WinBonusRewardId)
-            {
-                _pendingRewardId = null;
-                _isWinRewardFlowRunning = false;
-
-                if (_rewardButtonRestartLevel != null)
-                    _rewardButtonRestartLevel.interactable = true;
-            }
-
-            if (_pendingRewardId == ReviveRewardId)
-            {
-                _pendingRewardId = null;
-
-                if (_rewardButtonRestartLevelLose != null)
-                    _rewardButtonRestartLevelLose.interactable = true;
             }
         }
 
@@ -433,19 +418,21 @@ namespace Game.Scripts.Levels
 
         private void HidePanelAnimated(GameObject panel, CanvasGroup canvasGroup)
         {
-            if (panel == null || canvasGroup == null) return;
+            if (panel == null || canvasGroup == null)
+                return;
 
             _currentAnimation?.Kill();
 
             _currentAnimation = DOTween.Sequence()
-                .Join(canvasGroup.DOFade(0f, _fadeDuration))
-                .Join(panel.transform.DOScale(0.8f, _scaleDuration).SetEase(Ease.InBack))
+                .Join(canvasGroup.DOFade(0f, _fadeDuration).SetUpdate(true))
+                .Join(panel.transform.DOScale(0.8f, _scaleDuration).SetEase(Ease.InBack).SetUpdate(true))
                 .OnComplete(() => panel.SetActive(false));
         }
 
         private void HidePanelInstant(GameObject panel, CanvasGroup canvasGroup)
         {
-            if (panel == null || canvasGroup == null) return;
+            if (panel == null || canvasGroup == null)
+                return;
 
             _currentAnimation?.Kill();
             _currentAnimation = (Sequence)UIPanelAnimator.Hide(panel, canvasGroup, _fadeDuration, _scaleDuration);
