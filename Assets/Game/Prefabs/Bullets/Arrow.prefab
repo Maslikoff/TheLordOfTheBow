@@ -236,6 +236,7 @@ MonoBehaviour:
   _baseDamage: 10
   _rigidbody: {fileID: 6715459730368479186}
   _destroyOnCollision: 1
+  _spawnGraceTime: 0.1
 --- !u!1 &4885448719525352949
 GameObject:
   m_ObjectHideFlags: 0

@@ -251,7 +251,7 @@ namespace Game.Scripts.Levels
             await UIPanelAnimator.Show(_pausePanel, _pausePanelCanvasGroup, _fadeDuration, _scaleDuration, _ease);
         }
 
-        private void OnResumeButtonClick()
+        public void OnResumeButtonClick()
         {
             HidePanelAnimated(_pausePanel, _pausePanelCanvasGroup);
             _pauseService.Resume(this);

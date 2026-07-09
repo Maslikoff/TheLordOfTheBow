@@ -86,7 +86,7 @@ namespace Game.Scripts.UI
         private void UpdateUI()
         {
             if (_levelText != null && _playerExperience != null)
-                _levelText.text = $"LVL {_playerExperience.CurrentLevel}";
+                _levelText.text = $"{_playerExperience.CurrentLevel}";
         }
 
         public void RefreshUI()
@@ -109,7 +109,7 @@ namespace Game.Scripts.UI
             float currentExp = _playerExperience.CurrentExperience;
             float requiredExp = _playerExperience.ExperienceForNextLevel;
 
-            _experienceText.text = $"{Mathf.FloorToInt(currentExp)} / {Mathf.FloorToInt(requiredExp)} XP";
+            _experienceText.text = $"{Mathf.FloorToInt(currentExp)} / {Mathf.FloorToInt(requiredExp)}";
         }
         
         private System.Collections.IEnumerator AnimateLevelText()

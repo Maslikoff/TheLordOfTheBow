@@ -17,30 +17,37 @@ namespace Game.Scripts.Reward
 
             IsBusy = true;
             var tcs = new UniTaskCompletionSource<RewardAdResult>();
-            bool granted = false;
-            void OnError() => tcs.TrySetResult(RewardAdResult.Error);
+            bool rewarded = false;
+
+            void OnReward(string id)
+            {
+                if (string.IsNullOrEmpty(rewardId) || id == rewardId)
+                    rewarded = true;
+            }
+
+            void OnError()
+            {
+                tcs.TrySetResult(RewardAdResult.Error);
+            }
 
             void OnClose()
             {
-                if (granted == false)
-                    tcs.TrySetResult(RewardAdResult.ClosedWithoutReward);
+                tcs.TrySetResult(
+                    rewarded ? RewardAdResult.Granted : RewardAdResult.ClosedWithoutReward);
             }
 
+            YG2.onRewardAdv += OnReward;
             YG2.onErrorRewardedAdv += OnError;
             YG2.onCloseRewardedAdv += OnClose;
 
             try
             {
-                YG2.RewardedAdvShow(rewardId, () =>
-                {
-                    granted = true;
-                    tcs.TrySetResult(RewardAdResult.Granted);
-                });
-
+                YG2.RewardedAdvShow(rewardId);
                 return await tcs.Task;
             }
             finally
             {
+                YG2.onRewardAdv -= OnReward;
                 YG2.onErrorRewardedAdv -= OnError;
                 YG2.onCloseRewardedAdv -= OnClose;
                 IsBusy = false;

@@ -1,3 +1,4 @@
+using Game.Localization;
 using Game.Scripts.Audio;
 using Game.Scripts.Levels;
 using Game.Scripts.Save;
@@ -36,6 +37,9 @@ namespace Game.Scripts.DI
         {
             builder.Register<ILevelService, LevelService>(Lifetime.Singleton);
             builder.Register<IAudioService, AudioService>(Lifetime.Singleton);
+            builder.Register<YgLanguageService>(Lifetime.Singleton)
+                .As<ILanguageService>()
+                .AsSelf();
         }
         
         private void ConfigureSaveSystem(IContainerBuilder builder)
