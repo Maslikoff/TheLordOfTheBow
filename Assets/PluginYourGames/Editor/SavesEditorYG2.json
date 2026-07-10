@@ -7,7 +7,7 @@
         false,
         false
     ],
-    "idSave": 61,
+    "idSave": 154,
     "_playerLevel": 1,
     "_playerExperience": 0.0,
     "_currentLevelIndex": 0,
@@ -34,5 +34,10 @@
             "CountBonus": 0
         }
     ],
-    "_waveCheckpoints": []
+    "_waveCheckpoints": [
+        {
+            "LevelIndex": 0,
+            "WaveIndex": 0
+        }
+    ]
 }

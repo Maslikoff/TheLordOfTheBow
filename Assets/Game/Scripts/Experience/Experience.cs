@@ -49,7 +49,7 @@ namespace Game.Scripts.Experience
             
             CheckLevelUp();
         }
-
+        
         public void ResetExperience()
         {
             _currentLevel = _startLevel;
@@ -72,6 +72,11 @@ namespace Game.Scripts.Experience
             ExperienceChanged?.Invoke(_currentExperience);
             ExperienceProgressChanged?.Invoke(_currentExperience, _experienceForNextLevel);
         }
+        
+        public void RestoreTo(int level, float experience)
+        {
+            LoadSaveData(level, experience);
+        }
 
         private void CheckLevelUp()
         {
@@ -89,7 +94,6 @@ namespace Game.Scripts.Experience
             
             ExperienceChanged?.Invoke(_currentExperience);
         }
-
 
         private void UpdateExperienceForNextLevel()
         {

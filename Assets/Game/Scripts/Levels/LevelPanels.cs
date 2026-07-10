@@ -42,8 +42,10 @@ namespace Game.Scripts.Levels
         [SerializeField] private float _scaleDuration = 0.3f;
         [SerializeField] private Ease _ease = Ease.OutBack;
 
-        private LeaderboardService _leaderboardService;
+        private bool _isWinRewardFlowRunning;
+
         private ILevelService _levelService;
+        private LeaderboardService _leaderboardService;
         private WaveSystem _waveSystem;
         private ISaveSystem _saveSystem;
         private Player _currentPlayer;
@@ -51,8 +53,8 @@ namespace Game.Scripts.Levels
         private IPauseService _pauseService;
         private IModalCoordinator _modalCoordinator;
         private RewardFacade _rewardFacade;
-
-        private bool _isWinRewardFlowRunning;
+        private LevelSessionService _levelSessionService;
+        private UpgradeChoicePanel _upgradeChoicePanel;
 
         [Inject]
         private void Construct(
@@ -62,7 +64,9 @@ namespace Game.Scripts.Levels
             IPauseService pauseService,
             IModalCoordinator modalCoordinator,
             LeaderboardService leaderboardService,
-            RewardFacade rewardFacade)
+            RewardFacade rewardFacade,
+            LevelSessionService levelSessionService,
+            UpgradeChoicePanel upgradeChoicePanel)
         {
             _levelService = levelService;
             _waveSystem = waveSystem;
@@ -71,6 +75,8 @@ namespace Game.Scripts.Levels
             _modalCoordinator = modalCoordinator;
             _leaderboardService = leaderboardService;
             _rewardFacade = rewardFacade;
+            _levelSessionService = levelSessionService;
+            _upgradeChoicePanel = upgradeChoicePanel;
         }
 
         private void Awake()
@@ -132,6 +138,17 @@ namespace Game.Scripts.Levels
 
             if (_rewardButtonRestartLevelLose != null)
                 _rewardButtonRestartLevelLose.interactable = true;
+        }
+        
+        private void RollbackLevelProgress()
+        {
+            if (_currentPlayer == null)
+                return;
+            
+            _levelSessionService.RollbackExperience(_currentPlayer.Experience);
+            _upgradeChoicePanel?.ResetPendingState();
+            _levelSessionService.ClearPreDeathState();
+            _saveSystem.SavePlayerProgress();
         }
 
         private void SubscribeButtons()
@@ -205,7 +222,7 @@ namespace Game.Scripts.Levels
             _modalCoordinator.ModalOpened -= OnModalStateChanged;
             _modalCoordinator.ModalClosed -= OnModalStateChanged;
         }
-
+        
         private void OnModalStateChanged(ModalType _)
         {
             UpdatePauseButtonState();
@@ -221,9 +238,10 @@ namespace Game.Scripts.Levels
         {
             int currentLevelIndex = _levelService.CurrentLevelIndex;
             _saveSystem.ClearWaveCheckpoint(currentLevelIndex);
-
-            _saveSystem.SavePlayerProgress();
+            _saveSystem.CommitSessionProgress();
+            
             await _levelService.LoadNextLevelAsync();
+            
             _saveSystem.SaveGameData();
         }
 
@@ -280,19 +298,20 @@ namespace Game.Scripts.Levels
         {
             _pauseService.Pause(this);
             _winPanel.transform.SetAsLastSibling();
-
+            
             await UIPanelAnimator.Show(_winPanel, _winPanelCanvasGroup, _fadeDuration, _scaleDuration, _ease);
-
-            _saveSystem.SavePlayerProgress();
+            
+            _saveSystem.CommitSessionProgress();
         }
 
         private void OnPlayerDeath(Player player)
         {
             if (_currentPlayer == null || _currentPlayer != player)
                 return;
-
+            
+            HandlePlayerDeath();
             WriteOnLeaderboardFinished();
-
+            
             if (_rewardButtonRestartLevelLose != null)
                 _rewardButtonRestartLevelLose.interactable = true;
 
@@ -335,6 +354,8 @@ namespace Game.Scripts.Levels
 
                 if (!revived)
                     return;
+                
+                RestoreProgressAfterRevive();
 
                 HidePanelAnimated(_losePanel, _losePanelCanvasGroup);
                 _modalCoordinator.NotifyClosed(ModalType.Lose);
@@ -378,7 +399,8 @@ namespace Game.Scripts.Levels
                 if (!granted)
                     return;
 
-                _saveSystem.SavePlayerProgress();
+                //_saveSystem.SavePlayerProgress();
+                _saveSystem.CommitSessionProgress();
 
                 int currentLevelIndex = _levelService.CurrentLevelIndex;
                 _saveSystem.ClearWaveCheckpoint(currentLevelIndex);
@@ -437,6 +459,17 @@ namespace Game.Scripts.Levels
             _currentAnimation?.Kill();
             _currentAnimation = (Sequence)UIPanelAnimator.Hide(panel, canvasGroup, _fadeDuration, _scaleDuration);
         }
+        
+        private void HandlePlayerDeath()
+        {
+            if (_currentPlayer == null)
+                return;
+            
+            _levelSessionService.CapturePreDeathState(_currentPlayer.Experience);
+            _levelSessionService.RollbackExperience(_currentPlayer.Experience);
+            _upgradeChoicePanel?.ResetPendingState();
+            _saveSystem.SavePlayerProgress();
+        }
 
         private void WriteOnLeaderboardFinished()
         {
@@ -446,9 +479,19 @@ namespace Game.Scripts.Levels
 
         private void RestartFromFirstWave()
         {
+            RollbackLevelProgress();
+
             int currentLevelIndex = _levelService.CurrentLevelIndex;
             _saveSystem.ClearWaveCheckpoint(currentLevelIndex);
             _levelService.RestartCurrentLevelAsync().Forget();
+        }
+        
+        private void RestoreProgressAfterRevive()
+        {
+            if (_currentPlayer == null)
+                return;
+            _levelSessionService.RestorePreDeathExperience(_currentPlayer.Experience);
+            _levelSessionService.ClearPreDeathState();
         }
     }
 }

@@ -1,4 +1,5 @@
 using DG.Tweening;
+using Game.Scripts.Levels;
 using Game.Scripts.StateServices;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -12,7 +13,10 @@ namespace Game.Scripts.UI
         [Header("Visual Elements")] 
         [SerializeField] private RectTransform _textContainer;
         [SerializeField] private TMPro.TextMeshProUGUI _tapText;
+        [SerializeField] private TMPro.TextMeshProUGUI _levelTitleText;
+        [SerializeField] private TMPro.TextMeshProUGUI _levelTitle;
         [SerializeField] private GameObject _prefabAnimationTutorialImage;
+        [SerializeField] private GameObject _waveCountsObject;
         [SerializeField] private Image _tapZoneBackground;
 
         [Header("Animation Settings")] 
@@ -30,11 +34,13 @@ namespace Game.Scripts.UI
         private Tween _textScaleTween;
         
         private IGameStateService _gameStateService;
+        private ILevelService _levelService;
         
         [Inject]
-        private void Construct(IGameStateService gameStateService)
+        private void Construct(IGameStateService gameStateService, ILevelService levelService)
         {
             _gameStateService = gameStateService;
+            _levelService = levelService;
         }
         
         private void Start()
@@ -96,6 +102,7 @@ namespace Game.Scripts.UI
                 return;
         
             StartGame();
+            OpenWaveCounts();
         }
 
         public void OnPointerEnter(PointerEventData eventData)
@@ -115,6 +122,19 @@ namespace Game.Scripts.UI
             if (_textContainer != null)
                 _textContainer.DOScale(1f, 0.3f).SetEase(Ease.OutQuad);
         }
+        
+        private void UpdateLevelTitle()
+        {
+            if (_levelTitleText == null || _levelService == null)
+                return;
+            
+            _levelTitleText.text = $"{_levelService.CurrentLevel}";
+        }
+
+        private void OpenWaveCounts()
+        {
+            _waveCountsObject.SetActive(true);
+        }
 
         private void StartGame()
         {
@@ -129,6 +149,9 @@ namespace Game.Scripts.UI
             fadeSequence.Join(_textContainer.DOScale(0f, _fadeDuration).SetEase(Ease.InBack));
             fadeSequence.Join(_tapText.DOFade(0f, _fadeDuration));
             fadeSequence.Join(_tapZoneBackground.DOFade(0f, _fadeDuration));
+            fadeSequence.Join(_levelTitle.DOFade(0f, _fadeDuration));
+            fadeSequence.Join(_levelTitleText.DOFade(0f, _fadeDuration));
+            
             _prefabAnimationTutorialImage.SetActive(false);
         
             fadeSequence.OnComplete(() =>

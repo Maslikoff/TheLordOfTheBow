@@ -18,6 +18,7 @@ namespace Game.Scripts.Save
         private readonly CompositeDisposable _disposables = new();
         
         [Inject] private ILevelService _levelService;
+        [Inject] private LevelSessionService _levelSessionService;
         
         private Player _currentPlayer;
         private UniTaskCompletionSource _readyTcs;
@@ -65,9 +66,7 @@ namespace Game.Scripts.Save
         {
             YG2.onGetSDKData -= OnSdkDataReady;
             YG2.onHideWindowGame -= OnHideWindow;
-
             UnsubscribeFromPlayer();
-            
             _disposables.Clear();
         } 
         
@@ -90,20 +89,12 @@ namespace Game.Scripts.Save
             return _readyTcs.Task;
         }
         
-        public void LoadGameData()
-        {
-            OnSdkDataReady();
-        }
-
-        public void ManualSave()
-        {
-            SaveGameData();
-        }
+        public void LoadGameData() => OnSdkDataReady();
+        public void ManualSave() => SaveGameData();
 
         public void SaveWaveCheckpoint(int levelIndex, int waveIndex)
         {
             YG2.saves.WriteWaveCheckpoint(levelIndex, waveIndex);
-
             if (YG2.isSDKEnabled)
                 YG2.SaveProgress();
         }
@@ -118,9 +109,17 @@ namespace Game.Scripts.Save
         public void ClearWaveCheckpoint(int levelIndex)
         {
             YG2.saves.ClearWaveCheckpoint(levelIndex);
-
             if (YG2.isSDKEnabled)
                 YG2.SaveProgress();
+        }
+        
+        public void CommitSessionProgress()
+        {
+            if (_currentPlayer == null || _levelSessionService == null)
+                return;
+
+            _levelSessionService.CaptureSnapshot(_currentPlayer.Experience);
+            SavePlayerProgress();
         }
 
         public void SavePlayerProgress()
@@ -147,23 +146,15 @@ namespace Game.Scripts.Save
                 return;
             }
             
-            Debug.Log("[SaveSystem] Сохранение данных игры...");
-            
             try
             {
                 var saves = YG2.saves;
-                
                 WritePlayerProgressToSaves(saves);
                 
                 if (_levelService != null)
-                {
                     saves.WriteCurrentLevelIndex(_levelService.CurrentLevelIndex);
-                    Debug.Log($"[SaveSystem] Сохранён индекс уровня: {_levelService.CurrentLevelIndex}");
-                }
                 
                 YG2.SaveProgress();
-                
-                Debug.Log("[SaveSystem] Данные успешно сохранены в облако!");
             }
             catch (Exception e)
             {
@@ -176,42 +167,36 @@ namespace Game.Scripts.Save
             if (_currentPlayer == null)
                 return;
             
-            saves.WritePlayerLevel(_currentPlayer.Experience.CurrentLevel);
-            saves.WritePlayerExperience(_currentPlayer.Experience.CurrentExperience);
-            
-            Debug.Log($"[SaveSystem] Сохранён уровень игрока: {_currentPlayer.Experience.CurrentLevel}, " +
-                      $"опыт: {_currentPlayer.Experience.CurrentExperience}");
+            (int level, float experience) = GetExperienceToPersist();
+            saves.WritePlayerLevel(level);
+            saves.WritePlayerExperience(experience);
             
             PlayerBulletUpgradeCollection bulletCollection = _currentPlayer.BulletUpgrades;
             
             foreach (BulletType bulletType in Enum.GetValues(typeof(BulletType)))
             {
                 PlayerBulletUpgradeEntry entry = bulletCollection.Get(bulletType);
+                if (entry == null) continue;
                 
-                if (entry == null)
-                    continue;
-                
-                var state = new BulletUpgradeState(
-                    entry.IsUnlocked,
-                    entry.DamageBonus,
-                    entry.LifeTimeBonus,
-                    entry.CountBonus);
-                saves.WriteBulletUpgradeState(bulletType, state);
-                
-                Debug.Log($"[SaveSystem] Сохранена прокачка пули {bulletType}: разблокирована={state.IsUnlocked}, " +
-                          $"урон={state.DamageBonus}");
+                saves.WriteBulletUpgradeState(bulletType, new BulletUpgradeState(
+                    entry.IsUnlocked, entry.DamageBonus, entry.LifeTimeBonus, entry.CountBonus));
             }
+        }
+        
+        private (int level, float experience) GetExperienceToPersist()
+        {
+            if (_levelSessionService != null && _levelSessionService.HasSnapshot)
+                return (_levelSessionService.SnapshotLevel, _levelSessionService.SnapshotExperience);
+            
+            return (_currentPlayer.Experience.CurrentLevel, _currentPlayer.Experience.CurrentExperience);
         }
         
         private void OnSdkDataReady()
         {
-            Debug.Log("[SaveSystem] SDK данные получены — загрузка...");
-            
             try
             {
                 LoadMetaData();
                 _metaDataLoaded = true;
-                
                 if (_currentPlayer != null)
                     LoadPlayerData(_currentPlayer);
             }
@@ -227,20 +212,14 @@ namespace Game.Scripts.Save
         
         private void LoadMetaData()
         {
-            if (_levelService == null)
-                return;
-            
-            int levelIndex = YG2.saves.CurrentLevelIndex;
-            _levelService.SetCurrentLevelIndex(levelIndex);
-            
-            Debug.Log($"[SaveSystem] Загружен индекс уровня: {levelIndex}");
+            if (_levelService == null) return;
+            _levelService.SetCurrentLevelIndex(YG2.saves.CurrentLevelIndex);
         }
         
         private void OnPlayerSpawned(Player player)
         {
             UnsubscribeFromPlayer();
             _currentPlayer = player;
-            _currentPlayer.Experience.LevelUp += OnPlayerLevelUp;
             
             if (_metaDataLoaded || YG2.isSDKEnabled)
                 LoadPlayerData(player);
@@ -248,71 +227,40 @@ namespace Game.Scripts.Save
         
         private void LoadPlayerData(Player player)
         {
-            Debug.Log("[SaveSystem] Загрузка данных игрока...");
-            
             var saves = YG2.saves;
             player.Experience.LoadSaveData(saves.PlayerLevel, saves.PlayerExperience);
-            
-            Debug.Log($"[SaveSystem] Загружен уровень игрока: {saves.PlayerLevel}, опыт: {saves.PlayerExperience}");
             
             PlayerBulletUpgradeCollection bulletCollection = player.BulletUpgrades;
             
             foreach (BulletType bulletType in Enum.GetValues(typeof(BulletType)))
             {
                 PlayerBulletUpgradeEntry entry = bulletCollection.Get(bulletType);
+                if (entry == null) continue;
 
-                if (entry == null)
-                    continue;
-
-                if (saves.TryGetBulletUpgradeState(bulletType, out BulletUpgradeState state) == false)
-                {
-                    Debug.Log($"[SaveSystem] Для {bulletType} нет данных в сейве — оставляем дефолт префаба");
-                    continue;
-                }
-
-                entry.ApplySaveState(state);
-
-                Debug.Log($"[SaveSystem] Загружена прокачка пули {bulletType}: " +
-                          $"разблокирована={state.IsUnlocked}, урон={state.DamageBonus}");
+                if (saves.TryGetBulletUpgradeState(bulletType, out BulletUpgradeState state))
+                    entry.ApplySaveState(state);
             }
             
             bulletCollection.NotifyLoadedFromSave();
         }
         
-        private void OnPlayerLevelUp(int level)
-        {
-            SavePlayerProgress();
-        }
-        
-        private void OnHideWindow()
-        {
-            SaveGameData();
-        }
+        private void OnHideWindow() => SaveGameData();
         
         private void UnsubscribeFromPlayer()
         {
-            if (_currentPlayer == null)
-                return;
-            
-            _currentPlayer.Experience.LevelUp -= OnPlayerLevelUp;
             _currentPlayer = null;
         }
         
         private void MarkReady()
         {
-            if (_isReady)
-                return;
-            
+            if (_isReady) return;
             _isReady = true;
             _readyTcs?.TrySetResult();
-            
-            Debug.Log("[SaveSystem] Облачные данные готовы — можно стартовать игру");
         }
         
         private async UniTaskVoid WaitForSdkWithTimeout()
         {
             float elapsed = 0f;
-            
             while (!YG2.isSDKEnabled && elapsed < SdkWaitTimeoutSeconds)
             {
                 await UniTask.Yield();

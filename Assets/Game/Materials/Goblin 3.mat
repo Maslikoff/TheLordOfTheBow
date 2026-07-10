@@ -147,7 +147,7 @@ Material:
     - _OcclusionStrength: 1
     - _OutlineDepthOffset: 0
     - _OutlineEnabled: 1
-    - _OutlineScale: 1.55
+    - _OutlineScale: 1.19
     - _OutlineSpace: 0
     - _OutlineWidth: 0.31
     - _OverrideLightmapDir: 0

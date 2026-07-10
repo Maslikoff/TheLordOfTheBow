@@ -95,6 +95,30 @@ namespace Game.Scripts.UI
                 OpenPanelInternal);
         }
         
+        public void ResetPendingState()
+        {
+            _pendingLevelUps = 0;
+
+            if (_panelRoot != null && _panelRoot.activeSelf)
+            {
+                _panelRoot.SetActive(false);
+                _pauseService?.Resume(this);
+
+                if (_modalCoordinator != null && _modalCoordinator.CurrentModal == ModalType.Upgrade)
+                {
+                    _modalCoordinator.NotifyClosed(ModalType.Upgrade);
+                }
+            }
+
+            foreach (var card in _currentCards)
+            {
+                if (card != null)
+                    Destroy(card.gameObject);
+            }
+
+            _currentCards.Clear();
+        }
+        
         private void OpenPanelInternal()
         {
             _pauseService.Pause(this);

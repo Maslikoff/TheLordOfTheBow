@@ -1,3 +1,4 @@
+using Game.Scripts.Characters.Player;
 using Game.Scripts.Levels;
 using Game.Scripts.Save;
 using Game.Scripts.StateServices;
@@ -16,14 +17,17 @@ namespace Game.Scripts.Spawners
         private UpgradeChoicePanel _upgradeChoicePanel;
         private IGameStateService _gameStateService;
         private ISaveSystem _saveSystem;
-
+        private LevelSessionService _levelSessionService;
+        
         [Inject]
-        private void Construct(ILevelService levelService,
+        private void Construct(
+            ILevelService levelService,
             PlayerSpawner playerSpawner,
             WaveSystem waveSystem,
             UpgradeChoicePanel upgradeChoicePanel,
-            IGameStateService gameStateService, 
-            ISaveSystem saveSystem)
+            IGameStateService gameStateService,
+            ISaveSystem saveSystem,
+            LevelSessionService levelSessionService)
         {
             _levelService = levelService;
             _playerSpawner = playerSpawner;
@@ -31,6 +35,7 @@ namespace Game.Scripts.Spawners
             _upgradeChoicePanel = upgradeChoicePanel;
             _gameStateService = gameStateService;
             _saveSystem = saveSystem;
+            _levelSessionService = levelSessionService;
         }
 
         private void Start()
@@ -49,8 +54,10 @@ namespace Game.Scripts.Spawners
             _waveSystem.SetEnemyPoolConfig(config.EnemyRaceConfigs);
             _waveSystem.ResetToPreStartState();
             
-            _playerSpawner.Spawn();
+            Player player = _playerSpawner.Spawn();
             _upgradeChoicePanel.SetAvailableUpgrades(config.AvailableUpgrades);
+            
+            _levelSessionService.CaptureSnapshot(player.Experience);
 
             int levelIndex = _levelService.CurrentLevelIndex;
             int startWaveIndex = _saveSystem.GetWaveCheckpointOrDefault(levelIndex);

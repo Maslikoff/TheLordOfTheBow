@@ -10,5 +10,6 @@ namespace Game.Scripts.Save
         void SaveWaveCheckpoint(int levelIndex, int waveIndex);
         int GetWaveCheckpointOrDefault(int levelIndex);
         void ClearWaveCheckpoint(int levelIndex);
+        void CommitSessionProgress();
     }
 }

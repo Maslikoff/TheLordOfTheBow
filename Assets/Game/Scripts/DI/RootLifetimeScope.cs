@@ -36,6 +36,7 @@ namespace Game.Scripts.DI
         private void ConfigureServices(IContainerBuilder builder)
         {
             builder.Register<ILevelService, LevelService>(Lifetime.Singleton);
+            builder.Register<LevelSessionService>(Lifetime.Singleton);
             builder.Register<IAudioService, AudioService>(Lifetime.Singleton);
             builder.Register<YgLanguageService>(Lifetime.Singleton)
                 .As<ILanguageService>()

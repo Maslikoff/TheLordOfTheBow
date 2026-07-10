@@ -1,10 +1,13 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Game.Scripts.Spawners
 {
     public class SpawnGrid : MonoBehaviour
     {
+        private readonly HashSet<int> _occupiedCells = new();
+        
         [SerializeField] private Transform _enemySpawnPoint;
     
         [Header("Settings")]
@@ -19,9 +22,77 @@ namespace Game.Scripts.Spawners
         
         public int GridWidth => _gridWidth;
         public int GridHeight => _gridHeight;
+        public int OccupiedCount => _occupiedCells.Count;
+        public int TotalCells => _gridWidth * _gridHeight;
+        public bool HasFreeCell => _occupiedCells.Count < TotalCells;
     
         public event Action<Vector3> SpawnEnemyAtPosition;
     
+        public void ResetOccupancy() => _occupiedCells.Clear();
+        public bool IsOccupied(int x, int y) => IsValidPosition(x, y) && _occupiedCells.Contains(ToIndex(x, y));
+        
+        public void Release(int x, int y)
+        {
+            if (IsValidPosition(x, y))
+                _occupiedCells.Remove(ToIndex(x, y));
+        }
+        
+        public bool TryGetRandomFreeCell(out int x, out int y)
+        {
+            x = 0;
+            y = 0;
+            if (HasFreeCell == false)
+                return false;
+            
+            int freeIndex = UnityEngine.Random.Range(0, TotalCells - _occupiedCells.Count);
+            
+            for (int i = 0; i < TotalCells; i++)
+            {
+                if (_occupiedCells.Contains(i))
+                    continue;
+                
+                if (freeIndex == 0)
+                {
+                    x = i % _gridWidth;
+                    y = i / _gridWidth;
+                    return TryOccupy(x, y);
+                }
+                freeIndex--;
+            }
+            return false;
+        }
+        
+        public bool TryGetNextFreeCell(int startX, int startY, out int x, out int y)
+        {
+            for (int cy = startY; cy < _gridHeight; cy++)
+            {
+                int fromX = cy == startY ? startX : 0;
+                
+                for (int cx = fromX; cx < _gridWidth; cx++)
+                {
+                    if (TryOccupy(cx, cy))
+                    {
+                        x = cx;
+                        y = cy;
+                        return true;
+                    }
+                }
+            }
+            x = 0;
+            y = 0;
+            return false;
+        }
+        
+        public bool TryOccupy(int x, int y)
+        {
+            if (IsValidPosition(x, y) == false || IsOccupied(x, y))
+                return false;
+            
+            _occupiedCells.Add(ToIndex(x, y));
+            
+            return true;
+        }
+        
         public void SpawnAllEnemies()
         {
             Vector3 offset = CalculateOffset();
@@ -67,6 +138,8 @@ namespace Game.Scripts.Spawners
         }
 
         private bool IsValidPosition(int x, int y) => x >= 0 && x < _gridWidth && y >= 0 && y < _gridHeight;
+        
+        private int ToIndex(int x, int y) => y * _gridWidth + x;
     
         private Vector3 CalculateOffset()
         {

@@ -68,7 +68,7 @@ namespace Game.Scripts.Characters.Player
             if (!IsDead) return false;
 
             IsDead = false;
-            _playerHealth.ReviveWithPercent(hpPercent);
+            _playerHealth.ReviveWithPercent(hpPercent); 
             return true;
         }
         

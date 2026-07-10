@@ -6,11 +6,26 @@ namespace Game.Scripts.Characters.Enemy
     {
         private Enemy _enemy;
 
-        protected override  void Start()
+        protected override void Start()
         {
             base.Start();
 
             _enemy = GetComponent<Enemy>();
+            HideFirePointDecorativeVisuals();
+        }
+        
+        private void HideFirePointDecorativeVisuals()
+        {
+            if (_firePoint == null)
+                return;
+            
+            Renderer[] renderers = _firePoint.GetComponentsInChildren<Renderer>(true);
+            
+            foreach (Renderer renderer in renderers)
+            {
+                if (renderer != null)
+                    renderer.enabled = false;
+            }
         }
 
         protected override Vector3 GetShootDirection()
