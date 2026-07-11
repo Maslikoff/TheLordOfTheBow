@@ -92,5 +92,41 @@ namespace Game.Scripts.Upgrades
             
             MessageBroker.Default.Publish(new M_SaveRequested());
         }
+
+        public Dictionary<BulletType, BulletUpgradeState> CaptureAllStates()
+        {
+            var states = new Dictionary<BulletType, BulletUpgradeState>();
+
+            foreach (PlayerBulletUpgradeEntry entry in _entries)
+            {
+                if (entry == null)
+                    continue;
+
+                states[entry.BulletType] = new BulletUpgradeState(
+                    entry.IsUnlocked,
+                    entry.DamageBonus,
+                    entry.LifeTimeBonus,
+                    entry.CountBonus);
+            }
+
+            return states;
+        }
+
+        public void ApplyAllStates(IReadOnlyDictionary<BulletType, BulletUpgradeState> states)
+        {
+            if (states == null)
+                return;
+
+            foreach (PlayerBulletUpgradeEntry entry in _entries)
+            {
+                if (entry == null)
+                    continue;
+
+                if (states.TryGetValue(entry.BulletType, out BulletUpgradeState state))
+                    entry.ApplySaveState(state);
+            }
+
+            NotifyLoadedFromSave();
+        }
     }
 }

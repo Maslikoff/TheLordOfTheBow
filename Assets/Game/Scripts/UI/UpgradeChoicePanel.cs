@@ -123,6 +123,10 @@ namespace Game.Scripts.UI
         {
             _pauseService.Pause(this);
             _panelRoot.SetActive(true);
+
+            if (_panelRoot.transform.parent != null)
+                _panelRoot.transform.parent.SetAsLastSibling();
+
             _panelRoot.transform.SetAsLastSibling();
             
             foreach (var card in _currentCards)

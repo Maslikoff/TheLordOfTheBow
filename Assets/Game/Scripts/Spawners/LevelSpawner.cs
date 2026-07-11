@@ -57,7 +57,7 @@ namespace Game.Scripts.Spawners
             Player player = _playerSpawner.Spawn();
             _upgradeChoicePanel.SetAvailableUpgrades(config.AvailableUpgrades);
             
-            _levelSessionService.CaptureSnapshot(player.Experience);
+            _levelSessionService.CaptureSnapshot(player.Experience, player.BulletUpgrades);
 
             int levelIndex = _levelService.CurrentLevelIndex;
             int startWaveIndex = _saveSystem.GetWaveCheckpointOrDefault(levelIndex);

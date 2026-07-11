@@ -146,6 +146,7 @@ namespace Game.Scripts.Levels
                 return;
             
             _levelSessionService.RollbackExperience(_currentPlayer.Experience);
+            _levelSessionService.RollbackUpgrades(_currentPlayer.BulletUpgrades);
             _upgradeChoicePanel?.ResetPendingState();
             _levelSessionService.ClearPreDeathState();
             _saveSystem.SavePlayerProgress();
@@ -242,6 +243,7 @@ namespace Game.Scripts.Levels
             
             await _levelService.LoadNextLevelAsync();
             
+            SubmitLeaderboardLevel();
             _saveSystem.SaveGameData();
         }
 
@@ -410,6 +412,7 @@ namespace Game.Scripts.Levels
                 _pauseService.Resume(this);
 
                 await _levelService.LoadNextLevelAsync();
+                SubmitLeaderboardLevel();
                 _saveSystem.SaveGameData();
             }
             finally
@@ -465,16 +468,22 @@ namespace Game.Scripts.Levels
             if (_currentPlayer == null)
                 return;
             
-            _levelSessionService.CapturePreDeathState(_currentPlayer.Experience);
+            _levelSessionService.CapturePreDeathState(_currentPlayer.Experience, _currentPlayer.BulletUpgrades);
             _levelSessionService.RollbackExperience(_currentPlayer.Experience);
+            _levelSessionService.RollbackUpgrades(_currentPlayer.BulletUpgrades);
             _upgradeChoicePanel?.ResetPendingState();
             _saveSystem.SavePlayerProgress();
         }
 
         private void WriteOnLeaderboardFinished()
         {
-            int score = _waveSystem.CurrentWaveIndex;
-            _leaderboardService.TrySubmitIfBest(score);
+            SubmitLeaderboardLevel();
+        }
+
+        private void SubmitLeaderboardLevel()
+        {
+            int level = _levelService.CurrentLevel;
+            _leaderboardService.TrySubmitIfBest(level);
         }
 
         private void RestartFromFirstWave()
@@ -491,6 +500,7 @@ namespace Game.Scripts.Levels
             if (_currentPlayer == null)
                 return;
             _levelSessionService.RestorePreDeathExperience(_currentPlayer.Experience);
+            _levelSessionService.RestorePreDeathUpgrades(_currentPlayer.BulletUpgrades);
             _levelSessionService.ClearPreDeathState();
         }
     }

@@ -8,7 +8,7 @@ namespace Game.Scripts.Save
     public class LeaderboardService : MonoBehaviour
     {
         [Header("YG Leaderboard")]
-        [SerializeField] private string _technoName = "best_wave";
+        [SerializeField] private string _technoName = "BestLevel";
         [Tooltip("Минимальный интервал между отправками в секундах (в доке: не чаще ~1 раза/сек).")]
         [SerializeField] private float _minSendIntervalSeconds = 1.1f;
         [Tooltip("Авто-открывать окно авторизации перед отправкой, если игрок не авторизован.")]
@@ -54,6 +54,16 @@ namespace Game.Scripts.Save
                 _bestScore = 0;
             
             BestScoreChanged?.Invoke(_bestScore);
+            TrySubmitSavedLevelProgress();
+        }
+
+        private void TrySubmitSavedLevelProgress()
+        {
+            if (YG2.isSDKEnabled == false || YG2.saves == null)
+                return;
+
+            int savedLevel = Mathf.Max(1, YG2.saves.CurrentLevelIndex + 1);
+            TrySubmitIfBest(savedLevel);
         }
         
         public bool TrySubmitIfBest(int candidateScore)

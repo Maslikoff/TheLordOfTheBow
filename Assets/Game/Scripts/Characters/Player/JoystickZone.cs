@@ -1,3 +1,4 @@
+using Game.Scripts.StateServices;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -11,6 +12,9 @@ namespace Game.Scripts.Characters.Player
 
         public void OnPointerDown(PointerEventData eventData)
         {
+            if (GameplayControlAccess.Instance != null && GameplayControlAccess.Instance.IsBlocked)
+                return;
+
             if (_joystick == null)
                 return;
             
@@ -23,6 +27,9 @@ namespace Game.Scripts.Characters.Player
         
         public void OnDrag(PointerEventData eventData)
         {
+            if (GameplayControlAccess.Instance != null && GameplayControlAccess.Instance.IsBlocked)
+                return;
+
             if (_joystick == null)
                 return;
             
@@ -34,6 +41,9 @@ namespace Game.Scripts.Characters.Player
         
         public void OnPointerUp(PointerEventData eventData)
         {
+            if (GameplayControlAccess.Instance != null && GameplayControlAccess.Instance.IsBlocked)
+                return;
+
             if (_joystick == null)
                 return;
             

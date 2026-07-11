@@ -1,5 +1,4 @@
-using DG.Tweening;
-using Game.Scripts.Levels;
+using DG.Tweening;using Game.Scripts.Levels;
 using Game.Scripts.StateServices;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -47,6 +46,7 @@ namespace Game.Scripts.UI
         {
             MakeFullscreenBlocker();
             PlayIdleAnimation();
+            UpdateLevelTitle();
         }
         
         private void MakeFullscreenBlocker()

@@ -118,7 +118,7 @@ namespace Game.Scripts.Save
             if (_currentPlayer == null || _levelSessionService == null)
                 return;
 
-            _levelSessionService.CaptureSnapshot(_currentPlayer.Experience);
+            _levelSessionService.CaptureSnapshot(_currentPlayer.Experience, _currentPlayer.BulletUpgrades);
             SavePlayerProgress();
         }
 
@@ -240,7 +240,7 @@ namespace Game.Scripts.Save
                 if (saves.TryGetBulletUpgradeState(bulletType, out BulletUpgradeState state))
                     entry.ApplySaveState(state);
             }
-            
+
             bulletCollection.NotifyLoadedFromSave();
         }
         

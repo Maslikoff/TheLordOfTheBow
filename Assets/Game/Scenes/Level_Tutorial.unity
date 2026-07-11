@@ -3918,7 +3918,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c87a4cf8e504d8bb1f8e5b9f1149a3f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _technoName: BestWave
+  _technoName: BestLevel
   _minSendIntervalSeconds: 1.1
   _requestAuthIfNeeded: 1
   _useLocalBestCache: 1

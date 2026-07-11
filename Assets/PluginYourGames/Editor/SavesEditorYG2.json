@@ -7,10 +7,10 @@
         false,
         false
     ],
-    "idSave": 154,
+    "idSave": 261,
     "_playerLevel": 1,
-    "_playerExperience": 0.0,
-    "_currentLevelIndex": 0,
+    "_playerExperience": 190.0,
+    "_currentLevelIndex": 2,
     "_bulletUpgrades": [
         {
             "BulletType": 0,
@@ -28,7 +28,7 @@
         },
         {
             "BulletType": 2,
-            "IsUnlocked": false,
+            "IsUnlocked": true,
             "DamageBonus": 0.0,
             "LifeTimeBonus": 0.0,
             "CountBonus": 0
@@ -37,6 +37,14 @@
     "_waveCheckpoints": [
         {
             "LevelIndex": 0,
+            "WaveIndex": 1
+        },
+        {
+            "LevelIndex": 1,
+            "WaveIndex": 0
+        },
+        {
+            "LevelIndex": 2,
             "WaveIndex": 0
         }
     ]
