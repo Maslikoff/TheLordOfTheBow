@@ -4,6 +4,7 @@ namespace Game.Scripts.Upgrades
     {
         Damage,
         LifeTime,
-        Count
+        Count,
+        PoisonDamage
     }
 }

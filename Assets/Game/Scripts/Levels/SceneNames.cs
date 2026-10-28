@@ -8,5 +8,7 @@ namespace Game.Scripts.Levels
         Level_2 = 3,
         Level_3 = 4,
         Level_4 = 5,
+        Level_Dust = 6,
+        Level_City = 7,
     }
 }

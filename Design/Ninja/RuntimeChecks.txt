@@ -1,0 +1,4 @@
+Ninja on new player: True; died: True; revived: True; hp: 50; same model: True
+Arrow fired with ninja: True
+
+Transition finished: Level_Tutorial; ninja=True
