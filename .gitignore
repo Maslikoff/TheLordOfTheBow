@@ -79,3 +79,7 @@ crashlytics-build.properties
 /[Aa]ssets/[Ss]treamingAssets/aa/*
 .idea/ 
 .vsconfig 
+
+# Build outputs (WebGL player build, Addressables remote bundles)
+/BildLOB/
+/ServerData/
