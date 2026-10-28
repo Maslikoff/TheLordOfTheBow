@@ -8,6 +8,7 @@ using Game.Scripts.Save;
 using Game.Scripts.Spawners;
 using Game.Scripts.StateServices;
 using Game.Scripts.UI;
+using Game.Scripts.UI.Shop;
 using Game.Scripts.Wave;
 using TransitionsPlus;
 using UnityEngine;
@@ -37,6 +38,9 @@ namespace Game.Scripts.DI
         [SerializeField] private LevelPanels _levelPanels;
         [SerializeField] private LeaderboardService _leaderboardService;
         [SerializeField] private RewardConfig _rewardConfig;
+        [SerializeField] private ShopPanel _shopPanel;
+        [SerializeField] private PreStartShopButton _preStartShopButton;
+        [SerializeField] private CoinCounterUI _coinCounterUI;
 
         protected override void Configure(IContainerBuilder builder)
         {
@@ -112,8 +116,18 @@ namespace Game.Scripts.DI
         
         private void ConfigureUI(IContainerBuilder builder)
         {
+            var waveUi = GetComponentInChildren<WaveUI>(true);
+            if (waveUi == null) waveUi = FindObjectOfType<WaveUI>(true);
+            if (waveUi != null) builder.RegisterComponent(waveUi);
             builder.RegisterComponent(_upgradeChoicePanel);
             builder.RegisterComponent(_levelPanels);
+
+            if (_shopPanel != null)
+                builder.RegisterComponent(_shopPanel);
+            if (_preStartShopButton != null)
+                builder.RegisterComponent(_preStartShopButton);
+            if (_coinCounterUI != null)
+                builder.RegisterComponent(_coinCounterUI);
         }
         
         private void ConfigureGameState(IContainerBuilder builder)

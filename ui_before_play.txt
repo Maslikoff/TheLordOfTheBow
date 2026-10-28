@@ -1,0 +1,71 @@
+Canvas/JoystickZone/Dynamic Joystick/Background/Handle|Handle_Plain|Assets/Joystick Pack/Sprites/Handles/Handle_Plain.png
+Canvas/JoystickZone/Dynamic Joystick/Background|AllAxis_Outline|Assets/Joystick Pack/Sprites/All Axis Backgrounds/AllAxis_Outline.png
+Canvas/JoystickZone/Dynamic Joystick|null|
+StartMenuCanvas/Prefab/InfinityImage/Pointer|HandPointer|Assets/Game/Tutor/Textures/HandPointer.png
+StartMenuCanvas/Prefab/InfinityImage|Infinity|Assets/Game/Tutor/Textures/Infinity.png
+ShopUI/ShopPanel/Window/Tabs/TabHats|buttonLong_beige|Assets/Game/Art/UI/KenneyRpg/buttonLong_beige.png
+ShopUI/ShopPanel/Window/Tabs/TabProjectiles|buttonLong_beige|Assets/Game/Art/UI/KenneyRpg/buttonLong_beige.png
+ShopUI/ShopPanel/Window/Tabs/TabSkins|buttonLong_beige|Assets/Game/Art/UI/KenneyRpg/buttonLong_beige.png
+ShopUI/ShopPanel/Window/Tabs|buttonLong_beige|Assets/Game/Art/UI/KenneyRpg/buttonLong_beige.png
+ShopUI/ShopPanel/Window/CardScroll/Viewport/Content/ShopItemCard/BuyButton|buttonLong_brown|Assets/Game/Art/UI/KenneyRpg/buttonLong_brown.png
+ShopUI/ShopPanel/Window/CardScroll/Viewport/Content/ShopItemCard/IconArea/Icon|null|
+ShopUI/ShopPanel/Window/CardScroll/Viewport/Content/ShopItemCard/IconArea/Placeholder|null|
+ShopUI/ShopPanel/Window/CardScroll/Viewport/Content/ShopItemCard/IconArea|panel_brown|Assets/Game/Art/UI/KenneyRpg/panel_brown.png
+ShopUI/ShopPanel/Window/CardScroll/Viewport/Content/ShopItemCard|panel_brown|Assets/Game/Art/UI/KenneyRpg/panel_brown.png
+ShopUI/ShopPanel/Window/CardScroll/Viewport|null|
+ShopUI/ShopPanel/Window/CloseButton|buttonLong_grey|Assets/Game/Art/UI/KenneyRpg/buttonLong_grey.png
+ShopUI/ShopPanel/Window/PanelCoinCounter|buttonRound_beige|Assets/Game/Art/UI/KenneyRpg/buttonRound_beige.png
+ShopUI/ShopPanel/Window|panel_brown|Assets/Game/Art/UI/KenneyRpg/panel_brown.png
+ShopUI/ShopPanel|null|
+ShopUI/ShopButton|buttonLong_brown|Assets/Game/Art/UI/KenneyRpg/buttonLong_brown.png
+ShopUI/CoinCounter|chip_coin|Assets/Game/Art/UI/ElvenForge/chip_coin.png
+Canvas/PausePanel/BG/Image/LanguageButton|btn_primary|Assets/Game/Art/UI/ElvenForge/btn_primary.png
+Canvas/PlayerLVL/Slider/Background|slider_track|Assets/Game/Art/UI/KenneyRpg/Generated/slider_track.png
+Canvas/ShootIndicators/PoisonArrowImage|2 lvl|Assets/Hyper_Casual_UI/Sprites/Panel_Sprites/2 lvl.png
+Canvas/WinPanel/BG/Panel/Buttons/ButtonNextLevel|buttonSquare_beige|Assets/Game/Art/UI/KenneyRpg/buttonSquare_beige.png
+Canvas/PausePanel/BG/SettingsSliders/SoundSettingSlider/Background|panel_brown|Assets/Game/Art/UI/KenneyRpg/panel_brown.png
+Canvas/ShootIndicators/PoisonArrowImage/Image (1)|photo_2026-05-05_22-20-22_2|Assets/Game/Art/photo_2026-05-05_22-20-22.jpg
+Canvas/WinPanel/BG|panel_hud|Assets/Game/Art/UI/ElvenForge/panel_hud.png
+Canvas/ShootIndicators/FireArrowImage/TimerBow|Knob|Resources/unity_builtin_extra
+Canvas/LosePanel/BG/Panel/Buttons/RewardButtonRestarttLevel|buttonLong_beige|Assets/Game/Art/UI/KenneyRpg/buttonLong_beige.png
+Canvas/JoystickZone|Background|Resources/unity_builtin_extra
+Canvas/PlayerLVL/Slider/Handle Slide Area/Handle|rataing star|Assets/Hyper_Casual_UI/Sprites/Icons/rataing star.png
+Canvas/PauseButton|buttonSquare_brown|Assets/Game/Art/UI/KenneyRpg/buttonSquare_brown.png
+Canvas/ShootIndicators/ArrowImage/Image|photo_2026-05-05_22-20-22_0|Assets/Game/Art/photo_2026-05-05_22-20-22.jpg
+Canvas/ShootIndicators/ArrowImage|2 lvl|Assets/Hyper_Casual_UI/Sprites/Panel_Sprites/2 lvl.png
+Canvas/WaveUI/BGEnemyCount|Rectangle 363 (1)|Assets/Hyper_Casual_UI/Sprites/Panel_Sprites/Rectangle 363 (1).png
+Canvas/PausePanel/BG/SettingsSliders/MusicSettingSlider/Fill Area/Fill|slider_fill|Assets/Game/Art/UI/KenneyRpg/Generated/slider_fill.png
+Canvas/LosePanel/BG/Panel/Buttons/ButtonRestarttLevel|buttonSquare_beige|Assets/Game/Art/UI/KenneyRpg/buttonSquare_beige.png
+Canvas/PausePanel/BG/SettingsSliders/SoundSettingSlider/Handle Slide Area/Handle|Rate us|Assets/Hyper_Casual_UI/Sprites/Icons/Rate us.png
+Canvas/PlayerLVL/Slider/Fill Area/Fill|slider_fill|Assets/Game/Art/UI/KenneyRpg/Generated/slider_fill.png
+Canvas/PausePanel/BG/BGForSettings/Image|panel_inner_1|Assets/maanetorn/Farm Game UI - Simple 2D UI/Sprites/128x128/panel_inner_1.png
+Canvas/PausePanel/BG/Buttons/RestartButton|buttonLong_blue|Assets/Game/Art/UI/KenneyRpg/buttonLong_blue.png
+Canvas/PausePanel/Panel|panel_hud|Assets/Game/Art/UI/ElvenForge/panel_hud.png
+Canvas/WinPanel/BG/Panel/Buttons/ReawardButtonRestartLevel/Image|ads|Assets/Hyper_Casual_UI/Sprites/Icons/ads.png
+Canvas/LosePanel/BG/Panel|panel_brown|Assets/Game/Art/UI/KenneyRpg/panel_brown.png
+Canvas/ShootIndicators/ArrowImage/TimerBow|Knob|Resources/unity_builtin_extra
+Canvas/PausePanel/BG/Image|panel_title_with_stroke_2|Assets/maanetorn/Farm Game UI - Simple 2D UI/Sprites/256x256/panel_title_with_stroke_2.png
+Canvas/PausePanel/BG/Settings/MusicButton|IMG_7360_2|Assets/Game/Art/IMG_7360.png
+Canvas/ShootIndicators/FireArrowImage|2 lvl|Assets/Hyper_Casual_UI/Sprites/Panel_Sprites/2 lvl.png
+Canvas/ShootIndicators/FireArrowImage/Image|photo_2026-05-05_22-20-22_1|Assets/Game/Art/photo_2026-05-05_22-20-22.jpg
+Canvas/ShootIndicators/PoisonArrowImage/TimerBow|Knob|Resources/unity_builtin_extra
+Canvas/WaveUI/BGWave|Rectangle 363 (1)|Assets/Hyper_Casual_UI/Sprites/Panel_Sprites/Rectangle 363 (1).png
+Canvas/PausePanel/BG/SettingsSliders/SoundSettingSlider/Fill Area/Fill|slider_fill|Assets/Game/Art/UI/KenneyRpg/Generated/slider_fill.png
+Canvas/ShootIndicators/ArrowImage/Image/Image|AllAxis_Outline|Assets/Joystick Pack/Sprites/All Axis Backgrounds/AllAxis_Outline.png
+Canvas/ShootIndicators/PoisonArrowImage/Image (1)/Image|AllAxis_Outline|Assets/Joystick Pack/Sprites/All Axis Backgrounds/AllAxis_Outline.png
+StartMenuCanvas/Image|button_blue_default_1|Assets/maanetorn/Farm Game UI - Simple 2D UI/Sprites/128x128/button_blue_default_1.png
+Canvas/ShootIndicators/FireArrowImage/Image/Image|AllAxis_Outline|Assets/Joystick Pack/Sprites/All Axis Backgrounds/AllAxis_Outline.png
+Canvas/WinPanel/BG/Panel/Buttons/ReawardButtonRestartLevel|buttonSquare_beige|Assets/Game/Art/UI/KenneyRpg/buttonSquare_beige.png
+Canvas/WinPanel/BG/Panel/Buttons/ButtonRestarttLevel|btn_secondary|Assets/Game/Art/UI/ElvenForge/btn_secondary.png
+Canvas/WaveUI/BGEnemyCount/Image|IMG_7360_1|Assets/Game/Art/IMG_7360.png
+Canvas/UpgradePanel/UpgradeChoicePanel/SkipButton|buttonLong_brown|Assets/Game/Art/UI/KenneyRpg/buttonLong_brown.png
+Canvas/PausePanel/BG/BGForSettings/w|panel_inner_1|Assets/maanetorn/Farm Game UI - Simple 2D UI/Sprites/128x128/panel_inner_1.png
+Canvas/WinPanel/BG/Panel|panel_brown|Assets/Game/Art/UI/KenneyRpg/panel_brown.png
+Canvas/PausePanel/BG|panel_brown|Assets/Game/Art/UI/KenneyRpg/panel_brown.png
+Canvas/PausePanel/BG/Buttons/ResumeButton|buttonLong_blue|Assets/Game/Art/UI/KenneyRpg/buttonLong_blue.png
+Canvas/PausePanel/BG/SettingsSliders/MusicSettingSlider/Handle Slide Area/Handle|Rate us|Assets/Hyper_Casual_UI/Sprites/Icons/Rate us.png
+Canvas/LosePanel/BG|panel_hud|Assets/Game/Art/UI/ElvenForge/panel_hud.png
+Canvas/LosePanel/BG/Panel/Buttons/RewardButtonRestarttLevel/Image|ads|Assets/Hyper_Casual_UI/Sprites/Icons/ads.png
+Canvas/WaveUI/BGWave/Image|IMG_7360_0|Assets/Game/Art/IMG_7360.png
+Canvas/PausePanel/BG/Settings/SoundButton|IMG_7360_6|Assets/Game/Art/IMG_7360.png
+Canvas/PausePanel/BG/SettingsSliders/MusicSettingSlider/Background|panel_brown|Assets/Game/Art/UI/KenneyRpg/panel_brown.png

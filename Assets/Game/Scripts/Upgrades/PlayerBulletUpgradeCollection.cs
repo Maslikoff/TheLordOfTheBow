@@ -81,6 +81,17 @@ namespace Game.Scripts.Upgrades
             
             MessageBroker.Default.Publish(new M_SaveRequested());
         }
+
+        public void AddPoisonDamage(BulletType bulletType, float poisonDamage)
+        {
+            PlayerBulletUpgradeEntry entry = Get(bulletType);
+            if (entry == null)
+                return;
+
+            entry.AddPoisonDamage(poisonDamage);
+
+            MessageBroker.Default.Publish(new M_SaveRequested());
+        }
         
         public void AddCount(BulletType bulletType, int value)
         {
@@ -106,7 +117,8 @@ namespace Game.Scripts.Upgrades
                     entry.IsUnlocked,
                     entry.DamageBonus,
                     entry.LifeTimeBonus,
-                    entry.CountBonus);
+                    entry.CountBonus,
+                    entry.PoisonDamageBonus);
             }
 
             return states;

@@ -156,6 +156,7 @@ MonoBehaviour:
   _spawnGrid: {fileID: 4011770484560313510}
   _useGridSpawning: 1
   _spawnInOrder: 0
+  _enemyBulletSpawner: {fileID: 0}
   _singleRace: 0
   _multipleRaces: 000000000100000002000000
   _useMultipleRaces: 1
@@ -192,4 +193,3 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _defaultEnemyConfigs: []
-  _bulletSpawner: {fileID: 0}

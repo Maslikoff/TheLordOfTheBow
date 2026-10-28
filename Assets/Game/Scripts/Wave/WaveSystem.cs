@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Game.Scripts.Characters.Enemy;
-using Game.Scripts.Levels;
 using Game.Scripts.Spawners;
 using UnityEngine;
 
@@ -12,224 +11,152 @@ namespace Game.Scripts.Wave
     {
         [SerializeField] private EnemySpawner _enemySpawner;
         [SerializeField] private WaveConfig _config;
-        
-        [SerializeField, Min(1)] private int _maxSpawnRetryFrames = 120;
-
-        private Coroutine _waveRoutine;
-        private int _currentWaveIndex = -1;
-        private int _enemiesSpawnedInWave;
-        private int _enemiesKilledInWave;
-        private int _totalEnemiesInWave;
-        private int _startWaveIndex;
-        
-        private bool _isWaveInProgress;
-
-        public int CurrentWaveIndex => _currentWaveIndex + 1;
-        public int TotalWaves => _config?.WavesEnemyCount?.Count ?? 0;
-        public bool IsWaveInProgress => _isWaveInProgress;
-        public int EnemiesRemaining => _enemiesSpawnedInWave - _enemiesKilledInWave;
-        public int TotalEnemiesInWave => _totalEnemiesInWave;
-        public int UiWaveIndex => TotalWaves == 0 ? 0 : Mathf.Clamp(_currentWaveIndex + 1, 1, TotalWaves);
-        public int UiWaveEnemyTotal
-        {
-            get
-            {
-                if (TotalWaves == 0)
-                    return 0;
-                
-                if (_isWaveInProgress)
-                    return _totalEnemiesInWave;
-                
-                int nextWaveIndex = Mathf.Clamp(_currentWaveIndex + 1, 0, TotalWaves - 1);
-                
-                return _config.WavesEnemyCount[nextWaveIndex];
-            }
-        }
-
+        private Coroutine _routine;
+        private int _index = -1;
+        private int _spawned;
+        private int _killed;
+        private bool _running;
+        private bool _failed;
+        public Func<bool> CanContinue { get; set; }
+        public int CurrentWaveIndex => _index + 1;
+        public int TotalWaves => _config?.Waves?.Count ?? 0;
+        public bool IsWaveInProgress => _running;
+        public bool HasFailed => _failed;
+        public int EnemiesRemaining => Mathf.Max(0, _spawned - _killed);
+        public int TotalEnemiesInWave => _index >= 0 && _index < TotalWaves ? _config.Waves[_index].Total : 0;
+        public int UiWaveIndex => TotalWaves == 0 ? 0 : Mathf.Clamp(_index + 1, 1, TotalWaves);
+        public int UiWaveEnemyTotal => TotalWaves == 0 ? 0 : _config.Waves[Mathf.Clamp(_index, 0, TotalWaves - 1)].Total;
         public event Action<int> WaveStarted;
         public event Action<int> WaveCompleted;
+        public event Action<float> HealingGranted;
         public event Action<int, int, int> EnemiesCountChanged;
         public event Action AllWavesCompleted;
+        public event Action<string> WaveFailed;
 
-        private void Start()
+        private void Awake()
         {
-            if (_enemySpawner == null)
-            {
-                Debug.LogError("EnemySpawner not assigned in WaveSystem!");
-                return;
-            }
-
-            _enemySpawner.enabled = false;
-            
-            _enemySpawner.EnemyReleased += OnEnemyReleased;
+            if (_enemySpawner == null) return;
+            _enemySpawner.EnemyKilled += OnEnemyKilled;
+            _enemySpawner.EnemyRemovedWithoutDeath += OnUnexpectedRemoval;
         }
 
         private void OnDestroy()
         {
-            if (_enemySpawner != null)
-                _enemySpawner.EnemyReleased -= OnEnemyReleased;
+            if (_enemySpawner == null) return;
+            _enemySpawner.EnemyKilled -= OnEnemyKilled;
+            _enemySpawner.EnemyRemovedWithoutDeath -= OnUnexpectedRemoval;
+        }
+
+        public void SetLevelWaveConfig(WaveConfig config) => _config = config;
+        public void SetEnemyPoolConfig(IReadOnlyList<EnemyRaceConfig> configs) => _enemySpawner.SetEnemyPoolConfig(configs);
+        public bool IsConfigValid(WaveConfig config)
+        {
+            if (config?.Waves == null || config.Waves.Count == 0) return false;
+            foreach (var wave in config.Waves) if (wave == null || !wave.IsValid) return false;
+            return true;
         }
 
         public void StartWaves(int startWaveIndex = 0)
         {
-            if (IsConfigValid(_config) == false)
+            StopWaves();
+            _failed = false;
+            if (_enemySpawner == null || !IsConfigValid(_config))
+            {
+                Fail("Invalid wave configuration or missing enemy spawner.");
                 return;
-            
-            if (_waveRoutine != null)
-                StopCoroutine(_waveRoutine);
-            
-            _startWaveIndex = Mathf.Clamp(startWaveIndex, 0, _config.WavesEnemyCount.Count - 1);
-            _currentWaveIndex = _startWaveIndex - 1;
-            _waveRoutine = StartCoroutine(WaveRoutine());
+            }
+            _routine = StartCoroutine(Run(Mathf.Clamp(startWaveIndex, 0, TotalWaves - 1)));
         }
 
         public void StopWaves()
         {
-            if (_waveRoutine != null)
+            _running = false;
+            if (_routine != null) StopCoroutine(_routine);
+            _routine = null;
+        }
+
+        private IEnumerator Run(int first)
+        {
+            for (_index = first; _index < TotalWaves; _index++)
             {
-                StopCoroutine(_waveRoutine);
-                _waveRoutine = null;
-            }
-            
-            _isWaveInProgress = false;
-        }
-        
-        public void SetLevelWaveConfig(WaveConfig waveConfig)
-        {
-            _config = waveConfig;
-        }
-        
-        public void SetEnemyPoolConfig(IReadOnlyList<EnemyRaceConfig> configs)
-        {
-            _enemySpawner.SetEnemyPoolConfig(configs);
-        }
-
-        public bool IsConfigValid(WaveConfig config)
-        {
-            return config != null &&
-                   config.WavesEnemyCount != null &&
-                   config.WavesEnemyCount.Count > 0;
-        }
-
-        public IEnumerator WaveRoutine()
-        {
-            WaitForSeconds wait = new WaitForSeconds(_config.TimeBetweenWaves);
-            
-            for (int i = _startWaveIndex; i < _config.WavesEnemyCount.Count; i++)
-            {
-                _currentWaveIndex = i;
-                _totalEnemiesInWave = _config.WavesEnemyCount[i];
-                
-                yield return StartCoroutine(ExecuteWave(_totalEnemiesInWave));
-
-                if (i < _config.WavesEnemyCount.Count - 1)
-                    yield return wait;
-            }
-            
-            AllWavesCompleted?.Invoke();
-            
-            _waveRoutine = null;
-            _isWaveInProgress = false;
-        }
-
-        public IEnumerator ExecuteWave(int enemyCount)
-        {
-            InitializeWave(enemyCount);
-
-            yield return StartCoroutine(SpawnWaveEnemies(enemyCount));
-    
-            yield return StartCoroutine(WaitForWaveCompletion());
-    
-            FinalizeWave();
-        }
-
-        public void InitializeWave(int enemyCount)
-        {
-            _isWaveInProgress = true;
-            _enemiesSpawnedInWave = 0;
-            _enemiesKilledInWave = 0;
-            
-            _enemySpawner.SetMaxObjects(enemyCount);
-            _enemySpawner.ResetCurrentCount();
-            _enemySpawner.ForceResetCount();
-            
-            WaveStarted?.Invoke(_currentWaveIndex);
-            EnemiesCountChanged?.Invoke(0, enemyCount, 0);
-        }
-
-        public IEnumerator SpawnWaveEnemies(int enemyCount)
-        {
-            int retryFramesLeft = _maxSpawnRetryFrames;
-    
-            while (_enemiesSpawnedInWave < enemyCount)
-            {
-                int spawnedBeforePass = _enemiesSpawnedInWave;
-                
-                while (_enemiesSpawnedInWave < enemyCount)
-                {
-                    bool spawnResult = _enemySpawner.ForceSpawn();
-                    
-                    if (spawnResult == false)
-                        break;
-                    
-                    _enemiesSpawnedInWave++;
-                    int remaining = _enemiesSpawnedInWave - _enemiesKilledInWave;
-                    
-                    EnemiesCountChanged?.Invoke(_enemiesSpawnedInWave, enemyCount, remaining);
-                }
-                
-                if (_enemiesSpawnedInWave >= enemyCount)
-                    break;
-                
-                if (_enemiesSpawnedInWave == spawnedBeforePass)
-                {
-                    retryFramesLeft--;
-                    
-                    if (retryFramesLeft <= 0)
+                var wave = _config.Waves[_index];
+                var order = wave.CreateSpawnOrder();
+                foreach (var race in order)
+                    if (!_enemySpawner.SupportsRace(race))
                     {
-                        Debug.LogWarning($"[WaveSystem] Could not spawn full wave. Spawned: {_enemiesSpawnedInWave}/{enemyCount}");
-                        break;
+                        Fail($"Missing prefab/pool for {race} in wave {_index + 1}.");
+                        yield break;
                     }
+                _spawned = _killed = 0;
+                _running = true;
+                _enemySpawner.SetMaxObjects(wave.MaxAlive);
+                WaveStarted?.Invoke(_index);
+                NotifyCounts();
+                float nextSpawn = Time.time;
+                while (_killed < wave.Total && !_failed)
+                {
+                    if (Time.timeScale <= 0 || (CanContinue != null && !CanContinue()))
+                    {
+                        yield return null;
+                        continue;
+                    }
+                    if (_spawned < order.Count && Time.time >= nextSpawn)
+                    {
+                        var result = _enemySpawner.TrySpawnRace(order[_spawned]);
+                        if (result == EnemySpawnResult.InvalidConfiguration)
+                        {
+                            Fail($"Enemy spawn failed in wave {_index + 1}: invalid pool/grid.");
+                            yield break;
+                        }
+                        if (result == EnemySpawnResult.Spawned)
+                        {
+                            _spawned++;
+                            nextSpawn = Time.time + wave.SpawnInterval;
+                            NotifyCounts();
+                        }
+                    }
+                    yield return null;
                 }
-                yield return null;
+                if (_failed) yield break;
+                while (CanContinue != null && !CanContinue()) yield return null;
+                _running = false;
+                if (wave.HealAfter > 0) HealingGranted?.Invoke(wave.HealAfter);
+                WaveCompleted?.Invoke(_index);
+                if (_index < TotalWaves - 1) yield return new WaitForSeconds(_config.TimeBetweenWaves);
             }
-            _enemySpawner.enabled = false;
+            _index = TotalWaves - 1;
+            _routine = null;
+            AllWavesCompleted?.Invoke();
         }
 
-        public IEnumerator WaitForWaveCompletion()
+        private void OnEnemyKilled()
         {
-            while (_enemiesKilledInWave < _enemiesSpawnedInWave)
-                yield return null;
+            if (!_running) return;
+            _killed++;
+            NotifyCounts();
         }
 
-        public void FinalizeWave()
+        private void OnUnexpectedRemoval()
         {
-            _isWaveInProgress = false;
-            
-            WaveCompleted?.Invoke(_currentWaveIndex);
+            if (_running) Fail("An active enemy was removed without being defeated. Wave aborted.");
         }
 
-        public void OnEnemyReleased()
+        private void NotifyCounts() => EnemiesCountChanged?.Invoke(_spawned, TotalEnemiesInWave, EnemiesRemaining);
+        private void Fail(string message)
         {
-            if (_isWaveInProgress && _enemiesKilledInWave < _enemiesSpawnedInWave)
-            {
-                _enemiesKilledInWave++;
-                
-                int remaining = _enemiesSpawnedInWave - _enemiesKilledInWave;
-                
-                EnemiesCountChanged?.Invoke(_enemiesSpawnedInWave, _totalEnemiesInWave, remaining);
-            }
+            _failed = true;
+            _running = false;
+            Debug.LogError("[WaveSystem] " + message);
+            WaveFailed?.Invoke(message);
         }
-        
+
         public void ResetToPreStartState()
         {
-            _currentWaveIndex = -1;
-            _isWaveInProgress = false;
-            _enemiesSpawnedInWave = 0;
-            _enemiesKilledInWave = 0;
-            _totalEnemiesInWave = UiWaveEnemyTotal;
-            
-            EnemiesCountChanged?.Invoke(0, _totalEnemiesInWave, 0);
+            StopWaves();
+            _index = -1;
+            _spawned = _killed = 0;
+            _failed = false;
+            EnemiesCountChanged?.Invoke(0, UiWaveEnemyTotal, 0);
         }
     }
 }

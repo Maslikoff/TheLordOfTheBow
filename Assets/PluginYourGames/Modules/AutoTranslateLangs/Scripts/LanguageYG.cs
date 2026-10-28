@@ -72,14 +72,14 @@ namespace YG.LanguageLegacy
                     if (!changeOnlyFont)
                         AssignTranslate(languages[i]);
 
-                    if (textLComponent)
+                    // Keep scene-authored fonts/sizes. Auto font swap was resetting Tutorial UI on Play.
+                    // Fonts: only apply when uniqueFont / uniqueFontTMP is explicitly set.
+                    if (textLComponent && uniqueFont)
                         ChangeFont(UtilsLang.GetFont(i, info));
 #if TMP_YG2
-                    else if (textMPComponent)
+                    else if (textMPComponent && uniqueFontTMP)
                         ChangeFont(UtilsLang.GetFontTMP(i, info));
 #endif
-
-                    FontSizeCorrect(UtilsLang.GetFontSize(i, info));
 
                     if (additionalText != null)
                         additionalText.AssignAdditionalText(this);

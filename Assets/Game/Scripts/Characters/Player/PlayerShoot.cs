@@ -19,6 +19,7 @@ namespace Game.Scripts.Characters.Player
         
         private IGameStateService _gameStateService;
         private IGameplayControlService _gameplayControl;
+        private CampaignUpgrades _campaign;
 
         public event Action ShotArrow;
         public event Action ShotFireArrow;
@@ -30,6 +31,7 @@ namespace Game.Scripts.Characters.Player
         
         private void Awake()
         {
+            _campaign = GetComponent<CampaignUpgrades>();
             InitializeDictionaries();
         }
         
@@ -69,7 +71,7 @@ namespace Game.Scripts.Characters.Player
                 if (_cooldownByType.ContainsKey(setting.BulletType))
                     continue;
                     
-                _cooldownByType.Add(setting.BulletType, setting.ShootDelay);
+            _cooldownByType.Add(setting.BulletType, setting.BulletType == BulletType.Arrow ? 1.2f : setting.ShootDelay);
                 _lastShootTimeByType.Add(setting.BulletType, -setting.ShootDelay);
             }
         }
@@ -124,6 +126,7 @@ namespace Game.Scripts.Characters.Player
                 _lastShootTimeByType.TryGetValue(type, out float lastTime))
             {
                 float timeSinceLast = Time.time - lastTime;
+                cooldown *= _campaign != null ? _campaign.ReloadMultiplier : 1f;
                 
                 if (timeSinceLast < cooldown)
                 {
@@ -145,7 +148,7 @@ namespace Game.Scripts.Characters.Player
             if (_lastShootTimeByType.TryGetValue(type, out float last) == false)
                 return false;
 
-            return Time.time - last >= cooldown;
+            return Time.time - last >= cooldown * (_campaign != null ? _campaign.ReloadMultiplier : 1f);
         }
         
         private void TryShootArrow(Vector3 baseDirection)
@@ -158,13 +161,18 @@ namespace Game.Scripts.Characters.Player
             if (CanShoot(BulletType.Arrow) == false)
                 return;
 
-            BulletData shotData = new BulletData(arrowEntry.Damage, 0f);
+            BulletData MakeShot()
+            {
+                bool critical = UnityEngine.Random.value < (_campaign != null ? _campaign.CriticalChance : 0);
+                float damage = arrowEntry.Damage * CampaignUpgrades.ArrowMultiplier(arrowEntry.Count);
+                return new BulletData(damage, 0, 0, _campaign != null ? _campaign.Pierce : 0, critical);
+            }
 
             int arrowCount = arrowEntry.Count;
 
             if (arrowCount <= 1)
             {
-                _bulletSpawner.SpawnBullet(BulletType.Arrow, baseDirection, shotData);
+                _bulletSpawner.SpawnBullet(BulletType.Arrow, baseDirection, MakeShot());
             }
             else
             {
@@ -173,7 +181,7 @@ namespace Game.Scripts.Characters.Player
                 for (int i = 0; i < angles.Length; i++)
                 {
                     Vector3 direction = Quaternion.AngleAxis(angles[i], _firePoint.up) * baseDirection;
-                    _bulletSpawner.SpawnBullet(BulletType.Arrow, direction, shotData);
+                    _bulletSpawner.SpawnBullet(BulletType.Arrow, direction, MakeShot());
                 }
             }
 
@@ -191,7 +199,9 @@ namespace Game.Scripts.Characters.Player
             if (CanShoot(bulletType) == false)
                 return;
 
-            BulletData shotData = new BulletData(entry.Damage, entry.LifeTime);
+            BulletData shotData = bulletType == BulletType.PoisonArrow
+                ? new BulletData(entry.Damage, entry.LifeTime, entry.PoisonDamage)
+                : new BulletData(entry.Damage, entry.LifeTime);
             _bulletSpawner.SpawnBullet(bulletType, direction, shotData);
 
             MarkShot(bulletType);

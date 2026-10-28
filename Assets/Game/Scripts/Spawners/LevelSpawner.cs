@@ -1,6 +1,10 @@
+using Cysharp.Threading.Tasks;
+using Game.Scripts.AddressablesContent;
 using Game.Scripts.Characters.Player;
 using Game.Scripts.Levels;
+using Game.Scripts.ObjectPool;
 using Game.Scripts.Save;
+using Game.Scripts.Shop;
 using Game.Scripts.StateServices;
 using Game.Scripts.UI;
 using Game.Scripts.Wave;
@@ -18,7 +22,15 @@ namespace Game.Scripts.Spawners
         private IGameStateService _gameStateService;
         private ISaveSystem _saveSystem;
         private LevelSessionService _levelSessionService;
-        
+        private ICurrencyService _currencyService;
+        private BulletPool[] _bulletPools;
+        private EffectsPool _effectsPool;
+        private GroundPool _groundPool;
+        private HealthKitPool _healthKitPool;
+
+        private IAddressablesContentService _content;
+        private int _startWave;
+
         [Inject]
         private void Construct(
             ILevelService levelService,
@@ -27,7 +39,9 @@ namespace Game.Scripts.Spawners
             UpgradeChoicePanel upgradeChoicePanel,
             IGameStateService gameStateService,
             ISaveSystem saveSystem,
-            LevelSessionService levelSessionService)
+            LevelSessionService levelSessionService,
+            ICurrencyService currencyService,
+            IAddressablesContentService content)
         {
             _levelService = levelService;
             _playerSpawner = playerSpawner;
@@ -36,58 +50,89 @@ namespace Game.Scripts.Spawners
             _gameStateService = gameStateService;
             _saveSystem = saveSystem;
             _levelSessionService = levelSessionService;
+            _currencyService = currencyService;
+            _content = content;
         }
 
         private void Start()
         {
             _waveSystem.WaveStarted += OnWaveStarted;
-            _waveSystem.AllWavesCompleted += OnAllWavesCompleted;
-            
-            Spawn();
+            _waveSystem.HealingGranted += OnHealingGranted;
+            SpawnAsync().Forget();
         }
 
-        private void Spawn()
+        private async UniTaskVoid SpawnAsync()
         {
+            await WarmupPoolsAsync();
+
             LevelConfig config = _levelService.CurrentConfig;
 
             _waveSystem.SetLevelWaveConfig(config.WaveConfig);
             _waveSystem.SetEnemyPoolConfig(config.EnemyRaceConfigs);
             _waveSystem.ResetToPreStartState();
-            
-            Player player = _playerSpawner.Spawn();
-            _upgradeChoicePanel.SetAvailableUpgrades(config.AvailableUpgrades);
-            
-            _levelSessionService.CaptureSnapshot(player.Experience, player.BulletUpgrades);
 
-            int levelIndex = _levelService.CurrentLevelIndex;
-            int startWaveIndex = _saveSystem.GetWaveCheckpointOrDefault(levelIndex);
-            
+            Player player = await _playerSpawner.SpawnAsync();
+            _upgradeChoicePanel.SetAvailableUpgrades(config.AvailableUpgrades);
+
+            _startWave = _saveSystem.BeginStage(player);
+            _waveSystem.CanContinue = () => player != null && !player.IsDead && !_upgradeChoicePanel.HasPendingChoices;
+
             if (_gameStateService.IsGameStarted)
-                _waveSystem.StartWaves(startWaveIndex);
+                _waveSystem.StartWaves(_startWave);
             else
                 _gameStateService.GameStarted += OnGameStarted;
         }
-        
+
+        private async UniTask WarmupPoolsAsync()
+        {
+            _bulletPools = FindObjectsOfType<BulletPool>(true);
+            _effectsPool = FindObjectOfType<EffectsPool>(true);
+            _groundPool = FindObjectOfType<GroundPool>(true);
+            _healthKitPool = FindObjectOfType<HealthKitPool>(true);
+
+            if (_bulletPools != null)
+            {
+                foreach (BulletPool pool in _bulletPools)
+                {
+                    if (pool != null)
+                        await pool.WarmupAsync(_content);
+                }
+            }
+
+            if (_effectsPool != null)
+                await _effectsPool.WarmupAsync(_content);
+
+            if (_groundPool != null)
+                await _groundPool.WarmupAsync(_content);
+
+            if (_healthKitPool != null)
+                await _healthKitPool.WarmupAsync(_content);
+        }
+
         private void OnGameStarted()
         {
             _gameStateService.GameStarted -= OnGameStarted;
-            _waveSystem.StartWaves();
+            _waveSystem.StartWaves(_startWave);
         }
-        
+
         private void OnDestroy()
         {
+            _waveSystem.StopWaves();
+            _waveSystem.WaveStarted -= OnWaveStarted;
+            _waveSystem.HealingGranted -= OnHealingGranted;
             if (_gameStateService != null)
                 _gameStateService.GameStarted -= OnGameStarted;
         }
-        
+
         private void OnWaveStarted(int waveIndex)
         {
             _saveSystem.SaveWaveCheckpoint(_levelService.CurrentLevelIndex, waveIndex);
         }
 
-        private void OnAllWavesCompleted()
+        private void OnHealingGranted(float fraction)
         {
-            _saveSystem.ClearWaveCheckpoint(_levelService.CurrentLevelIndex);
+            var health = _playerSpawner.CurrentPlayer.PlayerHealth;
+            health.Heal(Mathf.CeilToInt(health.MaxCount * fraction));
         }
     }
 }

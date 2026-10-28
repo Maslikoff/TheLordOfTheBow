@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using DG.Tweening;
 using Game.Scripts.Environment.Effect;
 using UnityEngine;
@@ -7,6 +9,10 @@ namespace Game.Scripts.Characters
 {
     public class HitFeedback : MonoBehaviour
     {
+        private static readonly int EmissionColorId = Shader.PropertyToID("_EmissionColor");
+        private static readonly Color EnemyFlashColor = new Color(1.5f, 1.5f, 1.5f, 1f);
+        private static readonly Color PlayerFlashColor = new Color(1.5f, 0f, 0f, 1f);
+
         [Header("Type")]
         [SerializeField] private HitFeedbackType _feedbackType = HitFeedbackType.Enemy;
         
@@ -16,8 +22,8 @@ namespace Game.Scripts.Characters
         [SerializeField] private Ease _knockbackEase = Ease.OutQuad;
         
         [Header("Flash Settings")]
-        [SerializeField] private float _flashDuration = 0.5f;
-        [SerializeField] private int _flashCount = 2;
+        [SerializeField] [Min(0.01f)] private float _flashDuration = 0.12f;
+        [SerializeField] [Min(1)] private int _flashCount = 1;
         
         [Header("Camera Shake (Player Only)")]
         [SerializeField] private float _shakeDuration = 0.2f;
@@ -25,10 +31,9 @@ namespace Game.Scripts.Characters
         [SerializeField] private int _shakeVibrato = 10;
         
         private Health _health;
-        private Renderer[] _renderers;
-        private Color[] _originalColors;
+        private readonly List<FlashTarget> _flashTargets = new List<FlashTarget>();
         private Tweener _knockbackTween;
-        private Sequence _flashSequence;
+        private Coroutine _flashCoroutine;
         private Camera _mainCamera;
         
         private ICameraVignetteService _vignetteService;
@@ -63,14 +68,30 @@ namespace Game.Scripts.Characters
         
         private void CacheRenderers()
         {
-            _renderers = GetComponentsInChildren<Renderer>(true);
-            _originalColors = new Color[_renderers.Length];
-            
-            for (int i = 0; i < _renderers.Length; i++)
+            _flashTargets.Clear();
+
+            foreach (Renderer renderer in GetComponentsInChildren<Renderer>(true))
             {
-                if (_renderers[i] != null)
-                    _originalColors[i] = _renderers[i].material.color;
+                if (renderer is not MeshRenderer && renderer is not SkinnedMeshRenderer)
+                    continue;
+
+                Material[] materials = renderer.sharedMaterials;
+                for (int materialIndex = 0; materialIndex < materials.Length; materialIndex++)
+                {
+                    Material material = materials[materialIndex];
+                    if (material == null || !material.HasProperty(EmissionColorId))
+                        continue;
+
+                    _flashTargets.Add(new FlashTarget(renderer, materialIndex,
+                        material.GetColor(EmissionColorId)));
+                }
             }
+        }
+
+        public void RefreshRenderers()
+        {
+            StopFlash();
+            CacheRenderers();
         }
         
         private void OnDamageTaken(float damage)
@@ -171,25 +192,43 @@ namespace Game.Scripts.Characters
         
         private void PlayFlashEffect()
         {
-            _flashSequence?.Kill();
-            _flashSequence = DOTween.Sequence();
-            
-            float singleFlashDuration = _flashDuration / (_flashCount * 2);
-            Color flashColor = GetFlashColor();
-            
-            for (int i = 0; i < _flashCount; i++)
+            StopFlash();
+            SetFlash(GetFlashColor());
+            _flashCoroutine = StartCoroutine(FlashRoutine());
+        }
+
+        private IEnumerator FlashRoutine()
+        {
+            int flashCount = Mathf.Max(1, _flashCount);
+            float flashDuration = Mathf.Max(0.01f, _flashDuration);
+
+            if (flashCount == 1)
             {
-                _flashSequence.AppendCallback(() => SetColor(flashColor));
-                _flashSequence.AppendInterval(singleFlashDuration);
-                
-                _flashSequence.AppendCallback(() => ResetColors());
-                _flashSequence.AppendInterval(singleFlashDuration);
+                yield return new WaitForSeconds(flashDuration);
             }
-            
-            _flashSequence.OnComplete(ResetColors);
+            else
+            {
+                float phaseDuration = flashDuration / (flashCount * 2f);
+                var wait = new WaitForSeconds(phaseDuration);
+
+                for (int i = 0; i < flashCount; i++)
+                {
+                    if (i > 0)
+                        SetFlash(GetFlashColor());
+
+                    yield return wait;
+                    ResetFlash();
+                    yield return wait;
+                }
+            }
+
+            ResetFlash();
+            _flashCoroutine = null;
         }
         
-        private Color GetFlashColor() => _feedbackType == HitFeedbackType.Player ? Color.red : Color.white;
+        private Color GetFlashColor() => _feedbackType == HitFeedbackType.Player
+            ? PlayerFlashColor
+            : EnemyFlashColor;
         
         private void PlayCameraShake()
         {
@@ -198,21 +237,29 @@ namespace Game.Scripts.Characters
             
         }
         
-        private void SetColor(Color color)
+        private void SetFlash(Color color)
         {
-            foreach (var renderer in _renderers)
+            foreach (FlashTarget target in _flashTargets)
             {
-                if (renderer != null)
-                    renderer.material.color = color;
+                if (target.Renderer == null)
+                    continue;
+
+                target.Renderer.GetPropertyBlock(target.PropertyBlock, target.MaterialIndex);
+                target.PropertyBlock.SetColor(EmissionColorId, color);
+                target.Renderer.SetPropertyBlock(target.PropertyBlock, target.MaterialIndex);
             }
         }
         
-        private void ResetColors()
+        private void ResetFlash()
         {
-            for (int i = 0; i < _renderers.Length; i++)
+            foreach (FlashTarget target in _flashTargets)
             {
-                if (_renderers[i] != null)
-                    _renderers[i].material.color = _originalColors[i];
+                if (target.Renderer == null)
+                    continue;
+
+                target.Renderer.GetPropertyBlock(target.PropertyBlock, target.MaterialIndex);
+                target.PropertyBlock.SetColor(EmissionColorId, target.OriginalEmissionColor);
+                target.Renderer.SetPropertyBlock(target.PropertyBlock, target.MaterialIndex);
             }
         }
         
@@ -220,16 +267,40 @@ namespace Game.Scripts.Characters
         {
             _knockbackTween?.Kill();
             _knockbackTween = null;
-            
-            _flashSequence?.Kill();
-            _flashSequence = null;
-            
-            ResetColors();
+
+            StopFlash();
+        }
+
+        private void StopFlash()
+        {
+            if (_flashCoroutine != null)
+            {
+                StopCoroutine(_flashCoroutine);
+                _flashCoroutine = null;
+            }
+
+            ResetFlash();
         }
         
         private void OnDestroy()
         {
             KillAllTweens();
+        }
+
+        private sealed class FlashTarget
+        {
+            public FlashTarget(Renderer renderer, int materialIndex, Color originalEmissionColor)
+            {
+                Renderer = renderer;
+                MaterialIndex = materialIndex;
+                OriginalEmissionColor = originalEmissionColor;
+                PropertyBlock = new MaterialPropertyBlock();
+            }
+
+            public Renderer Renderer { get; }
+            public int MaterialIndex { get; }
+            public Color OriginalEmissionColor { get; }
+            public MaterialPropertyBlock PropertyBlock { get; }
         }
     }
 }

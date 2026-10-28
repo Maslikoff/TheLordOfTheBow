@@ -8,17 +8,60 @@ namespace YG
 {
     public partial class SavesYG
     {
+        public CampaignSaveData Campaign;
+
+        public CampaignSaveData EnsureCampaign()
+        {
+            if (Campaign != null && Campaign.Version >= CampaignSaveData.CurrentVersion) return Campaign;
+            var state = new PlayerProgressSnapshot
+            {
+                Level = PlayerLevel, Experience = PlayerExperience, Coins = Coins,
+                UnlockedStage = Mathf.Clamp(CurrentLevelIndex + 1, 1, 20)
+            };
+            foreach (var b in _bulletUpgrades)
+            {
+                var copy = new BulletUpgradeData { BulletType = b.BulletType, IsUnlocked = b.IsUnlocked,
+                    DamageBonus = b.DamageBonus, LifeTimeBonus = b.LifeTimeBonus, CountBonus = b.CountBonus,
+                    PoisonDamageBonus = b.PoisonDamageBonus };
+                state.Bullets.Add(copy);
+                state.LegacyBonuses.Add(copy);
+            }
+            Campaign = new CampaignSaveData { StageIndex = Mathf.Clamp(CurrentLevelIndex, 0, 19),
+                Cycle = 0, UnlockedStage = state.UnlockedStage, Committed = state };
+            _waveCheckpoints.Clear();
+            return Campaign;
+        }
         [SerializeField] private int _playerLevel = 1;
         [SerializeField] private float _playerExperience = 0f;
         [SerializeField] private int _currentLevelIndex = 0;
         [SerializeField] private List<BulletUpgradeData> _bulletUpgrades = new();
         [SerializeField] private List<LevelWaveCheckpoint> _waveCheckpoints = new();
+        [SerializeField] private int _coins;
+        [SerializeField] private List<string> _ownedSkins = new();
+        [SerializeField] private List<string> _ownedProjectiles = new();
+        [SerializeField] private List<string> _ownedHats = new();
+        [SerializeField] private string _equippedSkin = string.Empty;
+        [SerializeField] private string _equippedProjectile = string.Empty;
+        [SerializeField] private string _equippedHat = string.Empty;
 
         public int PlayerLevel 
         { 
             get => _playerLevel; 
             private set => _playerLevel = value >= 1 ? value : 1; 
         }
+
+        public int Coins
+        {
+            get => _coins;
+            private set => _coins = value >= 0 ? value : 0;
+        }
+
+        public IReadOnlyList<string> OwnedSkins => _ownedSkins;
+        public IReadOnlyList<string> OwnedProjectiles => _ownedProjectiles;
+        public IReadOnlyList<string> OwnedHats => _ownedHats;
+        public string EquippedSkin => _equippedSkin ?? string.Empty;
+        public string EquippedProjectile => _equippedProjectile ?? string.Empty;
+        public string EquippedHat => _equippedHat ?? string.Empty;
         
         public float PlayerExperience 
         { 
@@ -58,6 +101,7 @@ namespace YG
                 existing.IsUnlocked = state.IsUnlocked;
                 existing.DamageBonus = state.DamageBonus;
                 existing.LifeTimeBonus = state.LifeTimeBonus;
+                existing.PoisonDamageBonus = state.PoisonDamageBonus;
                 existing.CountBonus = state.CountBonus;
             }
             else
@@ -68,6 +112,7 @@ namespace YG
                     IsUnlocked = state.IsUnlocked,
                     DamageBonus = state.DamageBonus,
                     LifeTimeBonus = state.LifeTimeBonus,
+                    PoisonDamageBonus = state.PoisonDamageBonus,
                     CountBonus = state.CountBonus
                 });
             }
@@ -83,11 +128,12 @@ namespace YG
                     existing.IsUnlocked,
                     existing.DamageBonus,
                     existing.LifeTimeBonus,
-                    existing.CountBonus
+                    existing.CountBonus,
+                    existing.PoisonDamageBonus
                 );
             }
             
-            return new BulletUpgradeState(false, 0, 0, 0);
+            return new BulletUpgradeState(false, 0, 0, 0, 0);
         }
         
         public bool TryGetBulletUpgradeState(BulletType bulletType, out BulletUpgradeState state)
@@ -100,7 +146,8 @@ namespace YG
                     existing.IsUnlocked,
                     existing.DamageBonus,
                     existing.LifeTimeBonus,
-                    existing.CountBonus);
+                    existing.CountBonus,
+                    existing.PoisonDamageBonus);
                 return true;
             }
 
@@ -147,6 +194,27 @@ namespace YG
         public void ClearWaveCheckpoint(int levelIndex)
         {
             _waveCheckpoints.RemoveAll(x => x.LevelIndex == Mathf.Max(0, levelIndex));
+        }
+
+        public void WriteCoins(int coins)
+        {
+            Coins = coins;
+        }
+
+        public void WriteCosmeticInventory(
+            List<string> ownedSkins,
+            List<string> ownedProjectiles,
+            List<string> ownedHats,
+            string equippedSkin,
+            string equippedProjectile,
+            string equippedHat)
+        {
+            _ownedSkins = ownedSkins ?? new List<string>();
+            _ownedProjectiles = ownedProjectiles ?? new List<string>();
+            _ownedHats = ownedHats ?? new List<string>();
+            _equippedSkin = equippedSkin ?? string.Empty;
+            _equippedProjectile = equippedProjectile ?? string.Empty;
+            _equippedHat = equippedHat ?? string.Empty;
         }
     }
 }

@@ -1,8 +1,8 @@
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
+using Game.Scripts.AddressablesContent;
 using Game.Scripts.Environment.Effect;
-using Game.Scripts.Levels;
 using UnityEngine;
-using VContainer;
 
 namespace Game.Scripts.ObjectPool
 {
@@ -17,8 +17,6 @@ namespace Game.Scripts.ObjectPool
         protected override void Awake()
         {
             base.Awake();
-
-            InitializePools();
         }
 
         protected override void OnDestroy()
@@ -38,6 +36,17 @@ namespace Game.Scripts.ObjectPool
         protected override GameEffect CreateNewObject() => null;
 
         public override GameEffect GetFromPool() => null;
+
+        public async UniTask WarmupAsync(IAddressablesContentService content)
+        {
+            if (_isInitialized)
+                return;
+
+            foreach (EffectConfig config in _effectConfigs)
+                await config.ResolveAsync(content);
+
+            InitializePools();
+        }
 
         private void InitializePools()
         {
@@ -68,7 +77,10 @@ namespace Game.Scripts.ObjectPool
         public GameEffect GetEffect(EffectType type)
         {
             if (_isInitialized == false)
-                InitializePools();
+            {
+                Debug.LogError("EffectsPool is not warmed up.");
+                return null;
+            }
 
             if (_typePools.TryGetValue(type, out Queue<GameEffect> pool) == false)
             {
@@ -76,12 +88,7 @@ namespace Game.Scripts.ObjectPool
                 return null;
             }
 
-            GameEffect effect;
-
-            if (pool.Count > 0)
-                effect = pool.Dequeue();
-            else
-                effect = CreateEffectForType(type);
+            GameEffect effect = pool.Count > 0 ? pool.Dequeue() : CreateEffectForType(type);
 
             if (effect != null)
             {
@@ -101,12 +108,12 @@ namespace Game.Scripts.ObjectPool
             }
 
             GameEffect effect = Instantiate(prefab, _typeParents[type]);
-            
-             if (effect != null)
-             {
-                 effect.gameObject.SetActive(false);
-                 effect.Released += OnHandleObjectReleased;
-             }
+
+            if (effect != null)
+            {
+                effect.gameObject.SetActive(false);
+                effect.Released += OnHandleObjectReleased;
+            }
 
             return effect;
         }
@@ -120,7 +127,6 @@ namespace Game.Scripts.ObjectPool
             effect.transform.SetParent(_typeParents[type]);
             effect.transform.localPosition = Vector3.zero;
             effect.transform.localRotation = Quaternion.identity;
-
             _typePools[type].Enqueue(effect);
         }
 

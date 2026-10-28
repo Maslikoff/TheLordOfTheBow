@@ -1,0 +1,367 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Remote_Configs
+  m_EditorClassIdentifier: 
+  m_GroupName: Remote_Configs
+  m_Data:
+    m_SerializedData: []
+  m_GUID: b982a0af11fccd344b729ae177f8e712
+  m_SerializeEntries:
+  - m_GUID: 03d5399f1fd102f41b852600cd417ff1
+    m_Address: Configs/Shop/ShopCatalog
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Configs
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 05620cec6d4f32841920986f406a33e1
+    m_Address: Configs/Shop/Skin_Stub_01
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Configs
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0978ab06e0363ca47b0a1c2c6ac9f146
+    m_Address: Configs/Upgrades/Campaign_ArrowCount
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Configs
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0c83ffa1d9931a44eaf7a6fd927965c3
+    m_Address: Configs/Levels/Level_12
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Configs
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0f6c4651da2264f4c99cac3489f3230d
+    m_Address: Configs/Levels/Level_4
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Configs
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1fe8efc2055a9f74ba55e23962171717
+    m_Address: Configs/Levels/Level_13
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Configs
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2c4e5373e86661746bf95b6aba943130
+    m_Address: Configs/Shop/Projectile_Iap_Trial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Configs
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2e9c67a5d366db74ab3dc631b7aedb50
+    m_Address: Configs/Shop/Projectile_Stub_01
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Configs
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2e9ea3639bd8067419a299754f789dcb
+    m_Address: Configs/Levels/Level_1
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Configs
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2fe92b3c38d0e5f4689f62b7f3f35ab2
+    m_Address: Configs/Levels/Level_2
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Configs
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 32a69713f3d293a49bfb9981e9336656
+    m_Address: Configs/Shop/Hat_Stub_01
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Configs
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3322ed133bf4a0e428054a21ab5041c9
+    m_Address: Configs/Levels/Level_6
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Configs
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 33c7680457d6ec04091fc2541476f63a
+    m_Address: Configs/Upgrades/Campaign_Reload
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Configs
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3d359ec4584f08f4ba24495e23c0d6c1
+    m_Address: Configs/Upgrades/PoisonArrowLifeTimetUpgradeCard
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Configs
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 418bcd2709155e24598364b81abc51e8
+    m_Address: Configs/Levels/Level_5
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Configs
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4314763c059d47045bad7f144f355af7
+    m_Address: Configs/Levels/Level_9
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Configs
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 43a9dd6ea9704f84b9bb8e6d23ca4f5a
+    m_Address: Configs/Shop/Skin_Dwarf
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Configs
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4785ebf54e2433a428b83502bbcb69f1
+    m_Address: Configs/Levels/Level_11
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Configs
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4c7b82ee349d2f243b7abfda90bd5715
+    m_Address: Configs/Levels/Level_18
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Configs
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 535c7df547618b7408cbc2338c9c3eaa
+    m_Address: Configs/Levels/Level_15
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Configs
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 58fcc737936fca34c86785c5a10655ce
+    m_Address: Configs/Upgrades/Campaign_Health
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Configs
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 59ead4c8c049ceb4f9b949d87bf674b4
+    m_Address: Configs/Levels/Level_8
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Configs
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5b9c00400cfca264cb87af7e14e8b8a1
+    m_Address: Configs/Upgrades/ArrowCountUpgradeCard
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Configs
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 624c076960f465244b17e5f8f5584679
+    m_Address: Configs/Shop/Skin_Valkyrie
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Configs
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6499ce8c34536364c884fbd833bba48e
+    m_Address: Configs/Upgrades/UnlockFireArrowUpgradeCard
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Configs
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6674553d85ea25445af8329cd2bc8053
+    m_Address: Configs/Upgrades/Campaign_PoisonImpact
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Configs
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6e26e6baf5b21ce4283b0345f10f801e
+    m_Address: Configs/Upgrades/PoisonArrowDamagetUpgradeCard
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Configs
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 74496b1c17c3353478b970bb0d82ab9f
+    m_Address: Configs/Shop/Hat_Iap_Trial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Configs
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7521ec87b66bdfe4da6ad95a953d1b69
+    m_Address: Configs/Levels/Level_3
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Configs
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7750c71860996794fbef7d0f4aa9a4a8
+    m_Address: Configs/Shop/Skin_ElfFemale
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Configs
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7c089aa8147c43342ba480ec23744b9e
+    m_Address: Configs/Shop/Skin_Iap_Trial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Configs
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7e594d739537c9b48bf4552841b54d78
+    m_Address: Configs/Levels/Level_19
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Configs
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 83680799321d7404cbaaa3f3b22e0ebf
+    m_Address: Configs/Upgrades/ArrowDamagetUpgradeCard
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Configs
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 836bf2d4dcf31884aa52e7850d29f737
+    m_Address: Configs/Upgrades/UnlockPoisonArrowUpgradeCard 1
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Configs
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 894e12cb3ffaf7e48911362ea0ddf490
+    m_Address: Configs/Upgrades/Campaign_ArrowDamage
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Configs
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9016e795f17270d4180ceb4eb796b68a
+    m_Address: Configs/Levels/Level_17
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Configs
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 94eb8933a215d684d8394a91b999ab38
+    m_Address: Configs/Upgrades/Campaign_PoisonDamage
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Configs
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 954d1ad865faf4b4f9063e3118396caa
+    m_Address: Configs/Levels/Level_14
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Configs
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 97cd8ca38adeb704c8ad6eb6762df3db
+    m_Address: Configs/Levels/Level_10
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Configs
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9a66d3f12e68d6b4aaed9f41d28b723b
+    m_Address: Configs/Upgrades/Campaign_FireLifetime
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Configs
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a1c4e8f29b7d4e6a9f3c5d8e1b2a4c7d
+    m_Address: Configs/Upgrades/PoisonArrowDotUpgradeCard
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Configs
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a1f052c51ea873448b23d6902143c85d
+    m_Address: Configs/Levels/Level_16
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Configs
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a73f0087f37b1a64b90001b9099a1683
+    m_Address: Configs/Shop/Skin_Wizard
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Configs
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ab28f5e887dc4574ab6c643905babe24
+    m_Address: Configs/Shop/Skin_Default_Elf
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Configs
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: acad55da23cedee44b6567c536b705cb
+    m_Address: Configs/Upgrades/Campaign_PoisonDuration
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Configs
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: aef6ff2ad5fa6f5418cef3510ffa93fc
+    m_Address: Configs/Upgrades/FireArrowDamagetUpgradeCard
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Configs
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b3c52b7a975b88144bd570a8a69c82fa
+    m_Address: Configs/Shop/Skin_Knight
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Configs
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b44434e6d64dd7348a30df1c23fac640
+    m_Address: Configs/Upgrades/MaxHealthUpgradeCard
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Configs
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c664f15341e4cb84985bf57ef6ddafb8
+    m_Address: Configs/Upgrades/Campaign_Critical
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Configs
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c7f3d4b95823bb240897783a433f7bb7
+    m_Address: Configs/Upgrades/Campaign_Shield
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Configs
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cd761b0efe5f131469d7bc286943618a
+    m_Address: Configs/Upgrades/Campaign_Coins
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Configs
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d5302f57a44f29d40b86040a029f0c01
+    m_Address: Configs/Upgrades/Campaign_Heal
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Configs
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d715889cfb6fce842916b37f38a1ebfd
+    m_Address: Configs/Upgrades/FireArrowLifeTimetUpgradeCard
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Configs
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: dcaae9ae1196a304b8b73255de0f7f76
+    m_Address: Configs/Levels/Level_20
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Configs
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e2878beaf7222664a89fcf466929f5cd
+    m_Address: Configs/Upgrades/Campaign_Pierce
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Configs
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f6eb73b7b9cd22f4ea03f01e4add00e4
+    m_Address: Configs/Upgrades/Campaign_FireDamage
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Configs
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f7e6ef478b9ba60449cefe60962552f8
+    m_Address: Configs/Levels/Level_7
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Configs
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 26eb0a5cd928be748981234ea4adab30, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 1fca72f981c2d164aafc6efdafc33386, type: 2}
+    - {fileID: 11400000, guid: 0f73cfb3846e2964b8a8f687f7958d34, type: 2}

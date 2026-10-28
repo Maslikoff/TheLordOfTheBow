@@ -26,7 +26,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8135886326569738825}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -96,7 +96,7 @@ MonoBehaviour:
   snapY: 0
   background: {fileID: 8135886327475159579}
   handle: {fileID: 8135886327784587633}
-  moveThreshold: 1
+  moveThreshold: 3
 --- !u!1 &8135886327475159578
 GameObject:
   m_ObjectHideFlags: 0

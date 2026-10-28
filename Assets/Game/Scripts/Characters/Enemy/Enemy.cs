@@ -13,6 +13,7 @@ namespace Game.Scripts.Characters.Enemy
     [RequireComponent(typeof(EnemyShoot))]
     [RequireComponent(typeof(EnemyRotation))]
     [RequireComponent(typeof(Health))]
+    [RequireComponent(typeof(PoisonStatus))]
     [RequireComponent(typeof(HitFeedback))]
     public abstract class Enemy : MonoBehaviour, IPoolable
     {
@@ -21,6 +22,7 @@ namespace Game.Scripts.Characters.Enemy
         [SerializeField] protected EnemyRotation _enemyRotation;
         [SerializeField] protected Health _health;
         [SerializeField] protected DamagePopup _damagePopup;
+        [SerializeField] protected PoisonStatus _poisonStatus;
         
         [Header("Sounds")]
         [SerializeField] private AudioAsset _spawnSound;
@@ -40,6 +42,26 @@ namespace Game.Scripts.Characters.Enemy
         public Transform PlayerTarget { get; protected set; }
 
         public event Action<IPoolable> Released;
+        public bool WasKilled { get; private set; }
+        private bool _released;
+        private float _baseHealth;
+        private float _baseXp;
+
+        public void PrepareForSpawn(int cycle)
+        {
+            _released = false;
+            WasKilled = false;
+            var reward = GetComponent<Game.Scripts.Experience.ExperienceReward>();
+            if (_baseHealth <= 0)
+            {
+                _baseHealth = _health.MaxCount;
+                _baseXp = reward != null ? reward.Reward : 0;
+            }
+            float hp = _baseHealth * Game.Scripts.Levels.CampaignRules.EnemyHealth(cycle);
+            _health.Restore(hp, hp);
+            _enemyShoot.DamageMultiplier = Game.Scripts.Levels.CampaignRules.EnemyDamage(cycle);
+            reward?.SetExperienceReward(Mathf.Round(_baseXp * Game.Scripts.Levels.CampaignRules.Experience(cycle)));
+        }
 
         protected virtual void OnEnable()
         {
@@ -58,6 +80,7 @@ namespace Game.Scripts.Characters.Enemy
             _enemyShoot ??= GetComponent<EnemyShoot>();
             _enemyRotation ??= GetComponent<EnemyRotation>();
             _health ??= GetComponent<Health>();
+            _poisonStatus ??= GetComponent<PoisonStatus>();
         }
 
         protected virtual void OnDisable()
@@ -67,7 +90,8 @@ namespace Game.Scripts.Characters.Enemy
                 _health.DamageTaken -= OnDamageTaken;
                 _health.Death -= OnDeath;
             }
-            
+
+            _poisonStatus?.Clear();
             _damagePopup?.ResetPopup();
         }
 
@@ -83,6 +107,8 @@ namespace Game.Scripts.Characters.Enemy
         
         public void Release()
         {
+            if (_released) return;
+            _released = true;
             EnemyBulletTracker.ReleaseAllForOwner(transform);
             Released?.Invoke(this);
         }
@@ -94,6 +120,7 @@ namespace Game.Scripts.Characters.Enemy
 
         private void OnDeath()
         {
+            WasKilled = true;
             _effectService?.PlayEffect(EffectType.EnemyDeath, transform.position);
             _audioService?.PlayOneShot(_deathSound);
             

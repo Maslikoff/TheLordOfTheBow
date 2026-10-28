@@ -22,6 +22,7 @@ namespace Game.Scripts.Characters
     
         public event Action<float> ReloadProgressUpdated;
         public event Action ShotFired;
+        public float DamageMultiplier { get; set; } = 1f;
         
         protected virtual void Start()
         {
@@ -48,7 +49,7 @@ namespace Game.Scripts.Characters
             Vector3 direction = GetShootDirection();
             
             _bulletSpawner.SetFirePoint(_firePoint);
-            _bulletSpawner.SpawnBullet(_bulletType, direction, new BulletData(1, 0), GetShotOwner());
+            _bulletSpawner.SpawnBullet(_bulletType, direction, new BulletData(DamageMultiplier, 0), GetShotOwner());
         }
         
         protected virtual Transform GetShotOwner() => null;

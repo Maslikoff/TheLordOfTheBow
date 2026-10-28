@@ -10,6 +10,7 @@ using VContainer;
 
 namespace Game.Scripts.Spawners
 {
+    public enum EnemySpawnResult { Spawned, Waiting, InvalidConfiguration }
     public class EnemySpawner : Spawner<Enemy>
     {
         private readonly Dictionary<Enemy, Vector2Int> _enemyCells = new();
@@ -35,6 +36,23 @@ namespace Game.Scripts.Spawners
         private bool _isGameReady;
 
         public event Action EnemyReleased;
+        public event Action EnemyKilled;
+        public event Action EnemyRemovedWithoutDeath;
+        private Race? _requestedRace;
+        private Game.Scripts.Levels.ILevelService _levels;
+        public int ActiveCount => _currentObjectsCount;
+
+        [Inject] private void SetLevels(Game.Scripts.Levels.ILevelService levels) => _levels = levels;
+        public bool SupportsRace(Race race) => _enemyPool != null && _enemyPool.SupportsRace(race);
+        public EnemySpawnResult TrySpawnRace(Race race)
+        {
+            if (!SupportsRace(race) || (_useGridSpawning && (_spawnGrid == null || _spawnGrid.TotalCells <= 0))) return EnemySpawnResult.InvalidConfiguration;
+            if (!_isGameReady || !CanSpawn()) return EnemySpawnResult.Waiting;
+            _requestedRace = race;
+            bool spawned = TrySpawnObject();
+            _requestedRace = null;
+            return spawned ? EnemySpawnResult.Spawned : EnemySpawnResult.Waiting;
+        }
 
         [Inject]
         private void Construct(IPlayerProvider playerProvider, IGameStateService gameStateService)
@@ -60,8 +78,10 @@ namespace Game.Scripts.Spawners
                 Debug.LogError("[EnemySpawner] Failed to get EnemyPool component in Awake!");
         }
 
-        private void Start()
+        protected override void Start()
         {
+            base.Start();
+
             if (_gameStateService == null)
             {
                 Debug.LogError("[EnemySpawner] GameStateService is null!");
@@ -117,7 +137,7 @@ namespace Game.Scripts.Spawners
         {
             if (_useGridSpawning && _spawnGrid != null)
             {
-                if (_spawnInOrder)
+                if (_spawnInOrder && !_requestedRace.HasValue)
                     return TrySpawnNextInOrder();
 
                 return TrySpawnRandomInGrid();
@@ -204,6 +224,7 @@ namespace Game.Scripts.Spawners
             }
 
             enemy.transform.position = position;
+            enemy.PrepareForSpawn(_levels?.Cycle ?? 0);
 
             if (InitializeEnemy(enemy) == false)
             {
@@ -226,6 +247,7 @@ namespace Game.Scripts.Spawners
 
         private Enemy GetEnemyFromPool()
         {
+            if (_requestedRace.HasValue) return _enemyPool.GetEnemy(_requestedRace.Value);
             if (_enemyPool == null && _objectPool != null)
                 _enemyPool = _objectPool as EnemyPool;
 
@@ -294,8 +316,10 @@ namespace Game.Scripts.Spawners
                 _enemyCells.Remove(enemy);
             }
 
-            EnemyReleased?.Invoke();
             DecreaseObjectCount();
+            EnemyReleased?.Invoke();
+            if (enemy.WasKilled) EnemyKilled?.Invoke();
+            else EnemyRemovedWithoutDeath?.Invoke();
         }
     }
 }

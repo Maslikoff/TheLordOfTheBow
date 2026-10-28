@@ -11,8 +11,6 @@ namespace Game.Scripts.Save
         [SerializeField] private string _technoName = "BestLevel";
         [Tooltip("Минимальный интервал между отправками в секундах (в доке: не чаще ~1 раза/сек).")]
         [SerializeField] private float _minSendIntervalSeconds = 1.1f;
-        [Tooltip("Авто-открывать окно авторизации перед отправкой, если игрок не авторизован.")]
-        [SerializeField] private bool _requestAuthIfNeeded = true;
         
         [Header("Local Cache")]
         [Tooltip("Если true, локально сохраняем best score в PlayerPrefs, чтобы не спамить повторные отправки.")]
@@ -80,9 +78,7 @@ namespace Game.Scripts.Save
             if (candidateScore <= _bestScore)
                 return false;
             
-            if (_requestAuthIfNeeded && YG2.player.auth == false)
-                YG2.OpenAuthDialog();
-            
+            // Не открываем AuthDialog автоматически — только явная кнопка (п. 1.2.1 Яндекс Игр).
             YG2.SetLeaderboard(_technoName, candidateScore);
             
             _lastSendRealtime = now;
@@ -111,9 +107,6 @@ namespace Game.Scripts.Save
             
             if (now - _lastSendRealtime < _minSendIntervalSeconds)
                 return false;
-            
-            if (_requestAuthIfNeeded && YG2.player.auth == false)
-                YG2.OpenAuthDialog();
             
             YG2.SetLeaderboard(_technoName, score);
             _lastSendRealtime = now;
@@ -153,6 +146,9 @@ namespace Game.Scripts.Save
                 LeaderboardLoaded?.Invoke(data);
         }
         
+        /// <summary>
+        /// Вызывать только с отдельной кнопки «Авторизоваться» с пояснением преимуществ (п. 1.2.1).
+        /// </summary>
         public void RequestAuthorization()
         {
             if (_isSdkReady == false)

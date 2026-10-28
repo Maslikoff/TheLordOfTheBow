@@ -1,9 +1,12 @@
-using DG.Tweening;using Game.Scripts.Levels;
+using DG.Tweening;
+using Game.Scripts.Environment.Effect;
+using Game.Scripts.Levels;
 using Game.Scripts.StateServices;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using VContainer;
+using YG;
 
 namespace Game.Scripts.UI
 {
@@ -27,13 +30,26 @@ namespace Game.Scripts.UI
         [Header("References")] 
         [SerializeField] private GameObject _gameCamera;
         [SerializeField] private GameObject _menuCamera;
+        [SerializeField] private CinematicCameraTransition _cinematicCameraTransition;
         [SerializeField] private MonoBehaviour[] _gameScriptsToEnable;
 
         private bool _isGameStarted = false;
+        private bool _shopBlocking;
+        private bool _pauseBlocking;
         private Tween _textScaleTween;
         
         private IGameStateService _gameStateService;
         private ILevelService _levelService;
+
+        public void SetShopBlocking(bool blocking)
+        {
+            _shopBlocking = blocking;
+        }
+
+        public void SetPauseBlocking(bool blocking)
+        {
+            _pauseBlocking = blocking;
+        }
         
         [Inject]
         private void Construct(IGameStateService gameStateService, ILevelService levelService)
@@ -47,6 +63,9 @@ namespace Game.Scripts.UI
             MakeFullscreenBlocker();
             PlayIdleAnimation();
             UpdateLevelTitle();
+
+            // Game Ready API: call only when the first playable UI is interactive (YG AutoGRA is off).
+            YG2.GameReadyAPI();
         }
         
         private void MakeFullscreenBlocker()
@@ -98,7 +117,7 @@ namespace Game.Scripts.UI
         {
             Debug.Log("Tap detected!");
         
-            if (_isGameStarted) 
+            if (_isGameStarted || _shopBlocking || _pauseBlocking) 
                 return;
         
             StartGame();
@@ -157,30 +176,42 @@ namespace Game.Scripts.UI
             fadeSequence.OnComplete(() =>
             {
                 gameObject.SetActive(false);
-                SwitchToGameCamera();
-                EnableGameScripts();
-                
-                if (_gameStateService != null)
-                    _gameStateService.StartGame();
+                SwitchToGameCamera(BeginGameplay);
             });
         
             fadeSequence.Play();
         }
 
-        private void SwitchToGameCamera()
+        private void SwitchToGameCamera(System.Action onComplete)
         {
+            Camera gameCam = _gameCamera != null ? _gameCamera.GetComponent<Camera>() : null;
+            Camera menuCam = _menuCamera != null ? _menuCamera.GetComponent<Camera>() : null;
+
+            CinematicCameraTransition transition = _cinematicCameraTransition;
+            if (transition == null && _gameCamera != null)
+                transition = _gameCamera.GetComponent<CinematicCameraTransition>();
+
+            if (transition != null && gameCam != null)
+            {
+                transition.Play(menuCam, gameCam, onComplete);
+                return;
+            }
+
             if (_menuCamera != null)
                 _menuCamera.SetActive(false);
-        
+
             if (_gameCamera != null)
-            {
                 _gameCamera.SetActive(true);
-            
-                Camera cam = _gameCamera.GetComponent<Camera>();
-                
-                if (cam != null)
-                    cam.DOFieldOfView(70f, 1f).From(90f).SetEase(Ease.OutQuad);
-            }
+
+            onComplete?.Invoke();
+        }
+
+        private void BeginGameplay()
+        {
+            EnableGameScripts();
+
+            if (_gameStateService != null)
+                _gameStateService.StartGame();
         }
 
         private void EnableGameScripts()

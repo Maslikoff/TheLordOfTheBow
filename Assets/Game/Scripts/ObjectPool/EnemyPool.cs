@@ -30,9 +30,7 @@ namespace Game.Scripts.ObjectPool
         protected override void Awake()
         {
             base.Awake();
-
-            if (_defaultEnemyConfigs.Count > 0)
-                InitializeWithConfig(_defaultEnemyConfigs);
+            // Pool is initialized after Addressables resolve via SetEnemyPoolConfig.
         }
 
         protected override void OnDestroy()
@@ -79,6 +77,8 @@ namespace Game.Scripts.ObjectPool
 
             return enemy;
         }
+
+        public bool SupportsRace(Race race) => _isInitialized && _racePrefabs.ContainsKey(race);
 
         public Enemy GetRandomEnemyByWeight()
         {

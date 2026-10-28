@@ -108,7 +108,7 @@ namespace Game.Scripts.Characters.Bullets
             if (other.gameObject.TryGetComponent(out Health player) == false) 
                 return;
             
-            player.TakeDamage(_baseDamage);
+            player.TakeDamage(_baseDamage * _currentDamage);
         }
 
         protected override bool CanCollide(Collision other) => 
