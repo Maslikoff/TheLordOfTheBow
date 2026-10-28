@@ -15,7 +15,6 @@ using Game.Scripts.Upgrades;
 using UnityEditor;
 using UnityEditor.AddressableAssets;
 using UnityEngine;
-using YG;
 using Object = UnityEngine.Object;
 
 namespace Game.Tests.Editor
@@ -99,7 +98,7 @@ namespace Game.Tests.Editor
 
         private static void CheckMigration()
         {
-            var saves = new SavesYG();
+            var saves = new SaveData();
             saves.WritePlayerLevel(11);
             saves.WritePlayerExperience(123);
             saves.WriteCurrentLevelIndex(8);
@@ -113,7 +112,7 @@ namespace Game.Tests.Editor
             Check(migrated.Committed.LegacyBonuses.Count == 1, "Legacy baseline retained");
             Check(!saves.TryGetWaveCheckpoint(8, out _), "Old wave checkpoints cleared");
             Check(ReferenceEquals(migrated, saves.EnsureCampaign()), "Migration is idempotent");
-            var roundtrip = JsonUtility.FromJson<SavesYG>(JsonUtility.ToJson(saves));
+            var roundtrip = JsonUtility.FromJson<SaveData>(JsonUtility.ToJson(saves));
             Check(roundtrip.Campaign.Committed.Level == 11, "Save JSON roundtrip");
         }
 

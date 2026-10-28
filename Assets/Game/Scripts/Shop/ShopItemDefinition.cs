@@ -3,7 +3,7 @@ using Cysharp.Threading.Tasks;
 using Game.Scripts.AddressablesContent;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
-using YG;
+using Game.Localization;
 
 namespace Game.Scripts.Shop
 {
@@ -89,7 +89,7 @@ namespace Game.Scripts.Shop
 
         private static string GetLocalized(string ru, string en, string tr)
         {
-            return YG2.lang switch
+            return Loc.Lang switch
             {
                 "en" => string.IsNullOrEmpty(en) ? ru : en,
                 "tr" => string.IsNullOrEmpty(tr) ? ru : tr,

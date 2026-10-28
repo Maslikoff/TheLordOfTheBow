@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using VContainer;
-using YG;
+using JTLStudio.SDK;
 
 namespace Game.Scripts.UI
 {
@@ -65,7 +65,8 @@ namespace Game.Scripts.UI
             UpdateLevelTitle();
 
             // Game Ready API: call only when the first playable UI is interactive (YG AutoGRA is off).
-            YG2.GameReadyAPI();
+            if (JTLSDK.IsCreated && JTLSDK.GameEvents.IsGameReady == false)
+                JTLSDK.GameEvents.GameReady();
         }
         
         private void MakeFullscreenBlocker()

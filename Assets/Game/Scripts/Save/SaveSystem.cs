@@ -6,7 +6,6 @@ using Game.Scripts.Shop;
 using UniRx;
 using UnityEngine;
 using VContainer;
-using YG;
 
 namespace Game.Scripts.Save
 {
@@ -23,13 +22,12 @@ namespace Game.Scripts.Save
         private bool _defeated;
         public bool IsMetaDataLoaded { get; private set; }
         public bool IsReady { get; private set; }
-        private CampaignSaveData Data => YG2.saves.EnsureCampaign();
+        private CampaignSaveData Data => Saves.Data.EnsureCampaign();
 
         private void Awake()
         {
             DontDestroyOnLoad(gameObject);
-            YG2.onGetSDKData += OnSdkDataReady;
-            YG2.onHideWindowGame += SaveGameData;
+            Saves.Loaded += OnSdkDataReady;
             MessageBroker.Default.Receive<M_PlayerSpawned>().Subscribe(x => OnPlayerSpawned(x.Player)).AddTo(_disposables);
             MessageBroker.Default.Receive<M_SaveRequested>().Subscribe(_ => SavePlayerProgress()).AddTo(_disposables);
         }
@@ -38,14 +36,13 @@ namespace Game.Scripts.Save
         private async UniTaskVoid WaitForSdk()
         {
             float until = Time.realtimeSinceStartup + 5;
-            while (!YG2.isSDKEnabled && Time.realtimeSinceStartup < until) await UniTask.Yield();
+            while (!Saves.IsReady && Time.realtimeSinceStartup < until) await UniTask.Yield();
             if (!IsReady) OnSdkDataReady();
         }
 
         private void OnDestroy()
         {
-            YG2.onGetSDKData -= OnSdkDataReady;
-            YG2.onHideWindowGame -= SaveGameData;
+            Saves.Loaded -= OnSdkDataReady;
             _disposables.Dispose();
         }
 
@@ -62,7 +59,7 @@ namespace Game.Scripts.Save
             if (IsReady && _player != null) return;
             var data = Data;
             _levelService.SetCampaignPosition(data.StageIndex, data.Cycle, data.UnlockedStage);
-            var saves = YG2.saves;
+            var saves = Saves.Data;
             _currency.Load(saves.Coins);
             _cosmetics.Load(saves.OwnedSkins, saves.OwnedProjectiles, saves.OwnedHats,
                 saves.EquippedSkin, saves.EquippedProjectile, saves.EquippedHat);
@@ -209,15 +206,15 @@ namespace Game.Scripts.Save
             var state = data.Checkpoint ?? data.Committed;
             if (state != null)
             {
-                YG2.saves.WritePlayerLevel(state.Level);
-                YG2.saves.WritePlayerExperience(state.Experience);
-                YG2.saves.WriteCoins(state.Coins);
+                Saves.Data.WritePlayerLevel(state.Level);
+                Saves.Data.WritePlayerExperience(state.Experience);
+                Saves.Data.WriteCoins(state.Coins);
                 foreach (var b in state.Bullets)
-                    YG2.saves.WriteBulletUpgradeState(b.BulletType, new Upgrades.BulletUpgradeState(b.IsUnlocked,
+                    Saves.Data.WriteBulletUpgradeState(b.BulletType, new Upgrades.BulletUpgradeState(b.IsUnlocked,
                         b.DamageBonus, b.LifeTimeBonus, b.CountBonus, b.PoisonDamageBonus));
             }
-            YG2.saves.WriteCurrentLevelIndex(data.StageIndex);
-            if (YG2.isSDKEnabled) YG2.SaveProgress();
+            Saves.Data.WriteCurrentLevelIndex(data.StageIndex);
+            Saves.Save();
         }
     }
 }

@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using YG;
+using Game.Scripts.Save;
 
 namespace Game.Scripts.Shop
 {
@@ -179,7 +179,7 @@ namespace Game.Scripts.Shop
 
         private void Persist()
         {
-            YG2.saves.WriteCosmeticInventory(
+            Saves.Data.WriteCosmeticInventory(
                 ToList(_ownedSkins),
                 ToList(_ownedProjectiles),
                 ToList(_ownedHats),
@@ -187,8 +187,7 @@ namespace Game.Scripts.Shop
                 _equippedProjectile,
                 _equippedHat);
 
-            if (YG2.isSDKEnabled)
-                YG2.SaveProgress();
+            Saves.Save();
         }
 
         private static void AddRange(HashSet<string> target, IReadOnlyList<string> source)

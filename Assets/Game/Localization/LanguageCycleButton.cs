@@ -2,7 +2,6 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using VContainer;
-using YG;
 
 namespace Game.Localization
 {
@@ -35,8 +34,8 @@ namespace Game.Localization
             if (_button != null)
                 _button.onClick.AddListener(OnClick);
 
-            YG2.onSwitchLang += RefreshLabel;
-            RefreshLabel(YG2.lang);
+            Loc.Changed += RefreshLabel;
+            RefreshLabel(Loc.Lang);
         }
 
         private void OnDisable()
@@ -44,7 +43,7 @@ namespace Game.Localization
             if (_button != null)
                 _button.onClick.RemoveListener(OnClick);
 
-            YG2.onSwitchLang -= RefreshLabel;
+            Loc.Changed -= RefreshLabel;
         }
 
         private void OnClick()
@@ -55,9 +54,9 @@ namespace Game.Localization
                 return;
             }
 
-            int index = System.Array.IndexOf(SupportedLanguages, YG2.lang);
+            int index = System.Array.IndexOf(SupportedLanguages, Loc.Lang);
             int nextIndex = index < 0 ? 0 : (index + 1) % SupportedLanguages.Length;
-            YG2.SwitchLanguage(SupportedLanguages[nextIndex]);
+            Loc.SetByCode(SupportedLanguages[nextIndex]);
         }
 
         private void RefreshLabel(string lang)

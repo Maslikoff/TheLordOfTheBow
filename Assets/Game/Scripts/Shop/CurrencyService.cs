@@ -1,6 +1,6 @@
 using System;
+using Game.Scripts.Save;
 using UnityEngine;
-using YG;
 
 namespace Game.Scripts.Shop
 {
@@ -39,7 +39,7 @@ namespace Game.Scripts.Shop
 
             _coins -= amount;
             // Cosmetics survive a retry, so their cost must survive every rollback boundary too.
-            var campaign = YG2.saves.Campaign;
+            var campaign = Saves.Data.Campaign;
             void Debit(Game.Scripts.Save.PlayerProgressSnapshot snapshot)
             {
                 if (snapshot != null) snapshot.Coins = Mathf.Max(0, snapshot.Coins - amount);
@@ -63,10 +63,8 @@ namespace Game.Scripts.Shop
 
         public void Persist()
         {
-            YG2.saves.WriteCoins(_coins);
-
-            if (YG2.isSDKEnabled)
-                YG2.SaveProgress();
+            Saves.Data.WriteCoins(_coins);
+            Saves.Save();
         }
     }
 }

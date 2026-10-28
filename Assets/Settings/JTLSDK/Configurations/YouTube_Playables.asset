@@ -1,0 +1,109 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d25363e8620ac4c1ea2650739512eab7, type: 3}
+  m_Name: YouTube_Playables
+  m_EditorClassIdentifier: 
+  _displayName: YouTube Playables
+  _platform: 2
+  _defineSymbol: JTLSDK_YOUTUBE_PLAYABLES
+  _pauseOnFocusLoss: 0
+  _yandexMetricaCounter: 
+  _languages: 010000000000000002000000
+  _playerSettings:
+    _applyTemplate: 1
+    _template: PROJECT:JTLSDK
+    _applyExceptions: 0
+    _exceptions: 1
+    _applyCompression: 1
+    _compression: 0
+    _applyDecompressionFallback: 1
+    _decompressionFallback: 0
+    _applyNameFilesAsHashes: 1
+    _nameFilesAsHashes: 1
+    _applyDataCaching: 1
+    _dataCaching: 1
+    _applyStripping: 1
+    _stripping: 4
+    _applyRunInBackground: 1
+    _runInBackground: 1
+    _applyDebugSymbols: 1
+    _debugSymbols: 0
+    _applyMemorySize: 0
+    _memorySizeMegabytes: 512
+  _platformProvider:
+    rid: 391204689195565056
+  _ads:
+    rid: 391204689195565057
+  _data:
+    rid: 391204689195565058
+  _payments:
+    rid: 391204689195565059
+  _languageProvider:
+    rid: 391204689195565060
+  _player:
+    rid: 391204689195565061
+  _leaderboards:
+    rid: 391204689195565062
+  _flags:
+    rid: 391204689195565063
+  _timeProvider:
+    rid: 391204689195565064
+  _gameEvents:
+    rid: 391204689195565065
+  _review:
+    rid: 391204689195565066
+  _gameLabel:
+    rid: 391204689195565067
+  _links:
+    rid: 391204689195565068
+  references:
+    version: 2
+    RefIds:
+    - rid: 391204689195565056
+      type: {class: YouTubePlayablesPlatformProvider, ns: JTLStudio.SDK.YouTubePlayables, asm: JTLStudio.SDK.YouTubePlayables}
+      data: 
+    - rid: 391204689195565057
+      type: {class: YouTubePlayablesAdsProvider, ns: JTLStudio.SDK.YouTubePlayables, asm: JTLStudio.SDK.YouTubePlayables}
+      data: 
+    - rid: 391204689195565058
+      type: {class: YouTubePlayablesDataProvider, ns: JTLStudio.SDK.YouTubePlayables, asm: JTLStudio.SDK.YouTubePlayables}
+      data: 
+    - rid: 391204689195565059
+      type: {class: UnsupportedPaymentsProvider, ns: JTLStudio.SDK.Providers, asm: JTLStudio.SDK}
+      data: 
+    - rid: 391204689195565060
+      type: {class: YouTubePlayablesLanguageProvider, ns: JTLStudio.SDK.YouTubePlayables, asm: JTLStudio.SDK.YouTubePlayables}
+      data: 
+    - rid: 391204689195565061
+      type: {class: UnsupportedPlayerProvider, ns: JTLStudio.SDK.Providers, asm: JTLStudio.SDK}
+      data: 
+    - rid: 391204689195565062
+      type: {class: YouTubePlayablesLeaderboardsProvider, ns: JTLStudio.SDK.YouTubePlayables, asm: JTLStudio.SDK.YouTubePlayables}
+      data: 
+    - rid: 391204689195565063
+      type: {class: UnsupportedFlagsProvider, ns: JTLStudio.SDK.Providers, asm: JTLStudio.SDK}
+      data: 
+    - rid: 391204689195565064
+      type: {class: FallbackTimeProvider, ns: JTLStudio.SDK.Providers, asm: JTLStudio.SDK}
+      data: 
+    - rid: 391204689195565065
+      type: {class: YouTubePlayablesGameEventsProvider, ns: JTLStudio.SDK.YouTubePlayables, asm: JTLStudio.SDK.YouTubePlayables}
+      data: 
+    - rid: 391204689195565066
+      type: {class: UnsupportedReviewProvider, ns: JTLStudio.SDK.Providers, asm: JTLStudio.SDK}
+      data: 
+    - rid: 391204689195565067
+      type: {class: UnsupportedGameLabelProvider, ns: JTLStudio.SDK.Providers, asm: JTLStudio.SDK}
+      data: 
+    - rid: 391204689195565068
+      type: {class: UnsupportedLinksProvider, ns: JTLStudio.SDK.Providers, asm: JTLStudio.SDK}
+      data: 

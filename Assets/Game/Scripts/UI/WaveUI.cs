@@ -1,7 +1,7 @@
 using Game.Scripts.Wave;
 using UnityEngine;
 using TMPro;
-using YG;
+using Game.Localization;
 
 namespace Game.Scripts.UI
 {
@@ -35,7 +35,7 @@ namespace Game.Scripts.UI
 
         private void OnEnable()
         {
-            YG2.onSwitchLang += OnLanguageSwitched;
+            Loc.Changed += OnLanguageSwitched;
 
             if (_waveSystem != null)
             {
@@ -50,7 +50,7 @@ namespace Game.Scripts.UI
 
         private void OnDisable()
         {
-            YG2.onSwitchLang -= OnLanguageSwitched;
+            Loc.Changed -= OnLanguageSwitched;
 
             if (_waveSystem != null)
             {
@@ -109,7 +109,7 @@ namespace Game.Scripts.UI
             _lastWaveCurrent = current;
             _lastWaveTotal = total;
             if (_waveNumberText != null)
-                _waveNumberText.text = _levels == null ? string.Format(GetWaveFormat(), current, total) : YG2.lang switch
+                _waveNumberText.text = _levels == null ? string.Format(GetWaveFormat(), current, total) : Loc.Lang switch
                 {
                     "en" => $"Cycle {_levels.Cycle + 1} · Stage {_levels.CurrentLevel}\nWave {current}/{total}",
                     "tr" => $"Tur {_levels.Cycle + 1} · Bölüm {_levels.CurrentLevel}\nDalga {current}/{total}",
@@ -134,7 +134,7 @@ namespace Game.Scripts.UI
             if (!_useLocalizedFormats)
                 return _waveFormat;
 
-            return YG2.lang switch
+            return Loc.Lang switch
             {
                 "en" => _waveFormatEn,
                 "tr" => _waveFormatTr,
@@ -147,7 +147,7 @@ namespace Game.Scripts.UI
             if (!_useLocalizedFormats)
                 return _enemiesFormat;
 
-            return YG2.lang switch
+            return Loc.Lang switch
             {
                 "en" => _enemiesFormatEn,
                 "tr" => _enemiesFormatTr,

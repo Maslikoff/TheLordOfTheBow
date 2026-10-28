@@ -1,13 +1,13 @@
 using System;
+using JTLStudio.SDK;
 using UnityEngine;
-using YG;
 
 namespace Game.Scripts.Shop
 {
     /// <summary>
-    /// Yandex Games IAP via PluginYG2 Payments module.
-    /// PluginYG2 Payments integration. Create non-consumable products with these ids in Yandex Games:
-    /// skin_ninja, skin_valkyrie
+    /// IAP via the JTL SDK Payments module. Non-consumable products (e.g. skin_ninja, skin_valkyrie)
+    /// are configured in the active platform's store. On platforms without purchases (YouTube Playables)
+    /// the module reports IsSupported == false and purchases fail gracefully.
     /// </summary>
     public sealed class YandexPaymentsService : IPaymentsService
     {
@@ -16,6 +16,8 @@ namespace Game.Scripts.Shop
 
         private bool _initialized;
 
+        private static bool PaymentsAvailable => JTLSDK.IsCreated && JTLSDK.Payments.IsSupported;
+
         public void Initialize()
         {
             if (_initialized)
@@ -23,20 +25,15 @@ namespace Game.Scripts.Shop
 
             _initialized = true;
 
-#if Payments_yg
-            YG2.onPurchaseSuccess += OnPurchaseSuccess;
-            YG2.onPurchaseFailed += OnPurchaseFailed;
-            ConsumePendingPurchases();
-#else
-#if UNITY_EDITOR
-            Debug.LogWarning(
-                "[Payments] Payments_yg is not defined. Import PluginYG2 Payments module. " +
-                "Editor stub will simulate successful purchases.");
-#else
-            Debug.LogError(
-                "[Payments] Payments_yg is not defined. IAP purchases are disabled in this build.");
-#endif
-#endif
+            if (PaymentsAvailable)
+            {
+                // Restore once after the module is ready (JTL SDK records grants under "jtlsdk.granted").
+                JTLSDK.WhenReady(() => JTLSDK.Payments.RestorePurchases(_ => { }));
+            }
+            else
+            {
+                Debug.Log("[Payments] Purchases are not supported on the active platform.");
+            }
         }
 
         public void Buy(string productId)
@@ -49,40 +46,33 @@ namespace Game.Scripts.Shop
 
             Debug.Log($"[Payments] Buy requested: {productId}");
 
-#if Payments_yg
-            YG2.BuyPayments(productId);
-#else
-#if UNITY_EDITOR
-            // Editor / missing-module stub so shop flow can be tested.
-            Debug.Log($"[Payments] Stub success for {productId}");
-            PurchaseSucceeded?.Invoke(productId);
-#else
-            // Never grant paid content when the platform payments module is missing.
-            Debug.LogError($"[Payments] Cannot buy {productId}: Payments_yg is not enabled");
-            PurchaseFailed?.Invoke(productId);
-#endif
-#endif
+            if (PaymentsAvailable == false)
+            {
+                Debug.LogWarning($"[Payments] Cannot buy {productId}: payments not supported on this platform");
+                PurchaseFailed?.Invoke(productId);
+                return;
+            }
+
+            JTLSDK.Payments.Purchase(
+                productId,
+                () =>
+                {
+                    Debug.Log($"[Payments] Success: {productId}");
+                    PurchaseSucceeded?.Invoke(productId);
+                },
+                () =>
+                {
+                    Debug.LogWarning($"[Payments] Failed: {productId}");
+                    PurchaseFailed?.Invoke(productId);
+                });
         }
 
         public void ConsumePendingPurchases()
         {
-#if Payments_yg
-            YG2.ConsumePurchases();
-#else
-            Debug.Log("[Payments] ConsumePendingPurchases skipped (Payments module not installed)");
-#endif
-        }
-
-        private void OnPurchaseSuccess(string id)
-        {
-            Debug.Log($"[Payments] Success: {id}");
-            PurchaseSucceeded?.Invoke(id);
-        }
-
-        private void OnPurchaseFailed(string id)
-        {
-            Debug.LogWarning($"[Payments] Failed: {id}");
-            PurchaseFailed?.Invoke(id);
+            if (PaymentsAvailable)
+                JTLSDK.Payments.RestorePurchases(_ => { });
+            else
+                Debug.Log("[Payments] ConsumePendingPurchases skipped (payments not supported)");
         }
     }
 }

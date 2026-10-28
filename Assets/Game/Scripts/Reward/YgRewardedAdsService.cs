@@ -1,8 +1,9 @@
 using Cysharp.Threading.Tasks;
-using YG;
+using JTLStudio.SDK;
 
 namespace Game.Scripts.Reward
 {
+    /// <summary>Rewarded ads via JTL SDK. A single callback replaces the three PluginYG2 events.</summary>
     public class YgRewardedAdsService : IRewardedAdsService
     {
         public bool IsBusy { get; private set; }
@@ -12,44 +13,36 @@ namespace Game.Scripts.Reward
             if (IsBusy)
                 return RewardAdResult.Busy;
 
-            if (YG2.isSDKEnabled == false)
+            if (JTLSDK.IsCreated == false || JTLSDK.Ads.IsRewardedSupported == false)
                 return RewardAdResult.Error;
 
             IsBusy = true;
             var tcs = new UniTaskCompletionSource<RewardAdResult>();
-            bool rewarded = false;
-
-            void OnReward(string id)
-            {
-                if (string.IsNullOrEmpty(rewardId) || id == rewardId)
-                    rewarded = true;
-            }
-
-            void OnError()
-            {
-                tcs.TrySetResult(RewardAdResult.Error);
-            }
-
-            void OnClose()
-            {
-                tcs.TrySetResult(
-                    rewarded ? RewardAdResult.Granted : RewardAdResult.ClosedWithoutReward);
-            }
-
-            YG2.onRewardAdv += OnReward;
-            YG2.onErrorRewardedAdv += OnError;
-            YG2.onCloseRewardedAdv += OnClose;
 
             try
             {
-                YG2.RewardedAdvShow(rewardId);
+                JTLSDK.Ads.ShowRewarded(rewardId, result =>
+                {
+                    switch (result)
+                    {
+                        case AdResult.Rewarded:
+                            tcs.TrySetResult(RewardAdResult.Granted);
+                            break;
+                        case AdResult.Shown:
+                        case AdResult.Closed:
+                        case AdResult.NotShown:
+                            tcs.TrySetResult(RewardAdResult.ClosedWithoutReward);
+                            break;
+                        default:
+                            tcs.TrySetResult(RewardAdResult.Error);
+                            break;
+                    }
+                });
+
                 return await tcs.Task;
             }
             finally
             {
-                YG2.onRewardAdv -= OnReward;
-                YG2.onErrorRewardedAdv -= OnError;
-                YG2.onCloseRewardedAdv -= OnClose;
                 IsBusy = false;
             }
         }

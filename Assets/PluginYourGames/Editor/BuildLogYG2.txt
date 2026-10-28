@@ -1,3 +1,0 @@
-﻿Build path: D:/Builds/Bow
-Build number: 8
-PluginYG version: 2.0092

@@ -6,7 +6,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using VContainer;
-using YG;
+using Game.Localization;
 
 namespace Game.Scripts.UI.Shop
 {
@@ -328,7 +328,7 @@ namespace Game.Scripts.UI.Shop
 
         private static string L(string ru, string en, string tr)
         {
-            return YG2.lang switch
+            return Loc.Lang switch
             {
                 "en" => en,
                 "tr" => tr,

@@ -4,10 +4,8 @@ using Game.Scripts.Shop;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using YG;
-#if Payments_yg
-using YG.Utils.Pay;
-#endif
+using Game.Localization;
+using JTLStudio.SDK;
 
 namespace Game.Scripts.UI.Shop
 {
@@ -166,17 +164,18 @@ namespace Game.Scripts.UI.Shop
             if (item.IsIap == false)
                 return item.CoinPrice.ToString();
 
-#if Payments_yg
-            Purchase purchase = YG2.PurchaseByID(item.IapProductId);
-            if (purchase != null && string.IsNullOrEmpty(purchase.price) == false)
-                return purchase.price;
-#endif
+            if (JTLSDK.IsCreated && JTLSDK.Payments.IsSupported)
+            {
+                ProductData data = JTLSDK.Payments.GetProductData(item.IapProductId);
+                if (data.IsValid && string.IsNullOrEmpty(data.Formatted) == false)
+                    return data.Formatted;
+            }
             return string.IsNullOrEmpty(item.IapProductId) ? "IAP" : item.IapProductId;
         }
 
         private static string L(string ru, string en, string tr)
         {
-            return YG2.lang switch
+            return Loc.Lang switch
             {
                 "en" => en,
                 "tr" => tr,

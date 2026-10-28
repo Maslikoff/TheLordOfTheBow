@@ -1,15 +1,13 @@
 #if UNITY_EDITOR
 using System.Collections.Generic;
-using TMPro;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
-using YG.LanguageLegacy;
 
 namespace Game.Scripts.Editor
 {
     /// <summary>
-    /// Bakes Tutorial UI so Play Mode cannot revert prefab instances or LanguageYG fonts.
+    /// Bakes Tutorial UI so Play Mode cannot revert prefab instances.
     /// </summary>
     [InitializeOnLoad]
     public static class LockTutorialUi
@@ -41,7 +39,6 @@ namespace Game.Scripts.Editor
             var scene = EditorSceneManager.OpenScene(TutorialPath, OpenSceneMode.Single);
 
             int unpacked = UnpackUiPrefabs(scene);
-            int fontsLocked = LockLanguageFonts(scene);
 
             EditorSceneManager.MarkSceneDirty(scene);
             EditorSceneManager.SaveScene(scene);
@@ -53,7 +50,7 @@ namespace Game.Scripts.Editor
                 EditorSceneManager.OpenScene(active, OpenSceneMode.Single);
             }
 
-            Debug.Log($"[LockTutorialUi] Unpacked {unpacked} UI prefab(s), locked {fontsLocked} LanguageYG font(s). Scene saved.");
+            Debug.Log($"[LockTutorialUi] Unpacked {unpacked} UI prefab(s). Scene saved.");
         }
 
         static int UnpackUiPrefabs(UnityEngine.SceneManagement.Scene scene)
@@ -91,42 +88,6 @@ namespace Game.Scripts.Editor
             }
 
             return toUnpack.Count;
-        }
-
-        static int LockLanguageFonts(UnityEngine.SceneManagement.Scene scene)
-        {
-            int n = 0;
-            foreach (var root in scene.GetRootGameObjects())
-            {
-                foreach (var lang in root.GetComponentsInChildren<LanguageYG>(true))
-                {
-                    var tmp = lang.textMPComponent != null
-                        ? lang.textMPComponent
-                        : lang.GetComponent<TMP_Text>();
-
-                    if (tmp == null || tmp.font == null)
-                        continue;
-
-                    var fontAsset = tmp.font as TMP_FontAsset;
-                    if (fontAsset == null)
-                        continue;
-
-                    if (lang.uniqueFontTMP != fontAsset)
-                    {
-                        lang.uniqueFontTMP = fontAsset;
-                        EditorUtility.SetDirty(lang);
-                        n++;
-                    }
-
-                    if (lang.textMPComponent == null)
-                    {
-                        lang.textMPComponent = tmp;
-                        EditorUtility.SetDirty(lang);
-                    }
-                }
-            }
-
-            return n;
         }
     }
 }

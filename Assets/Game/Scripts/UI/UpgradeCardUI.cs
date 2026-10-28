@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using VContainer;
-using YG;
+using Game.Localization;
 using UpgradeCardData = Game.Scripts.Upgrades.UpgradeCard;
 
 namespace Game.Scripts.UI
@@ -36,13 +36,13 @@ namespace Game.Scripts.UI
 
         private void OnEnable()
         {
-            YG2.onSwitchLang += OnLanguageSwitched;
+            Loc.Changed += OnLanguageSwitched;
             RefreshTexts();
         }
 
         private void OnDisable()
         {
-            YG2.onSwitchLang -= OnLanguageSwitched;
+            Loc.Changed -= OnLanguageSwitched;
         }
 
         private void OnDestroy()

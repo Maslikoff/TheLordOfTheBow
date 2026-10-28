@@ -14,7 +14,7 @@ using UnityEditor;
 using UnityEditor.AddressableAssets;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
-using YG;
+using Game.Scripts.Save;
 using Object = UnityEngine.Object;
 
 namespace Game.Tests.Editor
@@ -103,15 +103,9 @@ namespace Game.Tests.Editor
         {
             Check(!EditorApplication.isPlaying && !EditorApplication.isPlayingOrWillChangePlaymode,
                 "Run in Edit Mode.");
-            var sdkField = typeof(YG2).GetField("_SDKEnabled",
-                System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic);
-            Check(sdkField != null, "YG2 SDK state field");
-            bool originalSdkEnabled = (bool)sdkField.GetValue(null);
-            var original = YG2.saves;
-            YG2.saves = new SavesYG();
-            // Enter Play Mode can leave this static set when domain reload is disabled.
-            // Keep test persistence local even when the menu is run afterwards.
-            sdkField.SetValue(null, false);
+            // Keep test persistence isolated from any real document; the cloud is never touched in Edit Mode.
+            var original = Saves.Data;
+            Saves.OverrideForEditorTests(new SaveData());
             try
             {
                 var catalog = AssetDatabase.LoadAssetAtPath<ShopCatalog>("Assets/Game/Configs/Shop/ShopCatalog.asset");
@@ -170,7 +164,7 @@ namespace Game.Tests.Editor
                 Check(shop.Equip(elf) && inventory.GetEquippedId(CosmeticCategory.Skin) == "" && currency.Coins == 777, "Free default selection");
                 Check(shop.Equip(ninja), "Re-equip owned ninja");
                 Check(!inventory.TryEquip(CosmeticCategory.Skin, "unowned"), "Unowned equip");
-                var saved = JsonUtility.FromJson<SavesYG>(JsonUtility.ToJson(YG2.saves));
+                var saved = JsonUtility.FromJson<SaveData>(JsonUtility.ToJson(Saves.Data));
                 var restored = new CosmeticInventoryService(currency);
                 restored.Load(saved.OwnedSkins, saved.OwnedProjectiles, saved.OwnedHats, saved.EquippedSkin, saved.EquippedProjectile, saved.EquippedHat);
                 Check(restored.Owns("skin_stub_01") && restored.GetEquippedId(CosmeticCategory.Skin) == ninja.Id, "Save round-trip/legacy id");
@@ -235,8 +229,7 @@ namespace Game.Tests.Editor
             }
             finally
             {
-                YG2.saves = original;
-                sdkField.SetValue(null, originalSdkEnabled);
+                Saves.OverrideForEditorTests(original);
             }
         }
 

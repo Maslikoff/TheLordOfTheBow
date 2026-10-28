@@ -15,7 +15,7 @@ namespace Game.Scripts.UpgradeCard
         {
             if (holder == null || _kind == CampaignUpgradeKind.Heal || _kind == CampaignUpgradeKind.Coins) return Description;
             int rank = holder.Campaign.EffectiveRank(_kind);
-            string label = YG.YG2.lang switch { "en" => "Rank", "tr" => "Seviye", _ => "Ранг" };
+            string label = Game.Localization.Loc.Lang switch { "en" => "Rank", "tr" => "Seviye", _ => "Ранг" };
             return $"{Description}\n{label}: {rank} → {rank + 1}\n{holder.Campaign.Preview(_kind)}";
         }
     }

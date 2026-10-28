@@ -1,0 +1,59 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &1
+MonoBehaviour:
+  m_ObjectHideFlags: 53
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 064ad9ff330d640fa854924ad856f87d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _logoMode: 1
+  _logo: {fileID: 2800000, guid: c65dddead1e3d43c894926c46e21eca4, type: 3}
+  _logoSize: 160
+  _loaderBackground:
+    _kind: 1
+    _color: {r: 0.102, g: 0.102, b: 0.102, a: 1}
+    _gradientFrom: {r: 0.9103774, g: 1, b: 0.9331012, a: 1}
+    _gradientTo: {r: 0.82706535, g: 1, b: 0.6367924, a: 1}
+    _radial: 1
+    _angle: 140
+    _image: {fileID: 0}
+  _pageBackground:
+    _kind: 0
+    _color: {r: 0.024, g: 0.031, b: 0.051, a: 1}
+    _gradientFrom: {r: 0.169, g: 0.106, b: 0.42, a: 1}
+    _gradientTo: {r: 0.051, g: 0.039, b: 0.122, a: 1}
+    _radial: 0
+    _angle: 140
+    _image: {fileID: 0}
+  _progressFill: {r: 0, g: 0.735849, b: 0.038536116, a: 1}
+  _progressTrack: {r: 1, g: 1, b: 1, a: 1}
+  _progressGradient: 0
+  _progressFillTo: {r: 0.482, g: 0.247, b: 0.949, a: 1}
+  _progressBorderWidth: 0
+  _progressBorderColor: {r: 1, g: 1, b: 1, a: 0.3}
+  _progressPadding: 0
+  _progressWidthPercent: 40
+  _progressHeight: 6
+  _progressRadius: 3
+  _progressAtBottom: 0
+  _loadingText: 
+  _fixedAspect: 1
+  _aspectRatio: 9/16
+  _freeAspectOnMobile: 1
+  _pageUsesLoaderBackground: 1
+  _desktopPixelRatioMode: 1
+  _desktopPixelRatio: 1
+  _mobilePixelRatioMode: 1
+  _mobilePixelRatio: 1
+  _buildOutput: 0
+  _buildPath: Builds
+  _buildNamePattern: '{product}_{configuration}_b{build}'
+  _buildNumber: 0
+  _developmentBuild: 0
+  _openFolderAfterBuild: 1

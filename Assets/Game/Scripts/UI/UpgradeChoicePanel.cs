@@ -10,7 +10,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using VContainer;
-using YG;
+using Game.Localization;
 using Random = UnityEngine.Random;
 
 namespace Game.Scripts.UI
@@ -53,8 +53,8 @@ namespace Game.Scripts.UI
             if (_rerollButton != null) _rerollButton.onClick.AddListener(Reroll);
         }
 
-        private void OnEnable() => YG2.onSwitchLang += OnLanguage;
-        private void OnDisable() => YG2.onSwitchLang -= OnLanguage;
+        private void OnEnable() => Loc.Changed += OnLanguage;
+        private void OnDisable() => Loc.Changed -= OnLanguage;
         private void OnLanguage(string _) => RefreshReroll();
         private void OnDestroy()
         {
@@ -168,7 +168,7 @@ namespace Game.Scripts.UI
             _rerollButton.gameObject.SetActive(_upgradeApplier.Holder.Campaign.UnlockedStage >= 10);
             _rerollButton.interactable = count > 0 && Available().Any(x => !_offer.Contains(x));
             var label = _rerollButton.GetComponentInChildren<TextMeshProUGUI>(true);
-            if (label != null) label.text = (YG2.lang switch { "en" => "Reroll", "tr" => "Yenile", _ => "Переброс" }) + $" ({count})";
+            if (label != null) label.text = (Loc.Lang switch { "en" => "Reroll", "tr" => "Yenile", _ => "Переброс" }) + $" ({count})";
         }
 
         public void Reroll()
