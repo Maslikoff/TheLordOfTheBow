@@ -1,6 +1,9 @@
+using Cysharp.Threading.Tasks;
+using Game.Scripts.AddressablesContent;
 using Game.Scripts.Characters.Player;
 using Game.Scripts.Levels;
 using Game.Scripts.UI;
+using Game.Scripts.Shop;
 using UnityEngine;
 using VContainer;
 using UniRx;
@@ -16,30 +19,40 @@ namespace Game.Scripts.Spawners
 
         private IObjectFactory _factory;
         private GameStartupConfig _startupConfig;
-
+        private IAddressablesContentService _content;
         private Player _currentPlayer;
-        
+        private ICosmeticInventoryService _inventory;
+        private ShopCatalogProvider _shopCatalog;
+
         public Player CurrentPlayer => _currentPlayer;
 
         [Inject]
-        private void Construct(IObjectFactory factory, GameStartupConfig startupConfig)
+        private void Construct(
+            IObjectFactory factory,
+            GameStartupConfig startupConfig,
+            IAddressablesContentService content,
+            ICosmeticInventoryService inventory,
+            ShopCatalogProvider shopCatalog)
         {
             _factory = factory;
             _startupConfig = startupConfig;
+            _content = content;
+            _inventory = inventory;
+            _shopCatalog = shopCatalog;
         }
-        
-        public Player Spawn()
+
+        public async UniTask<Player> SpawnAsync()
         {
-            Player playerPrefab = _startupConfig.PlayerPrefab;
+            Player playerPrefab = await _startupConfig.GetPlayerPrefabAsync(_content);
 
             DespawnCurrentPlayer();
 
             _currentPlayer = _factory.Create(playerPrefab, _spawnPoint.Position, _spawnPoint.Rotation);
-            
+            var skin = _currentPlayer.GetComponent<PlayerSkinController>();
+            if (skin != null)
+                await skin.InitializeAsync(_inventory, _shopCatalog, _content);
             InitializeUI(_currentPlayer);
-            
             MessageBroker.Default.Publish(new M_PlayerSpawned(_currentPlayer));
-
             return _currentPlayer;
         }
 
@@ -47,9 +60,8 @@ namespace Game.Scripts.Spawners
         {
             if (_currentPlayer == null)
                 return;
-            
+
             Destroy(_currentPlayer.gameObject);
-            
             _currentPlayer = null;
         }
 

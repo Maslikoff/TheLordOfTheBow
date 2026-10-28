@@ -46,11 +46,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _groundPrefabs:
-  - _groundPrefab: {fileID: 2364904275833305674, guid: e079399a237de2a46ba2f6824d2a36f9, type: 3}
+  - _groundPrefabReference:
+      m_AssetGUID: e079399a237de2a46ba2f6824d2a36f9
+      m_SubObjectName: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
     _poolSize: 3
-  - _groundPrefab: {fileID: 5339483416573392259, guid: f12aedfe0c144784aa54a8673baec75f, type: 3}
+  - _groundPrefabReference:
+      m_AssetGUID: f12aedfe0c144784aa54a8673baec75f
+      m_SubObjectName: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
     _poolSize: 3
-  - _groundPrefab: {fileID: 5355141102768460190, guid: 570cdb18b1b674042b7573e6be558a70, type: 3}
+  - _groundPrefabReference:
+      m_AssetGUID: 570cdb18b1b674042b7573e6be558a70
+      m_SubObjectName: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
     _poolSize: 3
   _groundLength: 50
 --- !u!114 &6907523908196350126

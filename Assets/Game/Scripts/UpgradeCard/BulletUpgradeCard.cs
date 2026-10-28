@@ -29,6 +29,10 @@ namespace Game.Scripts.UpgradeCard
                 case BulletUpgradeType.Count:
                     playerUpgradeHolder.Collection.AddCount(_bulletType, Mathf.RoundToInt(_value));
                     break;
+
+                case BulletUpgradeType.PoisonDamage:
+                    playerUpgradeHolder.Collection.AddPoisonDamage(_bulletType, _value);
+                    break;
             }
         }
     }

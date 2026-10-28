@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9398491c722656f498fe215c500cc4bf, type: 3}
+  m_Name: ElvenForgeUiTheme
+  m_EditorClassIdentifier: 
+  DisplayFont: {fileID: 11400000, guid: b8bf0662a09a9c641982684281a5c3e2, type: 2}
+  BodyFont: {fileID: 11400000, guid: cc0ef8981853d654889e38cb3d281a10, type: 2}
+  PanelModal: {fileID: 21300000, guid: 640a0b197db847e459cd8f494982823e, type: 3}
+  PanelParchment: {fileID: 21300000, guid: a3e7c253afc056246a72eca8a466e504, type: 3}
+  PanelHud: {fileID: 21300000, guid: c898d31e4bc1b174ea4487e4bf25bdde, type: 3}
+  ButtonPrimary: {fileID: 21300000, guid: 09f21cd7f56d38d48bd874dd804766ec, type: 3}
+  ButtonSecondary: {fileID: 21300000, guid: 5b8181c434af9324c8ae05e2a5d02c2e, type: 3}
+  ButtonDanger: {fileID: 21300000, guid: 101008dd15edddf49b893b42932beae0, type: 3}
+  ButtonReward: {fileID: 21300000, guid: c95a757b6b77d7b489ff229299f01ebc, type: 3}
+  ButtonIcon: {fileID: 21300000, guid: 5d8c3be8271c0e043a7ab74280134413, type: 3}
+  ChipCoin: {fileID: 21300000, guid: 4e6ca4b1d849bf443b9f3e91f0d369a1, type: 3}
+  SliderTrack: {fileID: 21300000, guid: 69a5ea44893b9834e92b973c9dd6e0ef, type: 3}
+  SliderFill: {fileID: 21300000, guid: bd9f2d6848a805a4dbcd1962eaa27d59, type: 3}
+  SliderFillGold: {fileID: 21300000, guid: 7f9bb2ff930aeac4ca3c7494dd3b908d, type: 3}
+  Stone: {r: 0.16470589, g: 0.12941177, b: 0.09411765, a: 1}
+  StoneMid: {r: 0.23921569, g: 0.19607843, b: 0.15686275, a: 1}
+  StoneLight: {r: 0.3529412, g: 0.2901961, b: 0.22745098, a: 1}
+  Parchment: {r: 0.9098039, g: 0.8627451, b: 0.78431374, a: 1}
+  DimOverlay: {r: 0, g: 0, b: 0, a: 0.55}
+  Gold: {r: 0.7882353, g: 0.63529414, b: 0.15294118, a: 1}
+  Mithril: {r: 0.72156864, g: 0.76862746, b: 0.8156863, a: 1}
+  Teal: {r: 0.35686275, g: 0.56078434, b: 0.65882355, a: 1}
+  Ember: {r: 0.83137256, g: 0.64705884, b: 0.45490196, a: 1}
+  Moss: {r: 0.41960785, g: 0.56078434, b: 0.3529412, a: 1}
+  Health: {r: 0.4862745, g: 0.72156864, b: 0.41568628, a: 1}
+  Forest: {r: 0.23921569, g: 0.3529412, b: 0.19607843, a: 1}
+  Danger: {r: 0.54509807, g: 0.2901961, b: 0.22745098, a: 1}
+  Reward: {r: 0.7882353, g: 0.63529414, b: 0.15294118, a: 1}
+  TextLight: {r: 0.9607843, g: 0.9372549, b: 0.8784314, a: 1}
+  TextMuted: {r: 0.65882355, g: 0.59607846, b: 0.5019608, a: 1}
+  TextDark: {r: 0.16470589, g: 0.14117648, b: 0.10980392, a: 1}

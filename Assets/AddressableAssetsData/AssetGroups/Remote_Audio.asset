@@ -1,0 +1,67 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Remote_Audio
+  m_EditorClassIdentifier: 
+  m_GroupName: Remote_Audio
+  m_Data:
+    m_SerializedData: []
+  m_GUID: beb0c32b4928f8140a967492aa45e343
+  m_SerializeEntries:
+  - m_GUID: 11c02c772a2164d41a819c88a98a9f82
+    m_Address: Audio/Upgrade
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Audio
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1271976ca31bbc3499a5360ef4e4077c
+    m_Address: Audio/ButtonClick
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Audio
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1fcfd83e3d859db4585f34930d88477c
+    m_Address: Audio/etfx_explosion_slime
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Audio
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5052682f23f19384da5d743dc76ed64b
+    m_Address: Audio/etfx_spawn
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Audio
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a4fd9cfe9019de9499423f6992da24b4
+    m_Address: Audio/Heal
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Audio
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c149a5b5299974c4183ac0b2ea58a9a0
+    m_Address: Audio/etfx_explosion_sharp
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Audio
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ed55cd9956b3912499f14684f7e570ec
+    m_Address: Audio/BGM
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Audio
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 26eb0a5cd928be748981234ea4adab30, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 3b4c60a41e3f1b040891f30b429b2af4, type: 2}
+    - {fileID: 11400000, guid: 39fabb623a3cbe8409938ee06f1fc6e3, type: 2}

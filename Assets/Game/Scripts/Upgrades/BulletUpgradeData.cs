@@ -10,6 +10,7 @@ namespace Game.Scripts.Upgrades
         public bool IsUnlocked;
         public float DamageBonus;
         public float LifeTimeBonus;
+        public float PoisonDamageBonus;
         public int CountBonus;
     }
 }

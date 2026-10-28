@@ -12,10 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93f37503c03b4173a6ba229b993f7001, type: 3}
   m_Name: FireArrowDamagetUpgradeCard
   m_EditorClassIdentifier: 
-  _cardName: "\u0421\u0434\u0435\u043B\u0430\u0442\u044C \u041F\u043E\u0433\u043E\u0440\u0435\u0447\u0435\u0435"
-  _description: "\u0423\u0432\u0435\u043B\u0438\u0447\u0438\u0442\u044C \u0443\u0440\u043E\u043D
-    \u043E\u0433\u043D\u0435\u043D\u043D\u044B\u043C \u0441\u0442\u0440\u0435\u043B\u0430\u043C"
-  _cardIcon: {fileID: 383867910, guid: b763ca4cb1923104eb17679983435b3d, type: 3}
+  _cardName: "\u0421\u0434\u0435\u043B\u0430\u0442\u044C \u041F\u043E\u0433\u043E\u0440\u044F\u0447\u0435\u0435"
+  _cardNameEn: Turn Up the Heat
+  _cardNameTr: "Is\u0131y\u0131 Art\u0131r"
+  _description: "\u0423\u0432\u0435\u043B\u0438\u0447\u0438\u0442\u044C \u0443\u0440\u043E\u043D \u043E\u0433\u043D\u0435\u043D\u043D\u044B\u043C \u0441\u0442\u0440\u0435\u043B\u0430\u043C"
+  _descriptionEn: Increase fire arrow damage
+  _descriptionTr: "Ate\u015F oku hasar\u0131n\u0131 art\u0131r"
+  _cardIconReference:
+    m_AssetGUID: b763ca4cb1923104eb17679983435b3d
+    m_SubObjectName: IMG_0603_8
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
   _cardColor: {r: 0.91764706, g: 0.7176471, b: 0.4392157, a: 1}
   _bulletType: 1
   _bulletUpgradeType: 0

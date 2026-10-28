@@ -14,6 +14,7 @@ namespace Game.Scripts.Upgrades
         public PlayerShoot PlayerShoot => _playerShoot;
         public Health PlayerHealth=> _playerHealth;
         public PlayerBulletUpgradeCollection Collection => _collection;
+        public CampaignUpgrades Campaign => GetComponent<CampaignUpgrades>();
         
     }
 }

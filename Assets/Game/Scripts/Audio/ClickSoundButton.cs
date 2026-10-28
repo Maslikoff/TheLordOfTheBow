@@ -37,7 +37,7 @@ namespace Game.Scripts.Audio
 
         private void OnClick()
         {
-            _audioService.PlayOneShot(_asset);
+            _audioService?.PlayOneShot(_asset);
         }
     }
 }

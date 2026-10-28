@@ -1,0 +1,91 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Remote_Icons
+  m_EditorClassIdentifier: 
+  m_GroupName: Remote_Icons
+  m_Data:
+    m_SerializedData: []
+  m_GUID: 800c30076174d864ab8b4677d455f5c4
+  m_SerializeEntries:
+  - m_GUID: 0c580f1a3ef514248b4cca14857b2dbe
+    m_Address: UI/Icons/Shop/Icon_Hat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Icons
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 32e324917d6bfef4d8bc6344654c1ad8
+    m_Address: UI/Icons/Shop/Icon_Valkyrie
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Icons
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 48f89ee4c3a5bf44a9be3ff23fbbab98
+    m_Address: UI/Icons/Shop/Icon_Ninja
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Icons
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7b631b1822f1f7c44a51140e9b4d1a37
+    m_Address: UI/Icons/Shop/Icon_Skin
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Icons
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9399fba2fa5557f4bb629a41715a927b
+    m_Address: UI/Icons/Shop/Icon_Knight
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Icons
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: aa430c7af4f035042a006236ee326736
+    m_Address: UI/Icons/Shop/Icon_Wizard
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Icons
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b763ca4cb1923104eb17679983435b3d
+    m_Address: UI/Icons/UpgradeSheet
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Icons
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cab980a47106bef4982d8b3c66e696d9
+    m_Address: UI/Icons/Shop/Icon_Elf
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Icons
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d3c0c499c36592f48b3daf64b6eb343c
+    m_Address: UI/Icons/Shop/Icon_Dwarf
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Icons
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e5d2b8a38f8c26b439e25d97ca305ed2
+    m_Address: UI/Icons/Shop/Icon_Projectile
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Icons
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f32f16feae7b8a74ea4b22c9550b394d
+    m_Address: UI/Icons/Shop/Icon_ElfFemale
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Icons
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 26eb0a5cd928be748981234ea4adab30, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: d1c3bbbd76779924c8e99ac2e7a2b629, type: 2}
+    - {fileID: 11400000, guid: 71df7cb329bd5c1469700ceb82ca8b0a, type: 2}

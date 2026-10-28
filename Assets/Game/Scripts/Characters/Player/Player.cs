@@ -12,6 +12,7 @@ namespace Game.Scripts.Characters.Player
     [RequireComponent(typeof(InputHandler))]
     [RequireComponent(typeof(Health))]
     [RequireComponent(typeof(HitFeedback))]
+    [RequireComponent(typeof(CampaignUpgrades))]
     public class Player : MonoBehaviour
     {
         [SerializeField] private PlayerMovement movement;
@@ -28,6 +29,7 @@ namespace Game.Scripts.Characters.Player
         public UpgradeApplier UpgradeApplier => _upgradeApplier;
         public Health PlayerHealth => _playerHealth;
         public bool IsDead { get; private set; }
+        public CampaignUpgrades Campaign => GetComponent<CampaignUpgrades>();
         
         [Inject]
         private void Construct(DynamicJoystick joystick,

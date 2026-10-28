@@ -14,8 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _category: 0
   _outputMixerGroup: {fileID: 8667632837456944177, guid: 2406c0872c8ce9f4fbf3e7c96ced7b71, type: 2}
-  _audioClips:
-  - {fileID: 8300000, guid: c149a5b5299974c4183ac0b2ea58a9a0, type: 3}
-  - {fileID: 8300000, guid: 1fcfd83e3d859db4585f34930d88477c, type: 3}
+  _audioClipReferences:
+  - m_AssetGUID: c149a5b5299974c4183ac0b2ea58a9a0
+    m_SubObjectName: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
+  - m_AssetGUID: 1fcfd83e3d859db4585f34930d88477c
+    m_SubObjectName: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
   _volume: 1
   _pitch: 1

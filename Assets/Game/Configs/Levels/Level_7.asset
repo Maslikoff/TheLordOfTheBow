@@ -12,30 +12,78 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6961dbc4ceae4f7b878ff99a643422b5, type: 3}
   m_Name: Level_7
   m_EditorClassIdentifier: 
-  _sceneNames: 1
+  _sceneNames: 7
+  _stageName: "\u0422\u044F\u0436\u0451\u043B\u0430\u044F \u043F\u043E\u0441\u0442\u0443\u043F\u044C"
   _sceneTransitionMode: 0
   _onGameStarted: 0
   _waveConfig:
-    _wavesEnemyCount: 050000000500000007000000
+    _waves:
+    - Goblins: 4
+      Orcs: 1
+      Trolls: 0
+      MaxAlive: 6
+      SpawnInterval: 0.8
+      HealAfter: 0
+      TrollLast: 0
+    - Goblins: 3
+      Orcs: 2
+      Trolls: 0
+      MaxAlive: 6
+      SpawnInterval: 0.8
+      HealAfter: 0
+      TrollLast: 0
+    - Goblins: 3
+      Orcs: 2
+      Trolls: 1
+      MaxAlive: 6
+      SpawnInterval: 0.8
+      HealAfter: 0
+      TrollLast: 1
+    - Goblins: 0
+      Orcs: 3
+      Trolls: 2
+      MaxAlive: 6
+      SpawnInterval: 0.8
+      HealAfter: 0
+      TrollLast: 0
     _timeBetweemWaves: 3
   _enemyRaceConfigs:
   - _race: 0
-    _prefab: {fileID: 7080309792819254836, guid: d5bd6346056e6a647b4f66f149d5864b, type: 3}
-    _poolSize: 10
-    _spawnWeight: 40
+    _prefabReference:
+      m_AssetGUID: d5bd6346056e6a647b4f66f149d5864b
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
+    _poolSize: 8
+    _spawnWeight: 1
   - _race: 1
-    _prefab: {fileID: 7371531689036714625, guid: 0987bbdc63c89a54d9eaeb7bbb073472, type: 3}
-    _poolSize: 10
-    _spawnWeight: 40
+    _prefabReference:
+      m_AssetGUID: 0987bbdc63c89a54d9eaeb7bbb073472
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
+    _poolSize: 8
+    _spawnWeight: 1
   - _race: 2
-    _prefab: {fileID: 4670338830001340343, guid: a2cd61c0cec42c34ebaf42f831b78e52, type: 3}
-    _poolSize: 10
-    _spawnWeight: 20
+    _prefabReference:
+      m_AssetGUID: a2cd61c0cec42c34ebaf42f831b78e52
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
+    _poolSize: 8
+    _spawnWeight: 1
   _availableUpgrades:
-  - {fileID: 11400000, guid: 5b9c00400cfca264cb87af7e14e8b8a1, type: 2}
-  - {fileID: 11400000, guid: 83680799321d7404cbaaa3f3b22e0ebf, type: 2}
-  - {fileID: 11400000, guid: aef6ff2ad5fa6f5418cef3510ffa93fc, type: 2}
-  - {fileID: 11400000, guid: d715889cfb6fce842916b37f38a1ebfd, type: 2}
-  - {fileID: 11400000, guid: b44434e6d64dd7348a30df1c23fac640, type: 2}
-  - {fileID: 11400000, guid: 6e26e6baf5b21ce4283b0345f10f801e, type: 2}
-  - {fileID: 11400000, guid: 3d359ec4584f08f4ba24495e23c0d6c1, type: 2}
+  - {fileID: 11400000, guid: 894e12cb3ffaf7e48911362ea0ddf490, type: 2}
+  - {fileID: 11400000, guid: 58fcc737936fca34c86785c5a10655ce, type: 2}
+  - {fileID: 11400000, guid: 0978ab06e0363ca47b0a1c2c6ac9f146, type: 2}
+  - {fileID: 11400000, guid: f6eb73b7b9cd22f4ea03f01e4add00e4, type: 2}
+  - {fileID: 11400000, guid: 9a66d3f12e68d6b4aaed9f41d28b723b, type: 2}
+  - {fileID: 11400000, guid: 33c7680457d6ec04091fc2541476f63a, type: 2}
+  - {fileID: 11400000, guid: 6674553d85ea25445af8329cd2bc8053, type: 2}
+  - {fileID: 11400000, guid: 94eb8933a215d684d8394a91b999ab38, type: 2}
+  - {fileID: 11400000, guid: e2878beaf7222664a89fcf466929f5cd, type: 2}
+  - {fileID: 11400000, guid: acad55da23cedee44b6567c536b705cb, type: 2}
+  - {fileID: 11400000, guid: c664f15341e4cb84985bf57ef6ddafb8, type: 2}
+  - {fileID: 11400000, guid: c7f3d4b95823bb240897783a433f7bb7, type: 2}
+  - {fileID: 11400000, guid: d5302f57a44f29d40b86040a029f0c01, type: 2}
+  - {fileID: 11400000, guid: cd761b0efe5f131469d7bc286943618a, type: 2}

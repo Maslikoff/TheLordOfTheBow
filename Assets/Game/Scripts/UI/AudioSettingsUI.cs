@@ -31,6 +31,9 @@ namespace Game.Scripts.UI
         
         private void Start()
         {
+            if (_audioSettings == null)
+                return;
+
             _musicSlider.value = _audioSettings.MusicVolume;
             _sfxSlider.value = _audioSettings.SFXVolume;
             
@@ -77,7 +80,7 @@ namespace Game.Scripts.UI
     
         private void OnDestroy()
         {
-            _audioSettings.SaveSettings();
+            _audioSettings?.SaveSettings();
         }
     }
 }

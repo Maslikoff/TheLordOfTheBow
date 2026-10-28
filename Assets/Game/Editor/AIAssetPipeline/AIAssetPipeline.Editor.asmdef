@@ -1,0 +1,16 @@
+{
+  "name": "Game.AIAssetPipeline.Editor",
+  "rootNamespace": "Game.Editor.AIAssetPipeline",
+  "references": [],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
+}

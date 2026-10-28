@@ -12,6 +12,7 @@ namespace Game.Scripts.Experience
         
         private Experience _playerExperience;
         private bool _rewardGiven = false;
+        public float Reward => _experienceReward;
 
         private void OnEnable()
         {

@@ -12,4 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df813bf7bda74be9b5ebbac4eff921e3, type: 3}
   m_Name: GameStartupConfig
   m_EditorClassIdentifier: 
-  _playerPrefab: {fileID: 8375185548954724957, guid: 058ba08b1d7613849954026be682e226, type: 3}
+  _playerPrefabReference:
+    m_AssetGUID: 058ba08b1d7613849954026be682e226
+    m_SubObjectName: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0

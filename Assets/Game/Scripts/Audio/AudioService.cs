@@ -1,4 +1,6 @@
 using System;
+using Cysharp.Threading.Tasks;
+using Game.Scripts.AddressablesContent;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -7,44 +9,63 @@ namespace Game.Scripts.Audio
     public class AudioService : IAudioService
     {
         private const float DestroyDelayPadding = 0.1f;
-        
+
         private readonly GameObject _audioRoot;
+        private readonly IAddressablesContentService _content;
 
         private AudioSource _musicSource;
         private AudioAsset _currentMusicAsset;
-        
-        public AudioService()
+
+        public AudioService(IAddressablesContentService content)
         {
+            _content = content ?? throw new ArgumentNullException(nameof(content));
             _audioRoot = new GameObject(nameof(AudioService));
             Object.DontDestroyOnLoad(_audioRoot);
         }
 
         public void PlayOneShot(AudioAsset asset)
         {
-            if (asset.Category != AudioCategories.SFX)
-                throw new InvalidOperationException();
-
-            AudioSource source = CreateSource(asset);
-            source.Play();
-            
-            Object.Destroy(source.gameObject, GetDestroyDelay(source));
+            PlayOneShotAsync(asset).Forget();
         }
 
         public void PlayMusic(AudioAsset asset)
         {
+            PlayMusicAsync(asset).Forget();
+        }
+
+        private async UniTaskVoid PlayOneShotAsync(AudioAsset asset)
+        {
+            if (asset == null)
+                return;
+
+            if (asset.Category != AudioCategories.SFX)
+                throw new InvalidOperationException();
+
+            await asset.EnsureLoadedAsync(_content);
+
+            AudioSource source = CreateSource(asset);
+            source.Play();
+            Object.Destroy(source.gameObject, GetDestroyDelay(source));
+        }
+
+        private async UniTaskVoid PlayMusicAsync(AudioAsset asset)
+        {
+            if (asset == null)
+                return;
+
             if (asset.Category != AudioCategories.Music)
                 throw new InvalidOperationException();
 
             if (asset == _currentMusicAsset && _musicSource != null && _musicSource.isPlaying)
                 return;
-            
+
+            await asset.EnsureLoadedAsync(_content);
+
             StopMusic();
-            
+
             _musicSource = CreateSource(asset);
             _musicSource.loop = true;
-            
             _currentMusicAsset = asset;
-            
             _musicSource.Play();
         }
 
@@ -52,11 +73,9 @@ namespace Game.Scripts.Audio
         {
             if (_musicSource == null)
                 return;
-            
+
             _musicSource.Stop();
-
             Object.Destroy(_musicSource.gameObject);
-
             _musicSource = null;
             _currentMusicAsset = null;
         }
@@ -67,7 +86,7 @@ namespace Game.Scripts.Audio
 
             GameObject audioObject = new GameObject(clip.name);
             audioObject.transform.SetParent(_audioRoot.transform);
-            
+
             AudioSource source = audioObject.AddComponent<AudioSource>();
             source.clip = clip;
             source.outputAudioMixerGroup = asset.OutputMixerGroup;

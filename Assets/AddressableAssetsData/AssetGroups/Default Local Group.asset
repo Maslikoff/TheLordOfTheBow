@@ -1,0 +1,55 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Default Local Group
+  m_EditorClassIdentifier: 
+  m_GroupName: Default Local Group
+  m_Data:
+    m_SerializedData: []
+  m_GUID: 815d2d6e1f950764980198919ed9f56c
+  m_SerializeEntries:
+  - m_GUID: 0de07713d9a367e4ea5ccc5b1b09e336
+    m_Address: Assets/Game/Prefabs/Grounds/Dast_2.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 53de365bd20382e4098b26d2ecce7801
+    m_Address: Assets/Game/Prefabs/Grounds/City_2.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 74d94c35f9a5d434ca8eb3b25352e6f1
+    m_Address: Assets/Game/Prefabs/Grounds/City_3.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 78399e6dfbee8b0449bf137be9c47d45
+    m_Address: Assets/Game/Prefabs/Grounds/Dast_3.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 980e6ff137b08794da5fd9a499f754c2
+    m_Address: Assets/Game/Prefabs/Grounds/City_1.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9af3c48958162b245bc011f20f7eded2
+    m_Address: Assets/Game/Prefabs/Grounds/Dast_1.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 26eb0a5cd928be748981234ea4adab30, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 9d8a7ac4fd988894cb3a5258e41d1c49, type: 2}
+    - {fileID: 11400000, guid: 5e3e10fbd150cd1499aaa609d5383f7b, type: 2}

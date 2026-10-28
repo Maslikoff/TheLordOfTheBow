@@ -7,6 +7,9 @@ namespace Game.Scripts.Levels
         LevelConfig CurrentConfig { get; }
         int CurrentLevel { get; }
         int CurrentLevelIndex { get; }
+        int Cycle { get; }
+        int UnlockedStage { get; }
+        void SetCampaignPosition(int index, int cycle, int unlockedStage);
         void SetCurrentLevelIndex(int index);
         UniTask LoadCurrentLevelAsync();
         UniTask LoadLevelAsync(int index);

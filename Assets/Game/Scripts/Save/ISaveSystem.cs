@@ -11,5 +11,9 @@ namespace Game.Scripts.Save
         int GetWaveCheckpointOrDefault(int levelIndex);
         void ClearWaveCheckpoint(int levelIndex);
         void CommitSessionProgress();
+        int BeginStage(Game.Scripts.Characters.Player.Player player);
+        void RestartStage();
+        void RecordDefeat();
+        void RestoreAfterRevive();
     }
 }

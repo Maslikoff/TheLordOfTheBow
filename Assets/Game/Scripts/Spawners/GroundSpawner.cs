@@ -1,4 +1,5 @@
 using System;
+using Cysharp.Threading.Tasks;
 using Game.Scripts.Environment;
 using Game.Scripts.ObjectPool;
 using UnityEngine;
@@ -12,7 +13,7 @@ namespace Game.Scripts.Spawners
         [SerializeField] private Vector3 _startPosition = Vector3.zero;
 
         protected override bool CanSpawn() => true;
-        
+
         protected override void OnEnable() { }
 
         protected override void OnDisable()
@@ -21,12 +22,43 @@ namespace Game.Scripts.Spawners
                 _groundPool.GroundReturned -= SpawnObject;
         }
 
+        protected override void Start()
+        {
+            WaitForPoolAndInitializeAsync().Forget();
+        }
+
+        private async UniTaskVoid WaitForPoolAndInitializeAsync()
+        {
+            if (_groundPool == null)
+                _groundPool = _objectPool as GroundPool ?? GetComponent<GroundPool>()
+                              ?? FindObjectOfType<GroundPool>(true);
+
+            if (_groundPool == null)
+                throw new NullReferenceException("Can't get for ground pool");
+
+            // LevelSpawner warms Addressables refs before we spawn segments.
+            float timeout = 15f;
+            while (_groundPool.IsWarmedUp == false && timeout > 0f)
+            {
+                await UniTask.Yield();
+                timeout -= Time.unscaledDeltaTime;
+            }
+
+            if (_groundPool.IsWarmedUp == false)
+            {
+                Debug.LogError("[GroundSpawner] GroundPool warmup timed out.");
+                return;
+            }
+
+            Initialize();
+        }
+
         protected override void Initialize()
         {
-            if (_groundPool == null) 
+            if (_groundPool == null)
                 _groundPool = _objectPool as GroundPool;
-            
-            if (_groundPool == null) 
+
+            if (_groundPool == null)
                 throw new NullReferenceException("Can't get for ground pool");
 
             _groundPool.GroundReturned += SpawnObject;
@@ -47,10 +79,13 @@ namespace Game.Scripts.Spawners
             if (newGround == null)
                 return;
 
-            Vector3 newGroundPosition = new Vector3(_startPosition.x, _startPosition.y, _groundPool.GroundLength * index);
+            Vector3 newGroundPosition = new Vector3(
+                _startPosition.x,
+                _startPosition.y,
+                _groundPool.GroundLength * index);
             newGround.transform.position = newGroundPosition;
             newGround.gameObject.SetActive(true);
-            
+
             IncreaseObjectCount();
         }
     }

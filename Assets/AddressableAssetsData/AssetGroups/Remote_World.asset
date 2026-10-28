@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Remote_World
+  m_EditorClassIdentifier: 
+  m_GroupName: Remote_World
+  m_Data:
+    m_SerializedData: []
+  m_GUID: 10080ffd6e4c3884ea6114955347a82c
+  m_SerializeEntries:
+  - m_GUID: 570cdb18b1b674042b7573e6be558a70
+    m_Address: Prefabs/World/Section_3_Ground
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_World
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e079399a237de2a46ba2f6824d2a36f9
+    m_Address: Prefabs/World/Section_1_Ground
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_World
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f12aedfe0c144784aa54a8673baec75f
+    m_Address: Prefabs/World/Section_2_Ground
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_World
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 26eb0a5cd928be748981234ea4adab30, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 44db1663c6c0e0544a00694448226ea8, type: 2}
+    - {fileID: 11400000, guid: a71a83e619ccfa048bfb6bade9b22ebe, type: 2}

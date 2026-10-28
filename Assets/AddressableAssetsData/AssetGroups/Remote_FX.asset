@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Remote_FX
+  m_EditorClassIdentifier: 
+  m_GroupName: Remote_FX
+  m_Data:
+    m_SerializedData: []
+  m_GUID: 509aee2db47bd30408d4c208badc5ff4
+  m_SerializeEntries:
+  - m_GUID: 448ffbcf71db27749b98c4ed68e15143
+    m_Address: Prefabs/FX/HealOnceBurst
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_FX
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e73000b12fb76244cbffd6abbf8bb6e4
+    m_Address: Prefabs/FX/GenericDeath
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_FX
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 26eb0a5cd928be748981234ea4adab30, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 87801bff00880e548853843038a5ffdc, type: 2}
+    - {fileID: 11400000, guid: e5880665eff76b34086f1e94f8818bff, type: 2}

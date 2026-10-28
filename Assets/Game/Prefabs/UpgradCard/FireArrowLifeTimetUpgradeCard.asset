@@ -13,10 +13,16 @@ MonoBehaviour:
   m_Name: FireArrowLifeTimetUpgradeCard
   m_EditorClassIdentifier: 
   _cardName: "\u0417\u0430\u043A\u043E\u043B\u0438\u0442\u044C \u041E\u0433\u043D\u0435\u043C"
-  _description: "\u0423\u0432\u0435\u043B\u0438\u0447\u0438\u0442\u044C \u0432\u0440\u0435\u043C\u044F
-    \u0438\u0441\u043F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u043D\u0438\u044F
-    \u043E\u0433\u043D\u0435\u043D\u043D\u044B\u043C \u0441\u0442\u0440\u0435\u043B\u0430\u043C"
-  _cardIcon: {fileID: 1647537983, guid: b763ca4cb1923104eb17679983435b3d, type: 3}
+  _cardNameEn: Forge with Fire
+  _cardNameTr: "Ate\u015Fle D\u00F6v"
+  _description: "\u0423\u0432\u0435\u043B\u0438\u0447\u0438\u0442\u044C \u0432\u0440\u0435\u043C\u044F \u0438\u0441\u043F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u043D\u0438\u044F \u043E\u0433\u043D\u0435\u043D\u043D\u044B\u043C \u0441\u0442\u0440\u0435\u043B\u0430\u043C"
+  _descriptionEn: Increase fire arrow duration
+  _descriptionTr: "Ate\u015F oku s\u00FCresini art\u0131r"
+  _cardIconReference:
+    m_AssetGUID: b763ca4cb1923104eb17679983435b3d
+    m_SubObjectName: IMG_0603_9
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
   _cardColor: {r: 0.91764706, g: 0.7176471, b: 0.4392157, a: 1}
   _bulletType: 1
   _bulletUpgradeType: 1

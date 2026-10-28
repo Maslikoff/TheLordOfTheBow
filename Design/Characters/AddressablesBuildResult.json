@@ -1,0 +1,13 @@
+{
+  "unityVersion": "2022.3.62f2",
+  "buildTarget": "WebGL",
+  "builtAtLocal": "2026-09-26T11:54:04+03:00",
+  "catalog": "ServerData/WebGL/catalog_2026.09.26.08.53.22.json",
+  "bundles": {
+    "Remote_Characters": "remote_characters_assets_all_bba9352556acb2fd15edc3b5d3890d24.bundle",
+    "Remote_Icons": "remote_icons_assets_all_c0eece643685a5a2c5c8d76a5f009b74.bundle",
+    "Remote_Configs": "remote_configs_assets_all_6c3287d841d3a74bf4bf48625f6aaaae.bundle"
+  },
+  "remoteLoadPath": "https://storage.yandexcloud.net/BUCKET_NAME/WebGL",
+  "publishStatus": "not-published; replace BUCKET_NAME and upload ServerData/WebGL"
+}

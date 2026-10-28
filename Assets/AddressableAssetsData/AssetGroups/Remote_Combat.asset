@@ -1,0 +1,67 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Remote_Combat
+  m_EditorClassIdentifier: 
+  m_GroupName: Remote_Combat
+  m_Data:
+    m_SerializedData: []
+  m_GUID: 283a868b528dbbc4ea5a9f9cbb2da2a9
+  m_SerializeEntries:
+  - m_GUID: 025be27ce63d27342a7becfcc52a72b8
+    m_Address: Prefabs/Combat/PickHealth
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Combat
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 284cf5c90bbf1e74d95e09721124c345
+    m_Address: Prefabs/Combat/Arrow
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Combat
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5e9da090ddaf0e843a311cdcfae40713
+    m_Address: Prefabs/Combat/PoisonBullet
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Combat
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5fce0b17aaf48d943902bd91b4023121
+    m_Address: Prefabs/Combat/FireArrow
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Combat
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 60ef32920345bd44ab33f62da36b5e76
+    m_Address: Prefabs/Combat/TrollBullet
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Combat
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 84ad99515f1be5840a70348eea73390a
+    m_Address: Prefabs/Combat/GoblinBullet
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Combat
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c83dc8e0cad9ecd4ea5d5718b248fe5b
+    m_Address: Prefabs/Combat/OrcBullet
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Remote_Combat
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 26eb0a5cd928be748981234ea4adab30, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: be137a3c70425d345b4c9599b94b78be, type: 2}
+    - {fileID: 11400000, guid: 5a282c34dbed20b44b9795a5f13ae18e, type: 2}

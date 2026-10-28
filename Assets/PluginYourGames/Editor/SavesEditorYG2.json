@@ -7,30 +7,33 @@
         false,
         false
     ],
-    "idSave": 261,
+    "idSave": 529,
     "_playerLevel": 1,
     "_playerExperience": 190.0,
-    "_currentLevelIndex": 2,
+    "_currentLevelIndex": 3,
     "_bulletUpgrades": [
         {
             "BulletType": 0,
             "IsUnlocked": true,
-            "DamageBonus": 0.0,
+            "DamageBonus": 6.0,
             "LifeTimeBonus": 0.0,
-            "CountBonus": 0
+            "PoisonDamageBonus": 0.0,
+            "CountBonus": 2
         },
         {
             "BulletType": 1,
-            "IsUnlocked": false,
-            "DamageBonus": 0.0,
-            "LifeTimeBonus": 0.0,
+            "IsUnlocked": true,
+            "DamageBonus": 8.0,
+            "LifeTimeBonus": 2.0,
+            "PoisonDamageBonus": 0.0,
             "CountBonus": 0
         },
         {
             "BulletType": 2,
             "IsUnlocked": true,
-            "DamageBonus": 0.0,
-            "LifeTimeBonus": 0.0,
+            "DamageBonus": 6.0,
+            "LifeTimeBonus": 2.0,
+            "PoisonDamageBonus": 3.0,
             "CountBonus": 0
         }
     ],
@@ -44,8 +47,19 @@
             "WaveIndex": 0
         },
         {
-            "LevelIndex": 2,
+            "LevelIndex": 3,
             "WaveIndex": 0
         }
-    ]
+    ],
+    "_coins": 783,
+    "_ownedSkins": [
+        "iap_skin_item",
+        "skin_wizard",
+        "skin_knight"
+    ],
+    "_ownedProjectiles": [],
+    "_ownedHats": [],
+    "_equippedSkin": "skin_knight",
+    "_equippedProjectile": "",
+    "_equippedHat": ""
 }

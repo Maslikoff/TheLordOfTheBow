@@ -17,9 +17,13 @@ namespace Game.Scripts.Characters
         public event Action Death;
         public event Action<float> Changed;
         public event Action<float> DamageTaken;
+        public Func<bool> TryBlockDamage { get; set; }
+        private float _baseMax;
+        public float BaseMax => _baseMax > 0 ? _baseMax : _maxCount;
 
         private void Awake()
         {
+            _baseMax = _maxCount;
             _currentCount = _maxCount;
         }
 
@@ -43,6 +47,7 @@ namespace Game.Scripts.Characters
         {
             if (_isInvulnerable || _currentCount <= 0)
                 return;
+            if (damage <= 0 || (TryBlockDamage != null && TryBlockDamage())) return;
 
             _currentCount -= damage;
 
@@ -92,6 +97,13 @@ namespace Game.Scripts.Characters
                 _invulnerabilityCoroutine = null;
             }
 
+            Changed?.Invoke(_currentCount);
+        }
+
+        public void Restore(float maximum, float current)
+        {
+            _maxCount = Mathf.Max(1, maximum);
+            _currentCount = Mathf.Clamp(current, 0, _maxCount);
             Changed?.Invoke(_currentCount);
         }
 

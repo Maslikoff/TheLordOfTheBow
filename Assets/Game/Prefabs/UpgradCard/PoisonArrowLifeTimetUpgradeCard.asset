@@ -12,13 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93f37503c03b4173a6ba229b993f7001, type: 3}
   m_Name: PoisonArrowLifeTimetUpgradeCard
   m_EditorClassIdentifier: 
-  _cardName: "\u041C\u0435\u0442\u0430\u043B\u043B\u0438\u0447\u0435\u0441\u043A\u0438\u0439
-    \u0441\u0442\u0435\u0440\u0436\u0435\u043D\u044C"
-  _description: "\u0423\u0432\u0435\u043B\u0438\u0447\u0438\u0442\u044C \u0432\u0440\u0435\u043C\u044F
-    \u0438\u0441\u043F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u043D\u0438\u044F
-    \u044F\u0434\u043E\u0432\u0438\u0442\u044B\u043C \u0441\u0442\u0440\u0435\u043B\u0430\u043C"
-  _cardIcon: {fileID: -47290501, guid: b763ca4cb1923104eb17679983435b3d, type: 3}
+  _cardName: "\u041C\u0435\u0442\u0430\u043B\u043B\u0438\u0447\u0435\u0441\u043A\u0438\u0439 \u0441\u0442\u0435\u0440\u0436\u0435\u043D\u044C"
+  _cardNameEn: Metal Rod
+  _cardNameTr: "Metal \u00C7ubuk"
+  _description: "\u0423\u0432\u0435\u043B\u0438\u0447\u0438\u0442\u044C \u0434\u043B\u0438\u0442\u0435\u043B\u044C\u043D\u043E\u0441\u0442\u044C \u043E\u0442\u0440\u0430\u0432\u043B\u0435\u043D\u0438\u044F"
+  _descriptionEn: Increase poison duration
+  _descriptionTr: "Zehir s\u00FCresini art\u0131r"
+  _cardIconReference:
+    m_AssetGUID: b763ca4cb1923104eb17679983435b3d
+    m_SubObjectName: IMG_0603_25
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
   _cardColor: {r: 0.39215687, g: 0.50980395, b: 0.33333334, a: 1}
   _bulletType: 2
   _bulletUpgradeType: 1
-  _value: 2
+  _value: 1

@@ -6,6 +6,7 @@ namespace Game.Scripts.Upgrades
     public class UpgradeApplier : MonoBehaviour
     {
         private PlayerUpgradeHolder _playerUpgradeHolder;
+        public PlayerUpgradeHolder Holder => _playerUpgradeHolder;
         
         private void Awake()
         {

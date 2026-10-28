@@ -11,7 +11,11 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Game/Scenes/Level_Tutorial.unity
     guid: 00de0201dde83c949b7b79e8f7b70640
-  - enabled: 0
-    path: Assets/Game/Scenes/Level_1.unity
-    guid: 9fc0d4010bbf28b4594072e72b8655ab
-  m_configObjects: {}
+  - enabled: 1
+    path: Assets/Game/Scenes/Level_Dust.unity
+    guid: 631baa8220d798941be61e9ef71b3e65
+  - enabled: 1
+    path: Assets/Game/Scenes/Level_City.unity
+    guid: 7baf3818f30d83a42b8cb7a5f8bb561a
+  m_configObjects:
+    com.unity.addressableassets: {fileID: 11400000, guid: 3d29ffcc7a54b81499cd703d4ec13db9, type: 2}
