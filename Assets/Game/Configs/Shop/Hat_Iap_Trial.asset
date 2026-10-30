@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _id: iap_hat_item
   _category: 2
+  _isDefault: 0
   _displayNameRu: "\u041F\u0440\u0435\u043C\u0438\u0443\u043C \u0448\u0430\u043F\u043A\u0430"
   _displayNameEn: Premium Hat
   _displayNameTr: Premium Hat
@@ -22,8 +23,8 @@ MonoBehaviour:
   _descriptionEn: Trial hat IAP.
   _descriptionTr: Trial hat IAP.
   _coinPrice: 0
-  _isIap: 1
-  _iapProductId: iap_hat_trial
+  _isIap: 0
+  _iapProductId: 
   _iconReference:
     m_AssetGUID: 0c580f1a3ef514248b4cca14857b2dbe
     m_SubObjectName: 

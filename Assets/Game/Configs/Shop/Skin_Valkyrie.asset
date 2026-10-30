@@ -22,9 +22,9 @@ MonoBehaviour:
     \u0434\u043B\u044F \u0433\u0435\u0440\u043E\u044F."
   _descriptionEn: Valkyrie appearance for the hero.
   _descriptionTr: "Kahraman i\xE7in Valk\xFCr g\xF6r\xFCn\xFCm\xFC."
-  _coinPrice: 0
-  _isIap: 1
-  _iapProductId: skin_valkyrie
+  _coinPrice: 110
+  _isIap: 0
+  _iapProductId: 
   _iconReference:
     m_AssetGUID: 32e324917d6bfef4d8bc6344654c1ad8
     m_SubObjectName: 

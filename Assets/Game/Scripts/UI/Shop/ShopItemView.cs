@@ -5,7 +5,6 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Game.Localization;
-using JTLStudio.SDK;
 
 namespace Game.Scripts.UI.Shop
 {
@@ -161,16 +160,8 @@ namespace Game.Scripts.UI.Shop
 
         private static string FormatPrice(ShopItemDefinition item)
         {
-            if (item.IsIap == false)
-                return item.CoinPrice.ToString();
-
-            if (JTLSDK.IsCreated && JTLSDK.Payments.IsSupported)
-            {
-                ProductData data = JTLSDK.Payments.GetProductData(item.IapProductId);
-                if (data.IsValid && string.IsNullOrEmpty(data.Formatted) == false)
-                    return data.Formatted;
-            }
-            return string.IsNullOrEmpty(item.IapProductId) ? "IAP" : item.IapProductId;
+            // No in-app purchases (YouTube Playables): everything is priced in coins.
+            return item.CoinPrice.ToString();
         }
 
         private static string L(string ru, string en, string tr)

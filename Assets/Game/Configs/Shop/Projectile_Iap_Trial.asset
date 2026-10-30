@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _id: iap_proj_item
   _category: 1
+  _isDefault: 0
   _displayNameRu: "\u041F\u0440\u0435\u043C\u0438\u0443\u043C \u0441\u043D\u0430\u0440\u044F\u0434"
   _displayNameEn: Premium Projectile
   _displayNameTr: Premium Projectile
@@ -22,8 +23,8 @@ MonoBehaviour:
   _descriptionEn: Trial projectile IAP.
   _descriptionTr: Trial projectile IAP.
   _coinPrice: 0
-  _isIap: 1
-  _iapProductId: iap_proj_trial
+  _isIap: 0
+  _iapProductId: 
   _iconReference:
     m_AssetGUID: e5d2b8a38f8c26b439e25d97ca305ed2
     m_SubObjectName: 

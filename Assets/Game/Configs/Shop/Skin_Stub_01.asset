@@ -24,9 +24,9 @@ MonoBehaviour:
   _descriptionEn: A silent warrior in black. Changes your hero's appearance.
   _descriptionTr: "Siyahl\u0131 sessiz sava\u015F\xE7\u0131. Kahraman\u0131n\u0131n
     g\xF6r\xFCn\xFCm\xFCn\xFC de\u011Fi\u015Ftirir."
-  _coinPrice: 0
-  _isIap: 1
-  _iapProductId: skin_ninja
+  _coinPrice: 110
+  _isIap: 0
+  _iapProductId: 
   _iconReference:
     m_AssetGUID: 48f89ee4c3a5bf44a9be3ff23fbbab98
     m_SubObjectName: 
